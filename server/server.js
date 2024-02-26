@@ -20,8 +20,9 @@ sql.connect(config, (err) => {
   }
 });
 
-
+//Configure route for request /api/user which uses middleware functions from userRoutes file
 app.use("/api/user", userRoutes);
+//Configure route for request /api/recipe which uses middleware functions from recipeRoutes file
 app.use("/api/recipe", recipeRoutes);
 
 const port = process.env.PORT || 3001;

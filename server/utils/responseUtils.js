@@ -1,3 +1,8 @@
+/**
+ * Helper functions for sending HTTP responses with corresponding status codes and error messages.
+ * @module responseUtils
+ */
+
 // 1xx Informational
 const continueResponse = (res, message) => res.status(100).json({ error: message });
 const switchingProtocols = (res, message) => res.status(101).json({ error: message });

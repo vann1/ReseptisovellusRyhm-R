@@ -51,6 +51,15 @@ function validatePassword(password) {
     return true;
   } 
 
+
+  /**
+ * Validates user information.
+ * @param {string} username - The username to validate.
+ * @param {string} email - The email to validate.
+ * @param {string} password - The password to validate.
+ * @param {string} name - The name to validate.
+ * @returns {boolean} Returns true if all validations pass, otherwise false.
+ */
   function validateUser(username, email, password ,name) {
     const isnameValid = validateName(name);
     const isPasswordValid = validatePassword(password);
@@ -65,14 +74,25 @@ function validatePassword(password) {
     }
   }
 
+
+  /**
+ * Creates a JSON Web Token (JWT) for authentication. 
+ * @param {import('express').Request} req - The request object.
+ * @param {import('express').Response} res - The response object.
+ * @param {Object} user - The user object containing password for comparison.
+ * @returns {Promise<string|import('express').Response>} Returns the generated JWT if authentication is successful, otherwise returns an unauthorized response.
+ */
   const createJWT = async (req,res,user) => {
+    //First the function gets the user password from req.body.
     const { password } = req.body;
+    //Then it compares the crypted password from database to req.body password.
     if(await bcrypt.compare(password, user.password)) {
+      //If these passwords matches, it creates jwt token which is returned.
       const token = jwt.sign({ userId: user.id }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1h' });
-      console.log(token)
-      res.json({ message: 'Kirjautuminen onnistui', token });
+      return token;
     }
     else {
+      //Else it returns responseUtils.unautorized function with parameters res and error message
       return responseUtils.unauthorized(res, "Virheellinen salasana")
     }
 
