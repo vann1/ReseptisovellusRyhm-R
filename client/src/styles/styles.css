@@ -1,0 +1,76 @@
+.navigation {
+    background-color: #333;
+    padding: 10px;
+  }
+  
+  .navigation-list {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .navigation-item {
+    display: inline;
+    margin-right: 20px;
+  }
+  
+  .navigation-link {
+    color: #fff;
+    text-decoration: none;
+  }
+  
+  .navigation-link:hover {
+    text-decoration: underline;
+  }
+
+.pError {
+    color :red;
+    font-size: 80%;
+    margin-top:-30px;
+    margin-bottom: -8px;
+
+}
+.regInput {
+    padding: 5px;
+    margin-bottom: 30px;
+}
+.infoText {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    left: 10px;
+    background-color: gray;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 20px;
+    color: white;
+    position: relative;
+    cursor: pointer;
+  }
+  
+  .infoText::after {
+    content: "Täytyy olla muotoa xxxxxx@xxxx.xx";
+    position: absolute;
+    top: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(0, 0, 0, 0.7);
+    padding: 5px;
+    border-radius: 5px;
+    color: white;
+    font-size: 12px;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+  }
+  
+  .infoText:hover::after {
+    opacity: 1;
+  }
+  .loginError {
+    color :red;
+    font-size: 80%;
+    margin-top:-30px;
+    margin-bottom: 13px;
+  }
