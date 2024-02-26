@@ -59,15 +59,14 @@ const addUserToDatabase = async (req, res) => {
  * @returns {object|undefined} Returns the user object if found, otherwise returns undefined.
  */
 const getUserFromDatabase = async (req, res) => {
+    //takes email from req.body
+    const { email } = req.body;
     try {
         //creates connection to database
         await sql.connect(config);
 
         //initializes a new request object that is used to send SQL queries to the connected database using the sql module or library.
         const request = new sql.Request();
-
-        //takes email from req.body
-        const { email } = req.body;
 
         //query for database
         const query = `SELECT * FROM users WHERE email = @email`;
@@ -90,4 +89,27 @@ const getUserFromDatabase = async (req, res) => {
 }
 
 
-module.exports = {addUserToDatabase, getUserFromDatabase};
+const addRecipeToDatabase = async (req , res) => {
+    const { UserID, RecipeName, RecipeCategory, RecipeGuide, RecipeDesc, Tags } = req.body;
+    try {
+      await sql.connect(config);
+      const request = new sql.Request();
+      
+      const query = `
+        INSERT INTO [dbo].[recipes] (userid, recipename, category, instructions, description, tags)
+        VALUES (@Userid, @RecipeName, @RecipeCategory, @RecipeGuide, @RecipeDesc, @Tags)
+      `;
+      await request
+        .input('Userid', sql.NVarChar, UserID)
+        .input('RecipeName', sql.NVarChar, RecipeName)
+        .input('RecipeCategory', sql.NVarChar, RecipeCategory)
+        .input('RecipeGuide', sql.NVarChar, RecipeGuide)
+        .input('RecipeDesc', sql.NVarChar, RecipeDesc)
+        .input('Tags', sql.NVarChar, Tags)
+        .query(query);
+      return true;
+    } catch (error) {
+      console.error('Error adding recipe to the database:', error);
+    }
+}   
+module.exports = {addUserToDatabase, getUserFromDatabase, addRecipeToDatabase};
