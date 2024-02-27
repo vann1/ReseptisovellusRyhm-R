@@ -110,6 +110,7 @@ const addRecipeToDatabase = async (req , res) => {
       return true;
     } catch (error) {
       console.error('Error adding recipe to the database:', error);
+      return false;
     }
 }   
 module.exports = {addUserToDatabase, getUserFromDatabase, addRecipeToDatabase};

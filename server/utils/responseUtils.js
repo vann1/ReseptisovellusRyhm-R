@@ -10,16 +10,16 @@ const processing = (res, message) => res.status(102).json({ error: message });
 const earlyHints = (res, message) => res.status(103).json({ error: message });
 
 // 2xx Success
-const ok = (res, message) => res.status(200).json({ error: message });
-const created = (res, message) => res.status(201).json({ error: message });
-const accepted = (res, message) => res.status(202).json({ error: message });
-const nonAuthoritativeInformation = (res, message) => res.status(203).json({ error: message });
-const noContent = (res, message) => res.status(204).json({ error: message });
-const resetContent = (res, message) => res.status(205).json({ error: message });
-const partialContent = (res, message) => res.status(206).json({ error: message });
-const multiStatus = (res, message) => res.status(207).json({ error: message });
-const alreadyReported = (res, message) => res.status(208).json({ error: message });
-const imUsed = (res, message) => res.status(226).json({ error: message });
+const ok = (res, message) => res.status(200).json({ message: message });
+const created = (res, message) => res.status(201).json({ message: message });
+const accepted = (res, message) => res.status(202).json({ message: message });
+const nonAuthoritativeInformation = (res, message) => res.status(203).json({ message: message });
+const noContent = (res, message) => res.status(204).json({ message: message });
+const resetContent = (res, message) => res.status(205).json({ message: message });
+const partialContent = (res, message) => res.status(206).json({ message: message });
+const multiStatus = (res, message) => res.status(207).json({ message: message });
+const alreadyReported = (res, message) => res.status(208).json({ message: message });
+const imUsed = (res, message) => res.status(226).json({ message: message });
 
 // 3xx Redirection
 const multipleChoices = (res, message) => res.status(300).json({ error: message });
@@ -77,9 +77,9 @@ const networkAuthenticationRequired = (res, message) => res.status(511).json({ e
 
 //for get routes
 const sendJson = (res, payload, code) => {
-    res.writeHead(code, {'Content-Type': 'application/json'});
-    return res.end(JSON.stringify(payload));
+    return res.status(code).json(payload);
 }
+
 module.exports = {
     continueResponse,
     switchingProtocols,
