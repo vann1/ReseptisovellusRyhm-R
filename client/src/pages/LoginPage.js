@@ -1,8 +1,32 @@
-import React, { useState,  } from 'react';
+import React, { useEffect, useState,  } from 'react';
 import LoginForm from '../components/LoginForm';
 //testiwqeqw
 const LoginPage = () => {
+  const [token, setToken] = useState(localStorage.getItem('jwt'));
   const [virheViesti, setVirheViesti] = useState('');
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(async() => {
+    if(token) {
+      try {
+        const response = await fetch('http://localhost:3001/api/user/login', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+        });
+        const data = await response.json();
+        if(response.ok) {
+          setIsLoggedIn(true);
+        }
+      }catch(error) {
+        console.error('Error:', error);
+      }
+    }
+  },[token])
+
+
   const handleLogin = async (email, password) => {
     setVirheViesti('');
     try {
@@ -14,11 +38,8 @@ const LoginPage = () => {
         body: JSON.stringify({email, password}),
       });
       const data = await response.json();
-      console.log(data)
       if (response.ok) {
-        const token = data.token;
-        console.log("token " + token)
-        localStorage.setItem('jwt', token);
+        localStorage.setItem('jwt', data.data.token);
       }
       else {
         setVirheViesti("Käyttäjätunnus tai salasana väärä");

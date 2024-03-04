@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import RegisterForm from '../components/RegisterForm';
 
 const RegisterPage = () => {
-
   const handleRegister = async (name, password, email, username) => {
       try {
         const response = await fetch('http://localhost:3001/api/user/create', {
