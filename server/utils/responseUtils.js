@@ -10,7 +10,7 @@ const processing = (res, message) => res.status(102).json({ error: message });
 const earlyHints = (res, message) => res.status(103).json({ error: message });
 
 // 2xx Success
-const ok = (res, message) => res.status(200).json({ message: message });
+const ok = (res, message, data) => res.status(200).json({ message: message, data: data});
 const created = (res, message) => res.status(201).json({ message: message });
 const accepted = (res, message) => res.status(202).json({ message: message });
 const nonAuthoritativeInformation = (res, message) => res.status(203).json({ message: message });
@@ -22,13 +22,13 @@ const alreadyReported = (res, message) => res.status(208).json({ message: messag
 const imUsed = (res, message) => res.status(226).json({ message: message });
 
 // 3xx Redirection
-const multipleChoices = (res, message) => res.status(300).json({ error: message });
-const movedPermanently = (res, message) => res.status(301).json({ error: message });
-const found = (res, message) => res.status(302).json({ error: message });
-const seeOther = (res, message) => res.status(303).json({ error: message });
-const notModified = (res, message) => res.status(304).json({ error: message });
-const temporaryRedirect = (res, message) => res.status(307).json({ error: message });
-const permanentRedirect = (res, message) => res.status(308).json({ error: message });
+const multipleChoices = (res, message) => res.status(300).json({ message: message });
+const movedPermanently = (res, message) => res.status(301).json({ message: message });
+const found = (res, message) => res.status(302).json({ message: message });
+const seeOther = (res, message) => res.status(303).json({ message: message });
+const notModified = (res, message) => res.status(304).json({ message: message });
+const temporaryRedirect = (res, message) => res.status(307).json({ message: message });
+const permanentRedirect = (res, message) => res.status(308).json({ message: message });
 
 // 4xx Client Error
 const badRequest = (res, message) => res.status(400).json({ error: message });
