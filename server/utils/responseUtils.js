@@ -141,5 +141,6 @@ module.exports = {
     insufficientStorage,
     loopDetected,
     notExtended,
-    networkAuthenticationRequired
+    networkAuthenticationRequired,
+    sendJson
   };

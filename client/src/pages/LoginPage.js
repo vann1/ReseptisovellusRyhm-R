@@ -17,7 +17,7 @@ const LoginPage = () => {
       console.log(data)
       if (response.ok) {
         const token = data.token;
-        console.log(token)
+        console.log("token " + token)
         localStorage.setItem('jwt', token);
       }
       else {

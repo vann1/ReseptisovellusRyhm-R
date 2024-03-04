@@ -48,6 +48,7 @@ const loginUser = async (req, res) => {
     const token = await userUtils.createJWT(req, res, user);
     //Then code returns responseUtils.ok function with parameters res, successful message and the JWT token.
     return responseUtils.ok(res, "Login successful", { token });
+    // return responseUtils.sendJson(res, token, 201);
   } catch (error) {
       console.error("Error login the user:", error)
       return responseUtils.internalServerError(res, "Internal server error, while creating user")
