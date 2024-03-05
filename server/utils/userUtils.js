@@ -1,4 +1,5 @@
 const bcrypt = require('bcrypt');
+require('dotenv').config();
 const jwt = require('jsonwebtoken');
 const responseUtils = require('../utils/responseUtils')
 function validatePassword(password) {
@@ -98,4 +99,23 @@ function validatePassword(password) {
 
   }
 
-  module.exports = {validateUser, createJWT}
+
+  
+const authenticateToken =(req ,res, next) => {
+  const token = req.header('Authorization');
+
+  if(!token) {
+    return responseUtils.unauthorized(res, "Access denied. Token missing.");
+  }
+
+  const tokenValue = token.split(' ')[1];
+
+  jwt.verify(tokenValue, process.env.ACCESS_TOKEN_SECRET , (err, user)=> {
+    if(err) {
+      return responseUtils.forbidden(res, "Invalid token");
+    }
+    req.user = user;
+    next();
+  })
+}
+  module.exports = {validateUser, createJWT,authenticateToken}

@@ -4,10 +4,10 @@
  */
 
 // 1xx Informational
-const continueResponse = (res, message) => res.status(100).json({ error: message });
-const switchingProtocols = (res, message) => res.status(101).json({ error: message });
-const processing = (res, message) => res.status(102).json({ error: message });
-const earlyHints = (res, message) => res.status(103).json({ error: message });
+const continueResponse = (res, message) => res.status(100).json({ message: message });
+const switchingProtocols = (res, message) => res.status(101).json({ message: message });
+const processing = (res, message) => res.status(102).json({ message: message });
+const earlyHints = (res, message) => res.status(103).json({ message: message });
 
 // 2xx Success
 const ok = (res, message, data) => res.status(200).json({ message: message, data: data});

@@ -3,6 +3,7 @@ const requestUtils = require('../utils/requestUtils')
 const router = express.Router();
 const user = require('../controllers/user')
 const responseUtils = require('../utils/responseUtils')
+const userUtils = require('../utils/userUtils')
 
 /**
  * 
@@ -38,5 +39,7 @@ router.post('/login', async (req, res) => {
       //If it was, the user.loginUser(req, res) function is returned.
       return user.loginUser(req, res);
 });
+
+
 
 module.exports = router;
