@@ -10,7 +10,7 @@ const RuokaKategoria = () => {
   const [Ingredients, setIngredients] = useState([]); 
   const [RecipeDesc, setRecipeDesc] = useState('');
   const [RecipeGuide, setRecipeGuide] = useState('');
-  const [UserID, setUserID] = useState('3');
+  const [UserID, setUserID] = useState('121');
   const [Tags, setTags] = useState('tags');
   //Vaihtoehdot kategorialle ja ainesosan mitalle
   const Kategoria = ['Alkupala', 'Juoma', 'Välipala', 'Pääruoka', 'Jälkiruoka', 'Leivonnaiset', 'Muu'];
@@ -98,6 +98,7 @@ const RuokaKategoria = () => {
                   RecipeGuide,
                   RecipeDesc,
                   Tags,
+                  Ingredients,
                 }),
               });
         
