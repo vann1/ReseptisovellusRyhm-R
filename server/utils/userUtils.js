@@ -1,7 +1,7 @@
 const bcrypt = require('bcrypt');
 require('dotenv').config();
 const jwt = require('jsonwebtoken');
-const responseUtils = require('../utils/responseUtils')
+const {unauthorized} = require('../utils/responseUtils')
 function validatePassword(password) {
     // Check for at least 8 characters
     if (password.length < 8) {
@@ -94,28 +94,28 @@ function validatePassword(password) {
     }
     else {
       //Else it returns responseUtils.unautorized function with parameters res and error message
-      return responseUtils.unauthorized(res, "Virheellinen salasana")
+      return unauthorized(res, "Virheellinen salasana")
     }
 
   }
 
 
   
-const authenticateToken =(req ,res, next) => {
-  const token = req.header('Authorization');
+// const authenticateToken =(req ,res, next) => {
+//   const token = req.header('Authorization');
 
-  if(!token) {
-    return responseUtils.unauthorized(res, "Access denied. Token missing.");
-  }
+//   if(!token) {
+//     return responseUtils.unauthorized(res, "Access denied. Token missing.");
+//   }
 
-  const tokenValue = token.split(' ')[1];
+//   const tokenValue = token.split(' ')[1];
 
-  jwt.verify(tokenValue, process.env.ACCESS_TOKEN_SECRET , (err, user)=> {
-    if(err) {
-      return responseUtils.forbidden(res, "Invalid token");
-    }
-    req.user = user;
-    next();
-  })
-}
+//   jwt.verify(tokenValue, process.env.ACCESS_TOKEN_SECRET , (err, user)=> {
+//     if(err) {
+//       return responseUtils.forbidden(res, "Invalid token");
+//     }
+//     req.user = user;
+//     next();
+//   })
+// }
   module.exports = {validateUser, createJWT,authenticateToken}

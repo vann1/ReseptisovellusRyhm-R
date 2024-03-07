@@ -1,9 +1,9 @@
 const express = require('express');
-const requestUtils = require('../utils/requestUtils')
+const {isJson} = require('../utils/requestUtils')
 const router = express.Router();
-const user = require('../controllers/user')
-const responseUtils = require('../utils/responseUtils')
-const userUtils = require('../utils/userUtils')
+const { createUser, loginUser } = require('../controllers/user')
+const {badRequest} = require('../utils/responseUtils')
+
 
 /**
  * 
@@ -14,12 +14,12 @@ const userUtils = require('../utils/userUtils')
  */
 router.post('/create', async (req, res) => {
   //First, it checks if the received request was in JSON format or not.
-    if(!requestUtils.isJson(req)){
+    if(!isJson(req)){
       //If it wasn't, the responseUtils.badRequest function is returned, which takes res and an error message as parameters.
-        return responseUtils.badRequest(res, "Content was not Json");
+        return badRequest(res, "Content was not Json");
     }
     //If it was, the user.createUser(req, res) function is returned.
-    return user.createUser(req, res);
+    return createUser(req, res);
 });
 
 
@@ -32,12 +32,12 @@ router.post('/create', async (req, res) => {
  */
 router.post('/login', async (req, res) => {
     //First, it checks if the received request was in JSON format or not.
-      if(!requestUtils.isJson(req)){
+      if(!isJson(req)){
         //If it wasn't, the responseUtils.badRequest function is returned, which takes res and an error message as parameters.
-        return responseUtils.badRequest(res, "Content was not Json");
+        return badRequest(res, "Content was not Json");
       }
       //If it was, the user.loginUser(req, res) function is returned.
-      return user.loginUser(req, res);
+      return loginUser(req, res);
 });
 
 

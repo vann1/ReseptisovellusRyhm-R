@@ -1,5 +1,5 @@
-const userUtils = require('./utils/userUtils')
-const responseUtils = require('./utils/responseUtils')
+const {validateUser} = require('./utils/userUtils')
+const {} = require('./utils/responseUtils')
 const sql = require('mssql');
 const config = require('./config/config')
 const bcrypt = require('bcrypt'); // for password encrypting
@@ -14,7 +14,7 @@ const addUserToDatabase = async (req, res) => {
     //First it gets user details from req.body
     const { username, email, password ,name } = req.body;
     //Checks if those user details were in correct format
-    if(!userUtils.validateUser(username, email, password ,name)) {
+    if(!validateUser(username, email, password ,name)) {
         return false;
     }
     const existingUser = await getUserFromDatabase(req, res);

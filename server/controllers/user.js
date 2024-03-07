@@ -1,6 +1,6 @@
-const responseUtils = require('../utils/responseUtils')
-const database = require('../database')
-const userUtils = require('../utils/userUtils')
+const {badRequest,created,internalServerError,notFound,ok} = require('../utils/responseUtils')
+const {addUserToDatabase,getUserFromDatabase} = require('../database')
+const {createJWT} = require('../utils/userUtils')
 
 
 /**
@@ -14,17 +14,17 @@ const userUtils = require('../utils/userUtils')
 const createUser = async (req, res) => {
     try {
       //First checks if the user can be added to the database.
-        if(!await database.addUserToDatabase(req, res)) {
+        if(!await addUserToDatabase(req, res)) {
           //If not, returns the badRequest function from the responseUtils directory, which is a helper function for HTTP responses. 
           //The function is passed parameters res and an error message.
-          return responseUtils.badRequest(res, "Cannot create duplicate user. Given email exist in the database.");
+          return badRequest(res, "Cannot create duplicate user. Given email exist in the database.");
         }
         //If the user can be added to the database, returns the created function from the responseUtils directory, 
         //which is passed parameters res and a success message.
-        return responseUtils.created(res, "User created successfully");
+        return created(res, "User created successfully");
       } catch (error) {
         console.error('Error creating user to the database:', error);
-        return responseUtils.internalServerError(res, "Internal server error, while creating user");
+        return internalServerError(res, "Internal server error, while creating user");
       }
     }
 
@@ -38,20 +38,20 @@ const createUser = async (req, res) => {
  */
 const loginUser = async (req, res) => {
   try {
-    const user = await database.getUserFromDatabase(req, res);
+    const user = await getUserFromDatabase(req, res);
     //First, it checks if the requested user exists in the database.
     if(user === undefined) {
       //If the user is not found, it returns the notFound function from responseUtils, which takes res and an error message as parameters.
-      return responseUtils.notFound(res, "User not found in the database")
+      return notFound(res, "User not found in the database")
     }
     //If the user is found, it calls the createJWT function with parameters req, res, and the user obtained from the getUserFromDatabase function so far.
-    const token = await userUtils.createJWT(req, res, user);
+    const token = await createJWT(req, res, user);
     //Then code returns responseUtils.ok function with parameters res, successful message and the JWT token.
-    return responseUtils.ok(res, "Login successful", { token });
+    return ok(res, "Login successful", { token });
     // return responseUtils.sendJson(res, token, 201);
   } catch (error) {
       console.error("Error login the user:", error)
-      return responseUtils.internalServerError(res, "Internal server error, while creating user")
+      return internalServerError(res, "Internal server error, while creating user")
 
   }
 }
