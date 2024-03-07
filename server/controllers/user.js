@@ -45,7 +45,7 @@ const loginUser = async (req, res) => {
       return notFound(res, "User not found in the database")
     }
     //If the user is found, it calls the createJWT function with parameters req, res, and the user obtained from the getUserFromDatabase function so far.
-    const token = await createJWT(req, res, user);
+    const token = await createJWT(user.id);
     //Then code returns responseUtils.ok function with parameters res, successful message and the JWT token.
     return ok(res, "Login successful", { token });
     // return responseUtils.sendJson(res, token, 201);

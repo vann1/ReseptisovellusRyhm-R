@@ -83,7 +83,7 @@ function validatePassword(password) {
  * @param {Object} user - The user object containing password for comparison.
  * @returns {Promise<string|import('express').Response>} Returns the generated JWT if authentication is successful, otherwise returns an unauthorized response.
  */
-  const createJWT = async (req,res,user) => {
+  const createJWT1 = async (req,res,user) => {
     //First the function gets the user password from req.body.
     const { password } = req.body;
     //Then it compares the crypted password from database to req.body password.
@@ -97,6 +97,12 @@ function validatePassword(password) {
       return unauthorized(res, "Virheellinen salasana")
     }
 
+  }
+
+  const createJWT = async (id) => {
+    return jwt.sign({id}, 'process.env.ACCESS_TOKEN_SECRET', {
+      expiresIn: 1000 * 1 * 60 * 60
+    })
   }
 
 
@@ -118,4 +124,4 @@ function validatePassword(password) {
 //     next();
 //   })
 // }
-  module.exports = {validateUser, createJWT,authenticateToken}
+  module.exports = {validateUser, createJWT}
