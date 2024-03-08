@@ -30,8 +30,40 @@ const RuokaKategoria = () => {
   Muut:
   kpl = kappale
   */
-  
 
+  const handleFileChange = async (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      try {
+        const base64Data = await readFileAsBase64(file);
+        setSelectedFile(base64Data);
+      } catch (error) {
+        console.error('Error reading file as base64:', error);
+      }
+    }
+  };
+  
+  const readFileAsBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+      try {
+        const reader = new FileReader();
+  
+        reader.onload = () => {
+          resolve(reader.result?.split(',')[1]);
+        };
+  
+        reader.onerror = (error) => {
+          reject(error);
+        };
+  
+        // Convert the file to a Blob before reading as base64
+        const blob = new Blob([file], { type: file.type });
+        reader.readAsDataURL(blob);
+      } catch (error) {
+        reject(error);
+      }
+    });
+  };
   //use state changerit
   const CategoryChange = (option) => {
     setRecipeCategory(option);
@@ -62,14 +94,10 @@ const RuokaKategoria = () => {
     setRecipeGuide(event.target.value)
   }
 
-  const RecipeTagChange = (event) => {
+  const TagsChange = (event) => {
     setTags(event.target.value)
   }
 
-  const handleFileChange = (event) => {
-    const file = event.target.files[0];
-    setSelectedFile(file);
-  };
   //Ainesosan lisääminen Varmistaa että inputit eivät ole tyhjiä
   const addIngredient = () => {
     if (IngAmount) {
@@ -86,40 +114,32 @@ const RuokaKategoria = () => {
     }
   };
 
-  
+
+  //Heittää consoleen mitä tallentuu, tietokanta yhteys myöhemmin
   //Varmistaa että kentät eivät ole tyhjiä
   const TallennaBtnClick = async () => {
     if (RecipeName) {
       if (RecipeCategory){
         if(Ingredients.length > 0){
           if(RecipeGuide){
+            console.log(selectedFile);
             try {
-              const formData = new FormData();
-              formData.append('UserID', UserID);
-              formData.append('RecipeName', RecipeName);
-              formData.append('RecipeCategory', RecipeCategory);
-              formData.append('RecipeGuide', RecipeGuide);
-              formData.append('RecipeDesc', RecipeDesc);
-              formData.append('Tags', Tags);
-              Ingredients.forEach((ingredient, index) => {
-                formData.append(`Ingredients[${index}][IngAmount]`, ingredient.IngAmount);
-                formData.append(`Ingredients[${index}][IngMeasure]`, ingredient.IngMeasure);
-                formData.append(`Ingredients[${index}][IngName]`, ingredient.IngName);
-              });
-              if (selectedFile) {
-                const reader = new FileReader();
-                reader.readAsDataURL(selectedFile);
-                reader.onloadend = () => {
-                  const base64Data = reader.result.split(',')[1];
-                  formData.append('image', base64Data);
-                };
-              }
-  
               const response = await fetch('http://localhost:3001/api/recipe/add', {
                 method: 'POST',
-                body: formData,
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                  UserID,
+                  RecipeName,
+                  RecipeCategory,
+                  RecipeGuide,
+                  RecipeDesc,
+                  Tags,
+                  Ingredients,
+                }),
               });
-  
+        
               if (response.ok) {
                 console.log('Recipe added successfully');
               } else {
@@ -210,14 +230,13 @@ const RuokaKategoria = () => {
        <div>
        <textarea type="text" value={RecipeDesc} onChange={RecipeDescChange}></textarea>
        </div>
-       <label>Tags:</label>
+       <label>tags:</label>
        <div>
-       <textarea type="text" value={Tags} onChange={RecipeTagChange}></textarea>
+       <textarea type="text" value={Tags} onChange={TagsChange}></textarea>
        </div>
-       <label>Lisää kuva:</label>
-       <div>
-       <input type="file" name="file" accept=".jpg, .jpeg, .png" onChange={handleFileChange} />
       </div>
+      <div>
+      <input type="file" accept=".jpg, .jpeg, .png" onChange={handleFileChange} />
       </div>
       <button type="button" onClick={TallennaBtnClick}>
         Tallenna
