@@ -11,7 +11,8 @@ const RuokaKategoria = () => {
   const [RecipeDesc, setRecipeDesc] = useState('');
   const [RecipeGuide, setRecipeGuide] = useState('');
   const [UserID, setUserID] = useState('121');
-  const [Tags, setTags] = useState('tags');
+  const [Tags, setTags] = useState('');
+  const [selectedFile, setSelectedFile] = useState(null);
   //Vaihtoehdot kategorialle ja ainesosan mitalle
   const Kategoria = ['Alkupala', 'Juoma', 'Välipala', 'Pääruoka', 'Jälkiruoka', 'Leivonnaiset', 'Muu'];
   const options = ['ml', 'tl', 'rkl', 'dl', 'l', 'kkp' ,'g', 'kg', 'kpl'];
@@ -29,7 +30,7 @@ const RuokaKategoria = () => {
   Muut:
   kpl = kappale
   */
-
+  
 
   //use state changerit
   const CategoryChange = (option) => {
@@ -61,6 +62,14 @@ const RuokaKategoria = () => {
     setRecipeGuide(event.target.value)
   }
 
+  const RecipeTagChange = (event) => {
+    setTags(event.target.value)
+  }
+
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    setSelectedFile(file);
+  };
   //Ainesosan lisääminen Varmistaa että inputit eivät ole tyhjiä
   const addIngredient = () => {
     if (IngAmount) {
@@ -77,8 +86,7 @@ const RuokaKategoria = () => {
     }
   };
 
-
-  //Heittää consoleen mitä tallentuu, tietokanta yhteys myöhemmin
+  
   //Varmistaa että kentät eivät ole tyhjiä
   const TallennaBtnClick = async () => {
     if (RecipeName) {
@@ -86,22 +94,32 @@ const RuokaKategoria = () => {
         if(Ingredients.length > 0){
           if(RecipeGuide){
             try {
+              const formData = new FormData();
+              formData.append('UserID', UserID);
+              formData.append('RecipeName', RecipeName);
+              formData.append('RecipeCategory', RecipeCategory);
+              formData.append('RecipeGuide', RecipeGuide);
+              formData.append('RecipeDesc', RecipeDesc);
+              formData.append('Tags', Tags);
+              Ingredients.forEach((ingredient, index) => {
+                formData.append(`Ingredients[${index}][IngAmount]`, ingredient.IngAmount);
+                formData.append(`Ingredients[${index}][IngMeasure]`, ingredient.IngMeasure);
+                formData.append(`Ingredients[${index}][IngName]`, ingredient.IngName);
+              });
+              if (selectedFile) {
+                const reader = new FileReader();
+                reader.readAsDataURL(selectedFile);
+                reader.onloadend = () => {
+                  const base64Data = reader.result.split(',')[1];
+                  formData.append('image', base64Data);
+                };
+              }
+  
               const response = await fetch('http://localhost:3001/api/recipe/add', {
                 method: 'POST',
-                headers: {
-                  'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                  UserID,
-                  RecipeName,
-                  RecipeCategory,
-                  RecipeGuide,
-                  RecipeDesc,
-                  Tags,
-                  Ingredients,
-                }),
+                body: formData,
               });
-        
+  
               if (response.ok) {
                 console.log('Recipe added successfully');
               } else {
@@ -192,6 +210,14 @@ const RuokaKategoria = () => {
        <div>
        <textarea type="text" value={RecipeDesc} onChange={RecipeDescChange}></textarea>
        </div>
+       <label>Tags:</label>
+       <div>
+       <textarea type="text" value={Tags} onChange={RecipeTagChange}></textarea>
+       </div>
+       <label>Lisää kuva:</label>
+       <div>
+       <input type="file" name="file" accept=".jpg, .jpeg, .png" onChange={handleFileChange} />
+      </div>
       </div>
       <button type="button" onClick={TallennaBtnClick}>
         Tallenna
