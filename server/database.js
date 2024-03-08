@@ -90,21 +90,19 @@ const getUserFromDatabase = async (req, res) => {
 
 
 const addRecipeToDatabase = async (req, res) => {
-  const { UserID, RecipeName, RecipeCategory, RecipeGuide, RecipeDesc, Tags, Ingredients } = req.body;
+  const { UserID, RecipeName, RecipeCategory, RecipeGuide, RecipeDesc, Tags, Ingredients, selectedFile } = req.body;
   try {
     await sql.connect(config);
     const transaction = new sql.Transaction();
 
     try {
       await transaction.begin();
-
       // Insert into recipes table
       const recipeQuery = `
-        INSERT INTO [dbo].[recipes] (userid, recipename, category, instructions, description, tags)
-        VALUES (@Userid, @RecipeName, @RecipeCategory, @RecipeGuide, @RecipeDesc, @Tags);
-        SELECT SCOPE_IDENTITY() AS RecipeID; -- Retrieve the newly inserted recipe ID
+      INSERT INTO [dbo].[recipes] (userid, recipename, category, instructions, description, tags${selectedFile ? ', images' : ''})
+      VALUES (@Userid, @RecipeName, @RecipeCategory, @RecipeGuide, @RecipeDesc, @Tags${selectedFile ? ', @selectedFile' : ''});
+      SELECT SCOPE_IDENTITY() AS RecipeID; -- Retrieve the newly inserted recipe ID
       `;
-
       const recipeResult = await new sql.Request(transaction)
         .input('Userid', sql.NVarChar, UserID)
         .input('RecipeName', sql.NVarChar, RecipeName)
@@ -112,16 +110,14 @@ const addRecipeToDatabase = async (req, res) => {
         .input('RecipeGuide', sql.NVarChar, RecipeGuide)
         .input('RecipeDesc', sql.NVarChar, RecipeDesc)
         .input('Tags', sql.NVarChar, Tags)
+        .input('selectedFile', sql.VarBinary, selectedFile ? Buffer.from(selectedFile, 'base64') : null)
         .query(recipeQuery);
-
       const recipeID = recipeResult.recordset[0].RecipeID;
-
       // Insert into ingredients table for each ingredient
       const ingredientQuery = `
         INSERT INTO [dbo].[ingredients] (recipeid, quantity, measure, ingredientname)
         VALUES (@RecipeID, @Quantity, @Measure, @IngredientName);
       `;
-
       for (let i = 0; i < Ingredients.length; i++) {
         const ingredient = Ingredients[i];
         await new sql.Request(transaction)
@@ -131,7 +127,6 @@ const addRecipeToDatabase = async (req, res) => {
           .input('IngredientName', sql.NVarChar, ingredient.IngName)
           .query(ingredientQuery);
       }
-
       await transaction.commit();
       return true;
     } catch (error) {

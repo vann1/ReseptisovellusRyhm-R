@@ -56,9 +56,7 @@ const RuokaKategoria = () => {
           reject(error);
         };
   
-        // Convert the file to a Blob before reading as base64
-        const blob = new Blob([file], { type: file.type });
-        reader.readAsDataURL(blob);
+        reader.readAsDataURL(file);
       } catch (error) {
         reject(error);
       }
@@ -137,6 +135,7 @@ const RuokaKategoria = () => {
                   RecipeDesc,
                   Tags,
                   Ingredients,
+                  selectedFile,
                 }),
               });
         
