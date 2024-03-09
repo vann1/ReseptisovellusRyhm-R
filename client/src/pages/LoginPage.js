@@ -1,39 +1,38 @@
-import React, { useEffect, useState,  } from 'react';
-import LoginForm from '../components/LoginForm';
+import React, { useEffect, useState } from "react";
+import LoginForm from "../components/LoginForm";
 //testiwqeqw
 const LoginPage = () => {
-  const [virheViesti, setVirheViesti] = useState('');
-
+  const [virheViesti, setVirheViesti] = useState("");
 
   const handleLogin = async (email, password) => {
-    setVirheViesti('');
+    setVirheViesti("");
     try {
-      const response = await fetch('http://localhost:3001/api/user/login', {
-        method: 'POST',
+      const response = await fetch("http://localhost:3001/api/user/login", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify({email, password}),
+        body: JSON.stringify({ email, password }),
       });
       const data = await response.json();
-      console.log("datsku",data)
+
       if (response.ok) {
-        localStorage.setItem('jwt', data.data.token);
-      }
-      else {
+        console.log("onnistui!");
+        console.log(data);
+      } else {
         setVirheViesti("Käyttäjätunnus tai salasana väärä");
         throw new Error(data.error);
       }
     } catch (error) {
-      console.error('Error:', error);
+      console.error("Error:", error);
     }
-};
-  return(
+  };
+  return (
     <div>
       <h1>Kirjaudu</h1>
-      <LoginForm virheViesti={virheViesti} onLogin={handleLogin}></LoginForm >
+      <LoginForm virheViesti={virheViesti} onLogin={handleLogin}></LoginForm>
     </div>
-  )
-}
+  );
+};
 
-export {LoginPage};
+export { LoginPage };

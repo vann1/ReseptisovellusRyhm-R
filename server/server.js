@@ -1,26 +1,26 @@
-require('dotenv').config();
-const express = require('express');
-const cors = require('cors');
-const bodyParser = require('body-parser');
-const sql = require('mssql');
+require("dotenv").config();
+const express = require("express");
+const cors = require("cors");
+const bodyParser = require("body-parser");
+const sql = require("mssql");
 const app = express();
-const config = require('./config/config'); // Tietokantayhteysasetukset
-const userRoutes = require('./routes/userRoutes');
-const recipeRoutes = require('./routes/recipeRoutes');
-const { checkUser } = require('./middlewares/authMiddleware');
+const config = require("./config/config"); // Tietokantayhteysasetukset
+const userRoutes = require("./routes/userRoutes");
+const recipeRoutes = require("./routes/recipeRoutes");
+const { checkUser } = require("./middlewares/authMiddleware");
 
-app.use(cors());// Enable CORS for all routes
+app.use(cors()); // Enable CORS for all routes
 app.use(bodyParser.json());
 
 // Connect to the database
 sql.connect(config, (err) => {
   if (err) {
-    console.error('Error connecting to the database:', err);
+    console.error("Error connecting to the database:", err);
   } else {
-    console.log('Connected to the database');
+    console.log("Connected to the database");
   }
 });
-app.get('*', checkUser)
+app.get("*", checkUser);
 //Configure route for request /api/user which uses middleware functions from userRoutes file
 app.use("/api/user", userRoutes);
 //Configure route for request /api/recipe which uses middleware functions from recipeRoutes file
