@@ -58,6 +58,7 @@ const loginUser = async (req, res, maxAge) => {
     if (await comparePassword(req, res, user)) {
       //If the user is found, it calls the createJWT function with parameters req, res, and the user obtained from the getUserFromDatabase function so far.
       const token = createJWT(user.userid, maxAge);
+      console.log(token)
       return token;
     } else {
       return;
