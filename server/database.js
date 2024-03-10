@@ -139,6 +139,70 @@ const addRecipeToDatabase = async (req, res) => {
     return false;
   }
 };
+
+/********************************************************* */
+
+const getRecipeFromDatabase = async (req, res) => {
+  // Assuming your database connection is already established and stored in the 'sql' variable
+
+  // Destructure parameters from the request body
+  const { recipeName, recipeCategory, recipeTag, recipeUsername, recipeOwnerName } = req.body;
+
+  try {
+    // Initialize a new request object
+    const request = new sql.Request();
+
+    // Build the query based on the provided parameters
+    let query = 'SELECT * FROM recipes WHERE 1=1'; // Start with a true condition
+
+    if (recipeName) {
+      query += ' AND recipename LIKE @recipeName';
+      request.input('recipeName', sql.NVarChar, `%${recipeName}%`);
+    }
+
+    if (recipeCategory) {
+      query += ' AND category LIKE @recipeCategory';
+      request.input('recipeCategory', sql.NVarChar, `%${recipeCategory}%`);
+    }
+
+    if (recipeTag) {
+      query += ' AND tags LIKE @recipeTag';
+      request.input('recipeTag', sql.NVarChar, `%${recipeTag}%`);
+    }
+
+    if (recipeUsername) {
+      query +=
+        ' AND userid IN (SELECT userid FROM users WHERE username LIKE @recipeUsername)';
+      request.input('recipeUsername', sql.NVarChar, `%${recipeUsername}%`);
+    }
+
+    if (recipeOwnerName) {
+      query +=
+        ' AND userid IN (SELECT userid FROM users WHERE name LIKE @recipeOwnerName)';
+      request.input('recipeOwnerName', sql.NVarChar, `%${recipeOwnerName}%`);
+    }
+    
+    // Execute the query
+    const result = await request.query(query);
+
+    console.log('SQL Query:', query);
+
+    if (result.recordset.length > 0) {
+      // Return the first record if any
+      const recipes = result;
+      console.log(recipes);
+      return recipes;
+    } else {
+      return undefined;
+    }
+  } catch (error) {
+    // Handle errors
+    console.error(error);
+    return undefined;
+  }
+};
+
+
+
   
-  
-module.exports = {addUserToDatabase, getUserFromDatabase, addRecipeToDatabase};
+module.exports = {addUserToDatabase, getUserFromDatabase, addRecipeToDatabase, getRecipeFromDatabase};

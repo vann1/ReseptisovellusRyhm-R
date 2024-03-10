@@ -6,6 +6,7 @@ import { LoginPage } from './pages/LoginPage';
 import {Navigation} from './components/navigationComponent';
 import RuokaKategoria from './pages/UusiResepti';
 import { HomePage } from './pages/homepage';
+import SearchPage from './pages/SearchPage';
 function App() {
   //Navigatio komponentti on vaan testausta varten, voi poistaa
   //localStorage.clear()
@@ -17,6 +18,7 @@ function App() {
         <Route path='/NewRecipe' element={<RuokaKategoria></RuokaKategoria>}></Route>
         <Route path="/RegisterPage" element={<RegisterPage></RegisterPage>}></Route>
         <Route path="/LoginPage" element={<LoginPage></LoginPage>}></Route>
+        <Route path="/SearchPage" element={<SearchPage></SearchPage>}></Route>
       </Routes>
     </div>
   );

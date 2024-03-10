@@ -10,7 +10,7 @@ const RuokaKategoria = () => {
   const [Ingredients, setIngredients] = useState([]); 
   const [RecipeDesc, setRecipeDesc] = useState('');
   const [RecipeGuide, setRecipeGuide] = useState('');
-  const [UserID, setUserID] = useState('121');
+  const [UserID, setUserID] = useState('125');
   const [Tags, setTags] = useState('');
   const [selectedFile, setSelectedFile] = useState(null);
   //Vaihtoehdot kategorialle ja ainesosan mitalle
@@ -47,15 +47,12 @@ const RuokaKategoria = () => {
     return new Promise((resolve, reject) => {
       try {
         const reader = new FileReader();
-  
         reader.onload = () => {
           resolve(reader.result?.split(',')[1]);
         };
-  
         reader.onerror = (error) => {
           reject(error);
         };
-  
         reader.readAsDataURL(file);
       } catch (error) {
         reject(error);
