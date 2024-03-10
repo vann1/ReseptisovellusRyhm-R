@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const {getUserFromDatabase} = require('../database')
+const {getUserFromDatabaseById} = require('../database')
 require('dotenv').config();
 
 
@@ -9,11 +9,8 @@ const requireAuth = async (req, res, next) => {
         return res.status(401).json({error: 'Authorization token required'})
     }
     const token = authorization.split(' ')[1];
-
     try {
         jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)
-        const user = await getUserFromDatabase(req, res);
-        req.user = user.userid;
         next();
     }catch(err) {
         console.log(err)
