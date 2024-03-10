@@ -3,24 +3,21 @@ const {getUserFromDatabase} = require('../database')
 require('dotenv').config();
 
 
-const requireAuth = (req, res, next) => {
-    const authHeader = req.headers['authorization'];
-    const token = authHeader && authHeader.split(' ')[1];
-    //check json token exist
-    if(token) {
-        jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decodedToken) => {
-            if(err){
-                console.log(err.message)
-                res.redirect('/login');
-            }
-            else {
-                console.log(decodedToken);
-                next();
-            }
-        });
+const requireAuth = async (req, res, next) => {
+    const {authorization} = req.headers;
+    if(!authorization){
+        return res.status(401).json({error: 'Authorization token required'})
     }
-    else {
-        res.redirect('/login');
+    const token = authorization.split(' ')[1];
+
+    try {
+        jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)
+        const user = await getUserFromDatabase(req, res);
+        req.user = user.userid;
+        next();
+    }catch(err) {
+        console.log(err)
+        res.status(401).json({error: 'Request is not authorized'});
     }
 }   
 

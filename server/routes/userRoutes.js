@@ -30,7 +30,6 @@ const maxAge = 60 * 60 * 1000;
  */
 router.post("/login", async (req, res) => {
   const {email} = req.body;
-  console.log(email)
   try {
   //First, it checks if the received request was in JSON format or not.
   if (!isJson(req)) {
@@ -44,8 +43,7 @@ router.post("/login", async (req, res) => {
   if (!token) {
     return notFound(res, "User not found in the database");
   } else {
-    res.setHeader('Authorization', `Bearer ${token}`);
-    return ok(res, "Login successful", email)
+    res.status(200).json({email: email, token: token})
   }
 } catch (err){
   return internalServerError(res, "Internal server error: " + err)

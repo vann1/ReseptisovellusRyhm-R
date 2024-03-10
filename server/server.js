@@ -7,7 +7,6 @@ const app = express();
 const config = require("./config/config"); // Tietokantayhteysasetukset
 const userRoutes = require("./routes/userRoutes");
 const recipeRoutes = require("./routes/recipeRoutes");
-const { checkUser } = require("./middlewares/authMiddleware");
 
 app.use(cors()); // Enable CORS for all routes
 app.use(bodyParser.json());
@@ -20,7 +19,7 @@ sql.connect(config, (err) => {
     console.log("Connected to the database");
   }
 });
-app.get("*", checkUser);
+// app.get("*", checkUser);
 //Configure route for request /api/user which uses middleware functions from userRoutes file
 app.use("/api/user", userRoutes);
 //Configure route for request /api/recipe which uses middleware functions from recipeRoutes file
