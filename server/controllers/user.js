@@ -58,21 +58,13 @@ const loginUser = async (req, res, maxAge) => {
     if (await comparePassword(req, res, user)) {
       //If the user is found, it calls the createJWT function with parameters req, res, and the user obtained from the getUserFromDatabase function so far.
       const token = createJWT(user.userid, maxAge);
-      console.log("1111");
       return token;
-
-      //Then code returns responseUtils.ok function with parameters res, successful message and the JWT token.
-      // return responseUtils.sendJson(res, token, 201);
     } else {
-      console.log("asdasd");
-      return unauthorized(res, "Virheellinen salasana");
+      return;
     }
   } catch (error) {
     console.error("Error login the user:", error);
-    return internalServerError(
-      res,
-      "Internal server error, while creating user"
-    );
+    return internalServerError(res,"Internal server error, while creating user");
   }
 };
 

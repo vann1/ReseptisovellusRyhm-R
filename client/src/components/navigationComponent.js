@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Route, Link, useActionData } from 'react-router-dom';
 import '../styles/styles.css'
 
-const Navigation = () => {
+const Navigation = (props) => {
   return(
     <nav className="navigation">
       <ul className="navigation-list">

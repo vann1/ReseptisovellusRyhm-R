@@ -1,8 +1,11 @@
 const jwt = require('jsonwebtoken');
 const {getUserFromDatabase} = require('../database')
 require('dotenv').config();
+
+
 const requireAuth = (req, res, next) => {
-    const token = req.cookies.jwt;
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(' ')[1];
     //check json token exist
     if(token) {
         jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decodedToken) => {
@@ -23,7 +26,8 @@ const requireAuth = (req, res, next) => {
 
 
 const checkUser =(req,res,next) => {
-    const token = req.cookies.jwt;
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(' ')[1];
     if(token) {
         jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, async (err, decodedToken) => {
             if(err){

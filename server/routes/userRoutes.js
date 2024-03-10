@@ -2,7 +2,7 @@ const express = require("express");
 const { isJson } = require("../utils/requestUtils");
 const router = express.Router();
 const { createUser, loginUser } = require("../controllers/user");
-const { badRequest, notFound, ok } = require("../utils/responseUtils");
+const { badRequest, notFound, ok , internalServerError} = require("../utils/responseUtils");
 
 /**
  *
@@ -29,6 +29,9 @@ const maxAge = 60 * 60 * 1000;
  * @returns {Promise<void>} A Promise that resolves when the user login process is complete.
  */
 router.post("/login", async (req, res) => {
+  const {email} = req.body;
+  console.log(email)
+  try {
   //First, it checks if the received request was in JSON format or not.
   if (!isJson(req)) {
     //If it wasn't, the responseUtils.badRequest function is returned, which takes res and an error message as parameters.
@@ -38,17 +41,15 @@ router.post("/login", async (req, res) => {
   // res.cookie('jwt', token, { httpOnly: true, maxAge: maxAge * 1000})
   const token = await loginUser(req, res, maxAge);
   // console.log(token)
-  if (token !== false) {
-    res.cookie("jwt", token, {
-      httpOnly: true,
-      maxAge: maxAge,
-      sameSite: "None",
-      secure: true,
-    });
-    return ok(res, "Login successful");
-  } else {
+  if (!token) {
     return notFound(res, "User not found in the database");
+  } else {
+    res.setHeader('Authorization', `Bearer ${token}`);
+    return ok(res, "Login successful", email)
   }
+} catch (err){
+  return internalServerError(res, "Internal server error: " + err)
+}
 });
 
 module.exports = router;

@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import LoginForm from "../components/LoginForm";
 //testiwqeqw
 const LoginPage = () => {
   const [virheViesti, setVirheViesti] = useState("");
-
   const handleLogin = async (email, password) => {
     setVirheViesti("");
     try {
@@ -17,8 +16,7 @@ const LoginPage = () => {
       const data = await response.json();
 
       if (response.ok) {
-        console.log("onnistui!");
-        console.log(data);
+        console.log(data)
       } else {
         setVirheViesti("Käyttäjätunnus tai salasana väärä");
         throw new Error(data.error);
