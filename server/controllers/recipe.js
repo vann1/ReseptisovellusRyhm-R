@@ -1,5 +1,5 @@
-const {badRequest, created, internalServerError} = require('../utils/responseUtils')
-const {addRecipeToDatabase} = require('../database')
+const {badRequest, created, internalServerError, notFound, ok} = require('../utils/responseUtils')
+const {addRecipeToDatabase, getRecipeFromDatabase} = require('../database')
 
 const addRecipe = (req, res) => {
     try {
@@ -15,18 +15,18 @@ const addRecipe = (req, res) => {
 
 const SearchRecipe = async (req, res) => {
     try {
-        const recipes = await database.getRecipeFromDatabase(req, res);
+        const recipes = await getRecipeFromDatabase(req, res);
 
         if (!recipes || recipes.length === 0) {
-            return responseUtils.notFound(res, "Recipe not found in the database");
+            return notFound(res, "Recipe not found in the database");
         }
 
         console.log('Recipes: ', recipes);
-        return responseUtils.ok(res, "Search completed.", { recipes });
+        return ok(res, "Search completed.", { recipes });
 
     } catch (error) {
         console.error("Error searching recipe: " + error);
-        return responseUtils.internalServerError(res, "Internal server error while searching for recipes");
+        return internalServerError(res, "Internal server error while searching for recipes");
     }
 };
 
