@@ -31,15 +31,12 @@ const Navigation = (props) => {
           <Link to="/LoginPage" className="navigation-link">Log in</Link>
         </li>
         </>)}
-        {user && (
-          <>
         <li className="navigation-item">
           <Link to="/NewRecipe" className="navigation-link">New recipe</Link>
         </li>
         <li className="navigation-item">
           <Link to="/SearchPage" className="navigation-link">Search</Link>
-        </li></>
-        )}
+        </li>
       </ul>
     </div>
     {user && (<div>
