@@ -7,6 +7,7 @@ import {Navigation} from './components/navigationComponent';
 import RuokaKategoria from './pages/UusiResepti';
 import { HomePage } from './pages/homepage';
 import SearchPage from './pages/SearchPage';
+import {ProfilePage} from './pages/ProfilePage';
 import { useAuthContext } from "./hooks/useAuthContext";
 function App() {
   const {user} = useAuthContext()
@@ -24,6 +25,8 @@ function App() {
         <Route path="/RegisterPage" element={<RegisterPage></RegisterPage>}></Route>
         <Route path="/LoginPage" element={<LoginPage></LoginPage>}></Route>
         </>)} 
+        {user &&
+        <Route path='/ProfilePage' element={<ProfilePage></ProfilePage>}></Route>}
       </Routes>
     </div>
   );

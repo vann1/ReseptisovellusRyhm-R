@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
-
+import { useAuthContext } from "../hooks/useAuthContext";
+import { useNavigate } from 'react-router-dom';
 const RuokaKategoria = () => {
+  //ContextApi for current user
+  const {user} = useAuthContext();
+  const navigate = useNavigate();
   //Muuttujat
   const [RecipeCategory, setRecipeCategory] = useState(null);
   const [IngAmount, setIngAmount] = useState('');
@@ -119,10 +123,16 @@ const RuokaKategoria = () => {
           if(RecipeGuide){
             console.log(selectedFile);
             try {
+
+              //checks if user is logged in to the site
+              if(!user) {
+                throw Error('Sinun täytyy kirjautuu sisään jotta voit luoda uusia reseptejä.')
+             }
               const response = await fetch('http://localhost:3001/api/recipe/add', {
                 method: 'POST',
                 headers: {
                   'Content-Type': 'application/json',
+                  'Authorization': `Bearer ${user.token}`
                 },
                 body: JSON.stringify({
                   UserID,
@@ -140,6 +150,8 @@ const RuokaKategoria = () => {
                 console.log('Recipe added successfully');
               } else {
                 console.error('Failed to add recipe:', response.statusText);
+                //if not valid jwt token redirect to login
+                navigate('/LoginPage')
               }
             } catch (error) {
               console.error('Error:', error.message);

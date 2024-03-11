@@ -1,8 +1,10 @@
 const express = require("express");
 const { isJson } = require("../utils/requestUtils");
 const router = express.Router();
-const { createUser, loginUser } = require("../controllers/user");
+const { createUser, loginUser, showUser } = require("../controllers/user");
 const { badRequest, notFound, ok , internalServerError} = require("../utils/responseUtils");
+const {requireAuth} = require('../middlewares/authMiddleware');
+
 
 /**
  *
@@ -45,6 +47,21 @@ router.post("/login", async (req, res) => {
   } else {
     res.status(200).json({email: email, token: token})
   }
+} catch (err){
+  return internalServerError(res, "Internal server error: " + err)
+}
+});
+
+router.use(requireAuth);
+
+router.post("/profile", async (req, res) => {
+  try {
+  //First, it checks if the received request was in JSON format or not.
+  if (!isJson(req)) {
+    //If it wasn't, the responseUtils.badRequest function is returned, which takes res and an error message as parameters.
+    return badRequest(res, "Content was not Json");
+  }
+  return showUser(req,res);
 } catch (err){
   return internalServerError(res, "Internal server error: " + err)
 }

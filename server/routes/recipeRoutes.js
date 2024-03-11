@@ -5,8 +5,9 @@ const {badRequest} = require("../utils/responseUtils")
 const {isJson} = require('../utils/requestUtils')
 const router = express.Router();
 const {addRecipe, SearchRecipe} = require("../controllers/recipe")
+const {requireAuth} = require('../middlewares/authMiddleware')
 
-
+router.use(requireAuth);
 router.post('/add', async (req, res) => {
     if(!isJson) {
       //If it wasn't, the responseUtils.badRequest function is returned, which takes res and an error message as parameters.

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Route, Link, useActionData } from 'react-router-dom';
 import '../styles/styles.css'
 import { useAuthContext } from "../hooks/useAuthContext";
+import { ProfileButton } from './ProfileButton';
 const Navigation = (props) => {
   const {dispatch, user} = useAuthContext()
   
@@ -40,7 +41,7 @@ const Navigation = (props) => {
       </ul>
     </div>
     {user && (<div>
-      <span>{user.email}</span>
+      <ProfileButton></ProfileButton>
         <button onClick={handleClick}>Log out</button>
     </div>)}
     </nav>

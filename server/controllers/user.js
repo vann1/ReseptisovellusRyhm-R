@@ -69,4 +69,24 @@ const loginUser = async (req, res, maxAge) => {
   }
 };
 
-module.exports = { createUser, loginUser };
+const showUser = async (req, res) => {
+  try {
+    const user = await getUserFromDatabase(req, res);
+
+    //First, it checks if the requested user exists in the database.
+    if (user === undefined) {
+      //If the user is not found, it returns the notFound function from responseUtils, which takes res and an error message as parameters.
+      return notFound(res, "Error finding user from database")
+    }
+    const userWithoutPassword = { ...user };
+    delete userWithoutPassword.password;
+    return ok(res, "User found from the database", {userWithoutPassword})
+  } 
+  catch (error) {
+    return internalServerError(res,"Internal server error, while creating user");
+  }
+};
+
+
+
+module.exports = { createUser, loginUser, showUser };
