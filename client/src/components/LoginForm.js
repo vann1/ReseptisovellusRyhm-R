@@ -1,6 +1,6 @@
 import { useState , useContext} from "react";
 import '../styles/styles.css'
-const LoginForm = ({onLogin, virheViesti}) => {
+const LoginForm = ({onLogin, virheViesti, isLoading}) => {
   const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');
   const [errorMessages, setErrorMessages] = useState('');
@@ -27,7 +27,7 @@ const LoginForm = ({onLogin, virheViesti}) => {
       />
       <br></br>
       <p className="loginError">{virheViesti}</p>
-      <button onClick={handleLogin}>Kirjaudu</button>
+      <button onClick={handleLogin} disabled={isLoading}>Kirjaudu</button>
     </div>
   );
 };
