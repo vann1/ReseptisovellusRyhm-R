@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Link, useActionData } from 'react-route
 import '../styles/styles.css'
 import { useAuthContext } from "../hooks/useAuthContext";
 import { ProfileButton } from './ProfileButton';
+import { AdminButton } from '../components/AdminButton';
 const Navigation = (props) => {
   const {dispatch, user} = useAuthContext()
   
@@ -40,10 +41,11 @@ const Navigation = (props) => {
         </li>
       </ul>
     </div>
-    {user && (<div>
+    {user && (<>
       <ProfileButton></ProfileButton>
         <button onClick={handleClick}>Log out</button>
-    </div>)}
+        {user.role === 1  && (<><AdminButton></AdminButton></>)}</>)}
+    
     </nav>
   )
 };

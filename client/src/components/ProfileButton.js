@@ -8,7 +8,6 @@ const ProfileButton = () => {
     }
 
 
-
     return(
         <button onClick={handleProfilePage}>{user.email}</button>
     )
