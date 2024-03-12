@@ -112,7 +112,7 @@ const RuokaKategoria = () => {
       alert('Ainesosan määrä puuttuu');
     }
   };
-
+ 
 
   //Heittää consoleen mitä tallentuu, tietokanta yhteys myöhemmin
   //Varmistaa että kentät eivät ole tyhjiä
@@ -121,7 +121,7 @@ const RuokaKategoria = () => {
       if (RecipeCategory){
         if(Ingredients.length > 0){
           if(RecipeGuide){
-            const UserID = `${user.id}`
+            const UserID = `${user.userid}`
             console.log(user);
             console.log(UserID);
             console.log(selectedFile);
