@@ -6,7 +6,7 @@ const {
   ok,
   unauthorized
 } = require("../utils/responseUtils");
-const { addUserToDatabase, getUserFromDatabase } = require("../database");
+const { addUserToDatabase, getUserFromDatabase ,getAllUsersFromDatabase, deleteUserFromDatabase} = require("../database");
 const { createJWT, comparePassword } = require("../utils/userUtils");
 
 /**
@@ -51,21 +51,24 @@ const loginUser = async (req, res, maxAge) => {
   try {
     const user = await getUserFromDatabase(req, res);
     //First, it checks if the requested user exists in the database.
-    if (user === undefined) {
+    if (!user) {
       //If the user is not found, it returns the notFound function from responseUtils, which takes res and an error message as parameters.
       return false;
     }
     if (await comparePassword(req, res, user)) {
       //If the user is found, it calls the createJWT function with parameters req, res, and the user obtained from the getUserFromDatabase function so far.
       const token = createJWT(user.userid, maxAge);
-      console.log(token)
-      return token;
+      const details = 
+      { token: token,
+        user: user,
+      }
+      return details;
     } else {
       return;
     }
   } catch (error) {
     console.error("Error login the user:", error);
-    return internalServerError(res,"Internal server error, while creating user");
+    return internalServerError(res,"Internal server error, while logging in user");
   }
 };
 
@@ -74,7 +77,7 @@ const showUser = async (req, res) => {
     const user = await getUserFromDatabase(req, res);
 
     //First, it checks if the requested user exists in the database.
-    if (user === undefined) {
+    if (!user) {
       //If the user is not found, it returns the notFound function from responseUtils, which takes res and an error message as parameters.
       return notFound(res, "Error finding user from database")
     }
@@ -83,10 +86,33 @@ const showUser = async (req, res) => {
     return ok(res, "User found from the database", {userWithoutPassword})
   } 
   catch (error) {
-    return internalServerError(res,"Internal server error, while creating user");
+    return internalServerError(res,"Internal server error, while getting user details");
   }
 };
 
+const showAllUsers = async (req,res) => {
+  try {
+    const users = await getAllUsersFromDatabase(res);
+    if (!users) {
+      return notFound(res, "Error finding users from database")
+    }
+    return ok(res, "User found from the database", {users})
+  } 
+  catch (error) {
+    return internalServerError(res,"Internal server error, while getting users details");
+  }
+}
 
+const deleteUser = async (res, userid) => {
+  try {
+    const result = await deleteUserFromDatabase(userid);
+    if(!result) {
+      return notFound(res, "Error finding user from database")
+    }
+    return ok(res, "User delete from the database successfully.")
+  } catch(error) {
+    return internalServerError(res,"Internal server error, while deleting user from database");
+  }
+}
 
-module.exports = { createUser, loginUser, showUser };
+module.exports = { createUser, loginUser, showUser, showAllUsers , deleteUser};
