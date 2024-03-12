@@ -6,7 +6,7 @@ const {
   ok,
   unauthorized
 } = require("../utils/responseUtils");
-const { addUserToDatabase, getUserFromDatabase ,getAllUsersFromDatabase} = require("../database");
+const { addUserToDatabase, getUserFromDatabase ,getAllUsersFromDatabase, deleteUserFromDatabase} = require("../database");
 const { createJWT, comparePassword } = require("../utils/userUtils");
 
 /**
@@ -68,7 +68,7 @@ const loginUser = async (req, res, maxAge) => {
     }
   } catch (error) {
     console.error("Error login the user:", error);
-    return internalServerError(res,"Internal server error, while creating user");
+    return internalServerError(res,"Internal server error, while logging in user");
   }
 };
 
@@ -86,7 +86,7 @@ const showUser = async (req, res) => {
     return ok(res, "User found from the database", {userWithoutPassword})
   } 
   catch (error) {
-    return internalServerError(res,"Internal server error, while creating user");
+    return internalServerError(res,"Internal server error, while getting user details");
   }
 };
 
@@ -99,8 +99,20 @@ const showAllUsers = async (req,res) => {
     return ok(res, "User found from the database", {users})
   } 
   catch (error) {
-    return internalServerError(res,"Internal server error, while creating user");
+    return internalServerError(res,"Internal server error, while getting users details");
   }
 }
 
-module.exports = { createUser, loginUser, showUser, showAllUsers };
+const deleteUser = async (res, userid) => {
+  try {
+    const result = await deleteUserFromDatabase(userid);
+    if(!result) {
+      return notFound(res, "Error finding user from database")
+    }
+    return ok(res, "User delete from the database successfully.")
+  } catch(error) {
+    return internalServerError(res,"Internal server error, while deleting user from database");
+  }
+}
+
+module.exports = { createUser, loginUser, showUser, showAllUsers , deleteUser};

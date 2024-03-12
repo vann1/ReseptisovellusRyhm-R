@@ -227,7 +227,31 @@ const getAllUsersFromDatabase = async (req, res) => {
   }
 };
 
+const deleteUserFromDatabase = async (userid)  => {
+  try {
+    // Luodaan yhteys tietokantaan
+    await sql.connect(config);
+
+    // Alustetaan uusi pyyntö-olio SQL-kyselyjen lähettämistä varten
+    const request = new sql.Request();
+
+    // SQL-kysely käyttäjän poistamiseksi tietokannasta userId:n perusteella
+    const query = `DELETE FROM users WHERE userid = @userid`;
+
+    // Lähetetään SQL-kysely tietokantaan
+    const result = await request
+      .input("userid", sql.NVarChar, userid)
+      .query(query);
+
+    // Palautetaan tulos
+    return result;
+  } catch (error) {
+    console.error("Error deleting user from the database:", error);
+    throw error; // Heitetään virhe eteenpäin käsittelyä varten
+  }
+};
+
 
 
   
-module.exports = {addUserToDatabase, getUserFromDatabase, addRecipeToDatabase, getRecipeFromDatabase, getAllUsersFromDatabase};
+module.exports = {addUserToDatabase, getUserFromDatabase, addRecipeToDatabase, getRecipeFromDatabase, getAllUsersFromDatabase, deleteUserFromDatabase};
