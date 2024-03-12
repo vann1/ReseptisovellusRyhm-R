@@ -45,7 +45,7 @@ router.post("/login", async (req, res) => {
   if (!token) {
     return notFound(res, "User not found in the database");
   } else {
-    res.status(200).json({email: email, token: token})
+    res.status(200).json({email: email, token: token.jwtToken, id: token.userid})
   }
 } catch (err){
   return internalServerError(res, "Internal server error: " + err)

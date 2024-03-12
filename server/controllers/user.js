@@ -46,7 +46,7 @@ const createUser = async (req, res) => {
  * @param {Object} req - HTTP request object.
  * @param {Object} res - HTTP response object.
  * @returns {Promise<void>} - Promise indicating the state of execution.
- */
+ */  
 const loginUser = async (req, res, maxAge) => {
   try {
     const user = await getUserFromDatabase(req, res);
@@ -58,8 +58,10 @@ const loginUser = async (req, res, maxAge) => {
     if (await comparePassword(req, res, user)) {
       //If the user is found, it calls the createJWT function with parameters req, res, and the user obtained from the getUserFromDatabase function so far.
       const token = createJWT(user.userid, maxAge);
+      user.jwtToken = token;
+      console.log(user);
       console.log(token)
-      return token;
+      return user;
     } else {
       return;
     }
