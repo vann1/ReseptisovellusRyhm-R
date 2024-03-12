@@ -21,7 +21,6 @@ const LoginPage = () => {
         body: JSON.stringify({ email, password }),
       });
       const data = await response.json();
-
       if (!response.ok) {
         setIsLoading(false);
         setError(data.error);

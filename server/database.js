@@ -199,7 +199,35 @@ const getRecipeFromDatabase = async (req, res) => {
   }
 };
 
+const getAllUsersFromDatabase = async (req, res) => {
+  try {
+    // Luodaan yhteys tietokantaan
+    await sql.connect(config);
+
+    // Alustetaan uusi pyyntö-olio SQL-kyselyjen lähettämistä varten
+    const request = new sql.Request();
+
+    // SQL-kysely kaikkien käyttäjien hakemiseksi tietokannasta
+    const query = `SELECT * FROM users`;
+
+    // Lähetetään SQL-kysely tietokantaan
+    const result = await request.query(query);
+
+    // Tarkistetaan, onko hakutuloksia
+    if (result.recordset.length > 0) {
+      const users = result.recordset;
+      return users;
+    } else {
+      // Jos käyttäjiä ei löydy, lähetetään tyhjä tulos
+      return undefined;
+    }
+  } catch (error) {
+    console.error("Error getting users from the database:", error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
 
 
   
-module.exports = {addUserToDatabase, getUserFromDatabase, addRecipeToDatabase, getRecipeFromDatabase};
+module.exports = {addUserToDatabase, getUserFromDatabase, addRecipeToDatabase, getRecipeFromDatabase, getAllUsersFromDatabase};
