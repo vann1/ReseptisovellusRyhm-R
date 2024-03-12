@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 const SearchPage = () => {
   const [recipeName, setrecipeName] = useState('');
@@ -38,6 +38,9 @@ const SearchPage = () => {
     }
   };
 
+  useEffect(() => {
+    handleSearch();
+  },[])
   return (
     <div>
       <h1>Recipe Search</h1>
