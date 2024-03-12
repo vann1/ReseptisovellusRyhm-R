@@ -135,8 +135,8 @@ const addRecipeToDatabase = async (req, res) => {
     console.error('Error connecting to the database:', error);
     return false;
   }
-};
- 
+}; 
+  
 /********************************************************* */
 
 const getRecipeFromDatabase = async (req, res) => {

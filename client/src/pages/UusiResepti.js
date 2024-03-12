@@ -14,7 +14,6 @@ const RuokaKategoria = () => {
   const [Ingredients, setIngredients] = useState([]); 
   const [RecipeDesc, setRecipeDesc] = useState('');
   const [RecipeGuide, setRecipeGuide] = useState('');
-  const [UserID] = useState(`${user.id}`);
   const [Tags, setTags] = useState('');
   const [selectedFile, setSelectedFile] = useState(null);
   //Vaihtoehdot kategorialle ja ainesosan mitalle
@@ -97,6 +96,7 @@ const RuokaKategoria = () => {
     setTags(event.target.value)
   }
 
+
   //Ainesosan lisääminen Varmistaa että inputit eivät ole tyhjiä
   const addIngredient = () => {
     if (IngAmount) {
@@ -121,6 +121,7 @@ const RuokaKategoria = () => {
       if (RecipeCategory){
         if(Ingredients.length > 0){
           if(RecipeGuide){
+            const UserID = `${user.id}`
             console.log(user);
             console.log(UserID);
             console.log(selectedFile);
