@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 
 const SearchPage = () => {
   const [recipeName, setrecipeName] = useState('');
@@ -76,30 +77,7 @@ handleSearch();
   return (
     <div>
       <h1>Recipe Search</h1>
-      <div>
-        <label>Recipe id:</label>
-        <input type="text" value={recipeid} onChange={(e) => setrecipeID(e.target.value)} />
-      </div>
-      <div>
-        <label>Recipe Name:</label>
-        <input type="text" value={recipeName} onChange={(e) => setrecipeName(e.target.value)} />
-      </div>
-      <div>
-        <label>Category:</label>
-        <input type="text" value={recipeCategory} onChange={(e) => setrecipeCategory(e.target.value)} />
-      </div>
-      <div>
-        <label>Tags:</label>
-        <input type="text" value={recipeTag} onChange={(e) => setrecipeTag(e.target.value)} />
-      </div>
-      <div>
-        <label>Username:</label>
-        <input type="text" value={recipeUsername} onChange={(e) => setrecipeUsername(e.target.value)} />
-      </div>
-      <div>
-        <label>Name:</label>
-        <input type="text" value={recipeownerName} onChange={(e) => setrecipeownerName(e.target.value)} />
-      </div>
+      {/* Your existing input fields */}
       <button onClick={handleSearch}>Search</button>
 
       {searchResults.length > 0 && (
@@ -111,11 +89,17 @@ handleSearch();
               </tr>
             </thead>
             <tbody>
-            {searchResults.map((recipe, index) => (
-              <tr key={index}>
-                <td>{recipe.recipename} - {recipe.category} - {recipe.username}</td>
-              </tr>
-            ))}
+              {searchResults.map((recipe, index) => (
+                <tr key={index}>
+                  {/* Modify this part to make the recipe name clickable */}
+                  <td>
+                    <Link to={`/Recipe/${recipe.recipeid}`}>
+                      {recipe.recipename}
+                    </Link>{" "}
+                    - {recipe.category} - {recipe.username}
+                  </td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>
@@ -123,6 +107,5 @@ handleSearch();
     </div>
   );
 };
-
 
 export default SearchPage;
