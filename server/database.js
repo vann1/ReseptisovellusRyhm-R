@@ -201,24 +201,17 @@ const getRecipeFromDatabase = async (req, res) => {
 
 const getAllUsersFromDatabase = async (req, res) => {
   try {
-    // Luodaan yhteys tietokantaan
     await sql.connect(config);
-
-    // Alustetaan uusi pyyntö-olio SQL-kyselyjen lähettämistä varten
     const request = new sql.Request();
 
-    // SQL-kysely kaikkien käyttäjien hakemiseksi tietokannasta
     const query = `SELECT * FROM users`;
 
-    // Lähetetään SQL-kysely tietokantaan
     const result = await request.query(query);
 
-    // Tarkistetaan, onko hakutuloksia
     if (result.recordset.length > 0) {
       const users = result.recordset;
       return users;
     } else {
-      // Jos käyttäjiä ei löydy, lähetetään tyhjä tulos
       return undefined;
     }
   } catch (error) {
@@ -229,25 +222,17 @@ const getAllUsersFromDatabase = async (req, res) => {
 
 const deleteUserFromDatabase = async (userid)  => {
   try {
-    // Luodaan yhteys tietokantaan
     await sql.connect(config);
-
-    // Alustetaan uusi pyyntö-olio SQL-kyselyjen lähettämistä varten
     const request = new sql.Request();
-
-    // SQL-kysely käyttäjän poistamiseksi tietokannasta userId:n perusteella
     const query = `DELETE FROM users WHERE userid = @userid`;
 
-    // Lähetetään SQL-kysely tietokantaan
     const result = await request
       .input("userid", sql.NVarChar, userid)
       .query(query);
-
-    // Palautetaan tulos
     return result;
   } catch (error) {
     console.error("Error deleting user from the database:", error);
-    throw error; // Heitetään virhe eteenpäin käsittelyä varten
+    throw error;
   }
 };
 
