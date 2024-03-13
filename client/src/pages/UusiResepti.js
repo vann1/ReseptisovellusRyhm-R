@@ -208,7 +208,7 @@ const RuokaKategoria = () => {
         />
         Vain rekisteröityneille käyttäjille?
       </label>
-
+      <p>Ainesosat:</p>
       {Ingredients.map((ingredient, index) => (
         <div key={index} style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
           <div>
@@ -225,7 +225,7 @@ const RuokaKategoria = () => {
           </div>
         </div>
       ))}
-      <p>Ainesosat:</p>
+      
       <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
         <div>
           <label>Määrä:</label>
