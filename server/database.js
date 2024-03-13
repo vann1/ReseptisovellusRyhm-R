@@ -193,7 +193,6 @@ const getRecipeFromDatabase = async (req, res) => {
     if (result.recordset.length > 0) {
       // Return the first record if any
       const recipes = result;
-      console.log(recipes);
       return recipes;
     } else {
       return undefined;

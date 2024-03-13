@@ -7,7 +7,7 @@ const SearchPage = () => {
   const [recipeUsername, setrecipeUsername] = useState('');
   const [recipeownerName, setrecipeownerName] = useState('');
   const [searchResults, setSearchResults] = useState([]);
-  const [recipeID, setrecipeID] = useState('');
+  const [recipeid, setrecipeID] = useState('');
 
 
 
@@ -19,6 +19,7 @@ const SearchPage = () => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
+          recipeid,
           recipeName,
           recipeCategory,
           recipeTag,
@@ -53,7 +54,7 @@ handleSearch();
       <h1>Recipe Search</h1>
       <div>
         <label>Recipe id:</label>
-        <input type="text" value={recipeID} onChange={(e) => setrecipeID(e.target.value)} />
+        <input type="text" value={recipeid} onChange={(e) => setrecipeID(e.target.value)} />
       </div>
       <div>
         <label>Recipe Name:</label>
