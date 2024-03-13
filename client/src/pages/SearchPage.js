@@ -15,7 +15,6 @@ const SearchPage = () => {
 
   const handleSearch = async () => {
     try {
-      
       const response = await fetch('http://localhost:3001/api/recipe/search', {
         method: 'POST',
         headers: {
@@ -34,24 +33,29 @@ const SearchPage = () => {
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
-      const data = await response.json()
-      console.log(data)
-      // Check if user exists
-      if (user) {
-        // User exists, set search results directly
-        setSearchResults(data.data.recipes);
-      } else {
-        // User does not exist, filter recipes with regonly 0
-        const filteredRecipes = data.data.recipes.recordset.filter(recipe => recipe.regonly === 0);
-        setSearchResults(filteredRecipes);
-      }
+  
+      const data = await response.json();
+  
+      // Check if the user is logged in
+      const isLoggedIn = user;
+      // Filter recipes based on user login status and regonly value (0 or null)
+      const filteredRecipes = data.data.recipes.filter(recipe => {
+        if (isLoggedIn) {
+          // For logged-in users, include all recipes
+          return true;
+        } else {
+          // For non-logged-in users, include recipes with regonly 0 or null
+          return recipe.regonly === 0 || recipe.regonly === null;
+        }
+      });
+  
+      setSearchResults(filteredRecipes);
+  
     } catch (error) {
       console.error('Error during search:', error.message);
       setSearchResults([]);
     }
   };
-
-
 
   
   useEffect(() => {
