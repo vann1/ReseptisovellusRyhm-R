@@ -45,6 +45,9 @@ handleSearch();
 },[])
 
 
+  useEffect(() => {
+    handleSearch();
+  },[])
   return (
     <div>
       <h1>Recipe Search</h1>

@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import RegisterForm from '../components/RegisterForm';
+import {useNavigate} from "react-router-dom"
 
 const RegisterPage = () => {
+  const navigate = useNavigate();
   const handleRegister = async (name, password, email, username) => {
       try {
         const response = await fetch('http://localhost:3001/api/user/create', {
@@ -12,11 +14,13 @@ const RegisterPage = () => {
           body: JSON.stringify({username, email, password ,name}),
         });
         const data = await response.json();
-        if (response.ok) {
-          console.log('User created successfully', response.status);
-        } else {
+        if (!response.ok) {
           throw new Error(data.error);
         }
+        if (response.ok) {
+          console.log('User created successfully', response.status);
+          navigate('/LoginPage');
+        } 
       } catch (error) {
         console.error('Error:', error);
       }

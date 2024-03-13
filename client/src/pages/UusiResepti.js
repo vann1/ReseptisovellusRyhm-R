@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
-
+import { useAuthContext } from "../hooks/useAuthContext";
+import { useNavigate } from 'react-router-dom';
 const RuokaKategoria = () => {
+  //ContextApi for current user
+  const {user} = useAuthContext();
+  const navigate = useNavigate();
   //Muuttujat
   const [RecipeCategory, setRecipeCategory] = useState(null);
   const [IngAmount, setIngAmount] = useState('');
@@ -10,7 +14,6 @@ const RuokaKategoria = () => {
   const [Ingredients, setIngredients] = useState([]); 
   const [RecipeDesc, setRecipeDesc] = useState('');
   const [RecipeGuide, setRecipeGuide] = useState('');
-  const [UserID, setUserID] = useState('125');
   const [Tags, setTags] = useState('');
   const [selectedFile, setSelectedFile] = useState(null);
   //Vaihtoehdot kategorialle ja ainesosan mitalle
@@ -93,6 +96,7 @@ const RuokaKategoria = () => {
     setTags(event.target.value)
   }
 
+
   //Ainesosan lisääminen Varmistaa että inputit eivät ole tyhjiä
   const addIngredient = () => {
     if (IngAmount) {
@@ -108,7 +112,7 @@ const RuokaKategoria = () => {
       alert('Ainesosan määrä puuttuu');
     }
   };
-
+ 
 
   //Heittää consoleen mitä tallentuu, tietokanta yhteys myöhemmin
   //Varmistaa että kentät eivät ole tyhjiä
@@ -117,12 +121,21 @@ const RuokaKategoria = () => {
       if (RecipeCategory){
         if(Ingredients.length > 0){
           if(RecipeGuide){
+            const UserID = `${user.userid}`
+            console.log(user);
+            console.log(UserID);
             console.log(selectedFile);
             try {
+
+              //checks if user is logged in to the site
+              if(!user) {
+                throw Error('Sinun täytyy kirjautuu sisään jotta voit luoda uusia reseptejä.')
+             }
               const response = await fetch('http://localhost:3001/api/recipe/add', {
                 method: 'POST',
                 headers: {
                   'Content-Type': 'application/json',
+                  'Authorization': `Bearer ${user.token}`
                 },
                 body: JSON.stringify({
                   UserID,
@@ -140,6 +153,8 @@ const RuokaKategoria = () => {
                 console.log('Recipe added successfully');
               } else {
                 console.error('Failed to add recipe:', response.statusText);
+                //if not valid jwt token redirect to login
+                navigate('/LoginPage')
               }
             } catch (error) {
               console.error('Error:', error.message);
