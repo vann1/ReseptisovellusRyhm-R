@@ -77,7 +77,30 @@ handleSearch();
   return (
     <div>
       <h1>Recipe Search</h1>
-      {/* Your existing input fields */}
+      <div>
+        <label>Recipe id:</label>
+        <input type="text" value={recipeid} onChange={(e) => setrecipeID(e.target.value)} />
+      </div>
+      <div>
+        <label>Recipe Name:</label>
+        <input type="text" value={recipeName} onChange={(e) => setrecipeName(e.target.value)} />
+      </div>
+      <div>
+        <label>Category:</label>
+        <input type="text" value={recipeCategory} onChange={(e) => setrecipeCategory(e.target.value)} />
+      </div>
+      <div>
+        <label>Tags:</label>
+        <input type="text" value={recipeTag} onChange={(e) => setrecipeTag(e.target.value)} />
+      </div>
+      <div>
+        <label>Username:</label>
+        <input type="text" value={recipeUsername} onChange={(e) => setrecipeUsername(e.target.value)} />
+      </div>
+      <div>
+        <label>Name:</label>
+        <input type="text" value={recipeownerName} onChange={(e) => setrecipeownerName(e.target.value)} />
+      </div>
       <button onClick={handleSearch}>Search</button>
 
       {searchResults.length > 0 && (
@@ -91,7 +114,6 @@ handleSearch();
             <tbody>
               {searchResults.map((recipe, index) => (
                 <tr key={index}>
-                  {/* Modify this part to make the recipe name clickable */}
                   <td>
                     <Link to={`/Recipe/${recipe.recipeid}`}>
                       {recipe.recipename}
