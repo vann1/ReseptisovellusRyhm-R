@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 const SearchPage = () => {
   const [recipeName, setrecipeName] = useState('');
@@ -7,6 +7,9 @@ const SearchPage = () => {
   const [recipeUsername, setrecipeUsername] = useState('');
   const [recipeownerName, setrecipeownerName] = useState('');
   const [searchResults, setSearchResults] = useState([]);
+  const [recipeID, setrecipeID] = useState('');
+
+
 
   const handleSearch = async () => {
     try {
@@ -37,10 +40,18 @@ const SearchPage = () => {
       setSearchResults([]);
     }
   };
+useEffect(() => {
+handleSearch();
+},[])
+
 
   return (
     <div>
       <h1>Recipe Search</h1>
+      <div>
+        <label>Recipe id:</label>
+        <input type="text" value={recipeID} onChange={(e) => setrecipeID(e.target.value)} />
+      </div>
       <div>
         <label>Recipe Name:</label>
         <input type="text" value={recipeName} onChange={(e) => setrecipeName(e.target.value)} />

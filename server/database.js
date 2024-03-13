@@ -146,7 +146,7 @@ const getRecipeFromDatabase = async (req, res) => {
   // Assuming your database connection is already established and stored in the 'sql' variable
 
   // Destructure parameters from the request body
-  const { recipeName, recipeCategory, recipeTag, recipeUsername, recipeOwnerName } = req.body;
+  const { recipeName, recipeCategory, recipeTag, recipeUsername, recipeOwnerName, recipeid } = req.body;
 
   try {
     // Initialize a new request object
@@ -159,6 +159,12 @@ const getRecipeFromDatabase = async (req, res) => {
       query += ' AND recipename LIKE @recipeName';
       request.input('recipeName', sql.NVarChar, `%${recipeName}%`);
     }
+    
+    if (recipeid) {
+      query += ' AND recipeid LIKE @recipeid';
+      request.input('recipeid', sql.NVarChar, `%${recipeid}%`);
+    }
+
 
     if (recipeCategory) {
       query += ' AND category LIKE @recipeCategory';
