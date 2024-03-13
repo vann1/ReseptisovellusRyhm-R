@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Route, Link, useActionData } from 'react-router-dom';
 import '../styles/styles.css'
+import '../styles/ClientStyles.css'
 import { useAuthContext } from "../hooks/useAuthContext";
 import { ProfileButton } from './ProfileButton';
 import { AdminButton } from '../components/AdminButton';
@@ -20,7 +21,7 @@ const Navigation = (props) => {
 
 
   return(
-    <nav className="navigation">
+    <nav className="navigation container">
     <div>
       <ul className="navigation-list">
         <li className="navigation-item">

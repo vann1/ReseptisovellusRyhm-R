@@ -9,7 +9,31 @@ const SearchPage = () => {
   const [searchResults, setSearchResults] = useState([]);
   const [recipeid, setrecipeID] = useState('');
 
+const getRecipeById = async () => {
+    try {
+      const response = await fetch('http://localhost:3001/api/recipe/search', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          recipeid,
+        }),
+      });
 
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      setSearchResults(data.data.recipes.recordset); // Assuming the API returns an array of recipes
+      console.log(data);
+      console.log(searchResults);
+    } catch (error) {
+      console.error('Error during search:', error.message);
+      setSearchResults([]);
+    }
+  };
 
   const handleSearch = async () => {
     try {
@@ -80,14 +104,20 @@ handleSearch();
 
       {searchResults.length > 0 && (
         <div>
-          <h2>Search Results:</h2>
-          <ul>
-            {searchResults.map((recipe) => (
-              <li key={recipe.recipeid}>
-                {recipe.recipename} - {recipe.category} - {recipe.username}
-              </li>
+          <table>
+            <thead>
+              <tr>
+                <th>Resepti tulokset:</th>
+              </tr>
+            </thead>
+            <tbody>
+            {searchResults.map((recipe, index) => (
+              <tr key={index}>
+                <td>{recipe.recipename} - {recipe.category} - {recipe.username}</td>
+              </tr>
             ))}
-          </ul>
+            </tbody>
+          </table>
         </div>
       )}
     </div>

@@ -23,7 +23,7 @@ function App() {
         <Route path='/' element={<HomePage></HomePage>}></Route>
         <Route path="/SearchPage" element={<SearchPage></SearchPage>}></Route>
         <Route path='/NewRecipe' element={<RuokaKategoria></RuokaKategoria>}></Route>
-        <Route path='/Recipe' element={<ShowRecipe></ShowRecipe>}></Route>
+        <Route path='/Recipe/*' element={<ShowRecipe></ShowRecipe>}></Route>
         {!user && (<>
         <Route path="/RegisterPage" element={<RegisterPage></RegisterPage>}></Route>
         <Route path="/LoginPage" element={<LoginPage></LoginPage>}></Route>

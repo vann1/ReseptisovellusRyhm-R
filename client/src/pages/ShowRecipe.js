@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import '../styles/ClientStyles.css';
 
 const ShowRecipe = () => {
   const [searchResults, setSearchResults] = useState([]);
@@ -11,7 +12,7 @@ const ShowRecipe = () => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          recipeid: 173,
+          recipeid: 174,
         }),
       });
 
@@ -21,8 +22,6 @@ const ShowRecipe = () => {
 
       const data = await response.json();
       setSearchResults(data.data.recipes.recordset); // Assuming the API returns an array of recipes
-      console.log(data);
-      console.log(searchResults);
     } catch (error) {
       console.error('Error during search:', error.message);
       setSearchResults([]);
@@ -38,25 +37,25 @@ const ShowRecipe = () => {
       <h1>Recipe</h1>
       {searchResults.length > 0 && (
         <div>
-          <ul>
-            {searchResults.map((recipe) => (
-              <li key={recipe.recipeid}>
-                <strong>Recipe ID:</strong> {recipe.recipeid}<br />
-                <strong>User ID:</strong> {recipe.userid}<br />
-                <strong>Recipe Name:</strong> {recipe.recipename}<br />
-                <strong>Category:</strong> {recipe.category}<br />
-                <strong>Instructions:</strong> {recipe.instructions}<br />
-                <strong>Description:</strong> {recipe.description}<br />
-                <strong>Tags:</strong> {recipe.tags}<br />
-                {recipe.images && (
-                  <div>
-                    <strong>Image:</strong><br />
-                    <img src={`data:image/jpeg;base64,${recipe.images}`} alt="Recipe Image" style={{ maxWidth: '300px' }} />
-                  </div>
-                )}
-              </li>
-            ))}
-          </ul>
+          {searchResults.map((recipe) => (
+            <div key={recipe.recipeid} style={{ display: 'flex', marginBottom: '20px' }}>
+              {recipe.images && (
+                <div style={{ flex: 1, marginRight: '20px' }}>
+                  <strong>Image:</strong><br />
+                  <img src={`data:image/jpeg;base64,${recipe.images}`} alt="Recipe Image" style={{ maxWidth: '300px' }} />
+                </div>
+              )}
+              <div style={{ flex: 2 }}>
+                <p><strong>Recipe ID:</strong> {recipe.recipeid}</p>
+                <p><strong>User ID:</strong> {recipe.userid}</p>
+                <p><strong>Recipe Name:</strong> {recipe.recipename}</p>
+                <p><strong>Category:</strong> {recipe.category}</p>
+                <p><strong>Description:</strong> {recipe.description}</p>
+                <p><strong>Tags:</strong> {recipe.tags}</p>
+                <p><strong>Instructions:</strong> {recipe.instructions}</p>
+              </div>
+            </div>
+          ))}
         </div>
       )}
     </div>
@@ -64,6 +63,7 @@ const ShowRecipe = () => {
 };
 
 export default ShowRecipe;
+
 
 
 
