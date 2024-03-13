@@ -87,7 +87,7 @@ const getUserFromDatabase = async (req, res) => {
 };
 
 const addRecipeToDatabase = async (req, res) => {
-  const { UserID, RecipeName, RecipeCategory, RecipeGuide, RecipeDesc, Tags, Ingredients, selectedFile } = req.body;
+  const { UserID, RecipeName, RecipeCategory, RecipeGuide, RecipeDesc, Tags, Ingredients, selectedFile, RecipeReg } = req.body;
   try {
     await sql.connect(config);
     const transaction = new sql.Transaction();
@@ -96,19 +96,20 @@ const addRecipeToDatabase = async (req, res) => {
       await transaction.begin();
       // Insert into recipes table
       const recipeQuery = `
-      INSERT INTO [dbo].[recipes] (userid, recipename, category, instructions, description, tags${selectedFile ? ', images' : ''})
-      VALUES (@Userid, @RecipeName, @RecipeCategory, @RecipeGuide, @RecipeDesc, @Tags${selectedFile ? ', @selectedFile' : ''});
+      INSERT INTO [dbo].[recipes] (userid, recipename, category, instructions, description, tags, regonly${selectedFile ? ', images' : ''})
+      VALUES (@Userid, @RecipeName, @RecipeCategory, @RecipeGuide, @RecipeDesc, @Tags, @RecipeReg${selectedFile ? ', @selectedFile' : ''});
       SELECT SCOPE_IDENTITY() AS RecipeID; -- Retrieve the newly inserted recipe ID
-      `;
+    `;
       const recipeResult = await new sql.Request(transaction)
-        .input('Userid', sql.NVarChar, UserID)
-        .input('RecipeName', sql.NVarChar, RecipeName)
-        .input('RecipeCategory', sql.NVarChar, RecipeCategory)
-        .input('RecipeGuide', sql.NVarChar, RecipeGuide)
-        .input('RecipeDesc', sql.NVarChar, RecipeDesc)
-        .input('Tags', sql.NVarChar, Tags)
-        .input('selectedFile', sql.VarBinary, selectedFile ? Buffer.from(selectedFile, 'base64') : null)
-        .query(recipeQuery);
+      .input('Userid', sql.NVarChar, UserID)
+      .input('RecipeName', sql.NVarChar, RecipeName)
+      .input('RecipeCategory', sql.NVarChar, RecipeCategory)
+      .input('RecipeGuide', sql.NVarChar, RecipeGuide)
+      .input('RecipeDesc', sql.NVarChar, RecipeDesc)
+      .input('Tags', sql.NVarChar, Tags)
+      .input('RecipeReg', sql.Int, RecipeReg)
+      .input('selectedFile', sql.VarBinary, selectedFile ? Buffer.from(selectedFile, 'base64') : null)
+      .query(recipeQuery);
       const recipeID = recipeResult.recordset[0].RecipeID;
       // Insert into ingredients table for each ingredient
       const ingredientQuery = `
@@ -150,49 +151,46 @@ const getRecipeFromDatabase = async (req, res) => {
     const request = new sql.Request();
 
     // Build the query based on the provided parameters
-    let query = 'SELECT * FROM recipes WHERE 1=1'; // Start with a true condition
+    let query = 'SELECT recipes.*, users.username, users.name FROM recipes INNER JOIN users ON recipes.userid = users.userid WHERE 1=1'; // Start with a true condition
 
     if (recipeName) {
-      query += ' AND recipename LIKE @recipeName';
+      query += ' AND recipes.recipename LIKE @recipeName';
       request.input('recipeName', sql.NVarChar, `%${recipeName}%`);
     }
     
     if (recipeid) {
-      query += ' AND recipeid LIKE @recipeid';
+      query += ' AND recipes.recipeid LIKE @recipeid';
       request.input('recipeid', sql.NVarChar, `%${recipeid}%`);
     }
 
-
     if (recipeCategory) {
-      query += ' AND category LIKE @recipeCategory';
+      query += ' AND recipes.category LIKE @recipeCategory';
       request.input('recipeCategory', sql.NVarChar, `%${recipeCategory}%`);
     }
 
     if (recipeTag) {
-      query += ' AND tags LIKE @recipeTag';
+      query += ' AND recipes.tags LIKE @recipeTag';
       request.input('recipeTag', sql.NVarChar, `%${recipeTag}%`);
     }
-
+ 
     if (recipeUsername) {
-      query +=
-        ' AND userid IN (SELECT userid FROM users WHERE username LIKE @recipeUsername)';
+      query += ' AND users.username LIKE @recipeUsername';
       request.input('recipeUsername', sql.NVarChar, `%${recipeUsername}%`);
     }
 
     if (recipeOwnerName) {
-      query +=
-        ' AND userid IN (SELECT userid FROM users WHERE name LIKE @recipeOwnerName)';
+      query += ' AND users.name LIKE @recipeOwnerName';
       request.input('recipeOwnerName', sql.NVarChar, `%${recipeOwnerName}%`);
     }
     
     // Execute the query
     const result = await request.query(query);
 
-    console.log('SQL Query:', query);
+
 
     if (result.recordset.length > 0) {
       // Return the first record if any
-      const recipes = result;
+      const recipes = result.recordset;
       return recipes;
     } else {
       return undefined;

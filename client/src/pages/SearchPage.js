@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useAuthContext } from "../hooks/useAuthContext";
+
 
 const SearchPage = () => {
   const [recipeName, setrecipeName] = useState('');
@@ -9,35 +11,11 @@ const SearchPage = () => {
   const [recipeownerName, setrecipeownerName] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [recipeid, setrecipeID] = useState('');
-
-const getRecipeById = async () => {
-    try {
-      const response = await fetch('http://localhost:3001/api/recipe/search', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          recipeid,
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-
-      const data = await response.json();
-      setSearchResults(data.data.recipes.recordset); // Assuming the API returns an array of recipes
-      console.log(data);
-      console.log(searchResults);
-    } catch (error) {
-      console.error('Error during search:', error.message);
-      setSearchResults([]);
-    }
-  };
+  const {user} = useAuthContext();
 
   const handleSearch = async () => {
     try {
+      
       const response = await fetch('http://localhost:3001/api/recipe/search', {
         method: 'POST',
         headers: {
@@ -52,23 +30,33 @@ const getRecipeById = async () => {
           recipeownerName,
         }),
       });
-
+  
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
-
-      const data = await response.json();
-      setSearchResults(data.data.recipes.recordset); // Assuming the API returns an array of recipes
-      console.log(data);
-      console.log(searchResults);
+      const data = await response.json()
+      console.log(data)
+      // Check if user exists
+      if (user) {
+        // User exists, set search results directly
+        setSearchResults(data.data.recipes);
+      } else {
+        // User does not exist, filter recipes with regonly 0
+        const filteredRecipes = data.data.recipes.recordset.filter(recipe => recipe.regonly === 0);
+        setSearchResults(filteredRecipes);
+      }
     } catch (error) {
       console.error('Error during search:', error.message);
       setSearchResults([]);
     }
   };
-useEffect(() => {
-handleSearch();
-},[])
+
+
+
+  
+  useEffect(() => {
+  handleSearch();
+  },[])
 
 
   useEffect(() => {
@@ -117,8 +105,8 @@ handleSearch();
                   <td>
                     <Link to={`/Recipe/${recipe.recipeid}`}>
                       {recipe.recipename}
-                    </Link>{" "}
                     - {recipe.category} - {recipe.username}
+                    </Link>{" "}
                   </td>
                 </tr>
               ))}
@@ -130,4 +118,34 @@ handleSearch();
   );
 };
 
+// const handleSearch = async () => {
+//   try {
+//     const response = await fetch('http://localhost:3001/api/recipe/search', {
+//       method: 'POST',
+//       headers: {
+//         'Content-Type': 'application/json',
+//       },
+//       body: JSON.stringify({
+//         recipeid,
+//         recipeName,
+//         recipeCategory,
+//         recipeTag,
+//         recipeUsername,
+//         recipeownerName,
+//       }),
+//     });
+    
+//     if (!response.ok) {
+//       throw new Error(`HTTP error! Status: ${response.status}`);
+//     }
+
+//     const data = await response.json();
+//     setSearchResults(data.data.recipes.recordset); // Assuming the API returns an array of recipes
+//     console.log(data);
+//     console.log(searchResults);
+//   } catch (error) {
+//     console.error('Error during search:', error.message);
+//     setSearchResults([]);
+//   }
+// };
 export default SearchPage;

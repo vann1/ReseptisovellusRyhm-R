@@ -19,6 +19,9 @@ const RuokaKategoria = () => {
   //Vaihtoehdot kategorialle ja ainesosan mitalle
   const Kategoria = ['Alkupala', 'Juoma', 'Välipala', 'Pääruoka', 'Jälkiruoka', 'Leivonnaiset', 'Muu'];
   const options = ['ml', 'tl', 'rkl', 'dl', 'l', 'kkp' ,'g', 'kg', 'kpl'];
+  const [RecipeReg, setRecipeReg] = useState(0);
+
+  
   /*Mitat:
   Tilavuus:
   ml = millilitra 1ml
@@ -45,7 +48,11 @@ const RuokaKategoria = () => {
       }
     }
   };
-  
+
+  const handleCheckboxChange = () => {
+    setRecipeReg(RecipeReg === 0 ? 1 : 0);
+    
+  };
   const readFileAsBase64 = (file) => {
     return new Promise((resolve, reject) => {
       try {
@@ -146,6 +153,7 @@ const RuokaKategoria = () => {
                   Tags,
                   Ingredients,
                   selectedFile,
+                  RecipeReg,
                 }),
               });
         
@@ -178,7 +186,7 @@ const RuokaKategoria = () => {
     <form>
       <label>Reseptin nimi:</label>
       <input type="text" value={RecipeName} onChange={RecipeNameChange} />
-
+        <p>Reseptin kategoria:</p>
       {Kategoria.map((option, index) => (
         <div id="RuokaKategoria" key={index}>
           <input
@@ -191,6 +199,15 @@ const RuokaKategoria = () => {
           <label htmlFor={`checkbox-${index}`}>{option}</label>
         </div>
       ))}
+      
+      <label >
+        <input
+          type="checkbox"
+          checked={RecipeReg}
+          onChange={handleCheckboxChange}
+        />
+        Vain rekisteröityneille käyttäjille?
+      </label>
 
       {Ingredients.map((ingredient, index) => (
         <div key={index} style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
@@ -233,16 +250,16 @@ const RuokaKategoria = () => {
         </button>
       </div>
       <div>
+        <div>
         <label>Reseptin ohje:</label>
-      <div>
         <textarea type="text" value={RecipeGuide} onChange={RecipeGuideChange}></textarea>
       </div>
+      <div>
        <label>Reseptin kuvaus:</label>
-       <div>
        <textarea type="text" value={RecipeDesc} onChange={RecipeDescChange}></textarea>
        </div>
-       <label>tags:</label>
        <div>
+       <label>tags:</label>
        <textarea type="text" value={Tags} onChange={TagsChange}></textarea>
        </div>
       </div>

@@ -23,7 +23,7 @@ const ShowRecipe = () => {
       }
 
       const data = await response.json();
-      setSearchResults(data.data.recipes.recordset);
+      setSearchResults(data.data.recipes);
     } catch (error) {
       console.error('Error during search:', error.message);
       setSearchResults([]);
