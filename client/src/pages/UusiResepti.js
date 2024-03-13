@@ -225,7 +225,7 @@ const RuokaKategoria = () => {
           </div>
         </div>
       ))}
-
+      <p>Ainesosat:</p>
       <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
         <div>
           <label>Määrä:</label>
@@ -240,7 +240,6 @@ const RuokaKategoria = () => {
             ))}
           </select>
         </div>
-
         <div>
           <label>Ainesosa:</label>
           <input type="text" value={IngName} onChange={IngNameChange} />
