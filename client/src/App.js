@@ -23,12 +23,11 @@ function App() {
         <Route path='/' element={<HomePage></HomePage>}></Route>
         <Route path="/SearchPage" element={<SearchPage></SearchPage>}></Route>
         <Route path='/NewRecipe' element={<RuokaKategoria></RuokaKategoria>}></Route>
-        <Route path='/Recipe/*' element={<ShowRecipe></ShowRecipe>}></Route>
+        <Route path='/Recipe/:recipeId' element={<ShowRecipe></ShowRecipe>}></Route>
         {!user && (<>
         <Route path="/RegisterPage" element={<RegisterPage></RegisterPage>}></Route>
         <Route path="/LoginPage" element={<LoginPage></LoginPage>}></Route>
-        </>)} 
-        
+        </>)}      
         {user && (<>
         <Route path='/ProfilePage' element={<ProfilePage></ProfilePage>}></Route>
         {user.role === 1  && (<Route path='/AdminPage' element={<AdminPage></AdminPage>}></Route>)}</>)}

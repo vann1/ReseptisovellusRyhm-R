@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import '../styles/ClientStyles.css';
 
 const ShowRecipe = () => {
   const [searchResults, setSearchResults] = useState([]);
+  const { recipeId } = useParams();
 
   const handleSearch = async () => {
     try {
@@ -12,7 +14,7 @@ const ShowRecipe = () => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          recipeid: 174,
+          recipeid: recipeId, // Pass the recipeId from the URL in the request body
         }),
       });
 
@@ -21,7 +23,7 @@ const ShowRecipe = () => {
       }
 
       const data = await response.json();
-      setSearchResults(data.data.recipes.recordset); // Assuming the API returns an array of recipes
+      setSearchResults(data.data.recipes.recordset);
     } catch (error) {
       console.error('Error during search:', error.message);
       setSearchResults([]);
@@ -30,7 +32,7 @@ const ShowRecipe = () => {
 
   useEffect(() => {
     handleSearch();
-  }, []);
+  }, [recipeId]);
 
   return (
     <div>
@@ -63,6 +65,7 @@ const ShowRecipe = () => {
 };
 
 export default ShowRecipe;
+
 
 
 
