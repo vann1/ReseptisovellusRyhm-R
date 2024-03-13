@@ -9,6 +9,7 @@ import { HomePage } from './pages/homepage';
 import SearchPage from './pages/SearchPage';
 import {ProfilePage} from './pages/ProfilePage';
 import { useAuthContext } from "./hooks/useAuthContext";
+import ShowRecipe from './pages/ShowRecipe';
 import { AdminPage } from './pages/AdminPage';
 function App() {
   const {user} = useAuthContext()
@@ -22,6 +23,7 @@ function App() {
         <Route path='/' element={<HomePage></HomePage>}></Route>
         <Route path="/SearchPage" element={<SearchPage></SearchPage>}></Route>
         <Route path='/NewRecipe' element={<RuokaKategoria></RuokaKategoria>}></Route>
+        <Route path='/Recipe' element={<ShowRecipe></ShowRecipe>}></Route>
         {!user && (<>
         <Route path="/RegisterPage" element={<RegisterPage></RegisterPage>}></Route>
         <Route path="/LoginPage" element={<LoginPage></LoginPage>}></Route>
