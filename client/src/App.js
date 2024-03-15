@@ -11,6 +11,7 @@ import {ProfilePage} from './pages/ProfilePage';
 import { useAuthContext } from "./hooks/useAuthContext";
 import ShowRecipe from './pages/ShowRecipe';
 import { AdminPage } from './pages/AdminPage';
+import { EditRecipePage } from './pages/EditRecipePage';
 function App() {
   const {user} = useAuthContext()
   //Navigatio komponentti on vaan testausta varten, voi poistaa
@@ -29,6 +30,7 @@ function App() {
         <Route path="/LoginPage" element={<LoginPage></LoginPage>}></Route>
         </>)}      
         {user && (<>
+        <Route path="/userrecipe/:id" element={<EditRecipePage></EditRecipePage>} />
         <Route path='/ProfilePage' element={<ProfilePage></ProfilePage>}></Route>
         {user.role === 1  && (<Route path='/AdminPage' element={<AdminPage></AdminPage>}></Route>)}</>)}
       </Routes>

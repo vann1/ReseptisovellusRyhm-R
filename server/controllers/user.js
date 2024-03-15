@@ -6,7 +6,7 @@ const {
   ok,
   unauthorized
 } = require("../utils/responseUtils");
-const { addUserToDatabase, getUserFromDatabase ,getAllUsersFromDatabase, deleteUserFromDatabase} = require("../database");
+const { addUserToDatabase, getUserFromDatabase ,getAllUsersFromDatabase, deleteUserFromDatabase, getRecipeFromDatabase} = require("../database");
 const { createJWT, comparePassword } = require("../utils/userUtils");
 
 /**
@@ -115,4 +115,16 @@ const deleteUser = async (res, userid) => {
   }
 }
 
-module.exports = { createUser, loginUser, showUser, showAllUsers , deleteUser};
+const getUserRecipe = async (req, res) => {
+  try {
+    const result = await getRecipeFromDatabase(req,res);
+    if(!result) {
+      return notFound(res, "Error finding recipe from database")
+    }
+    return ok(res, "User recipes found from database", {result})
+  } catch(error) {
+    return internalServerError(res,"Internal server error, while trying to get user's recipes from database");
+  }
+}
+
+module.exports = { createUser, loginUser, showUser, showAllUsers , deleteUser, getUserRecipe};

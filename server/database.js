@@ -141,10 +141,12 @@ const addRecipeToDatabase = async (req, res) => {
 
 const getRecipeFromDatabase = async (req, res) => {
   // Assuming your database connection is already established and stored in the 'sql' variable
-
+  const recipeidparams = req.params.id;
+  //userid for getting recipe for certain user
+  const userid = req.params.userId;
   // Destructure parameters from the request body
   const { recipeName, recipeCategory, recipeTag, recipeUsername, recipeOwnerName, recipeid } = req.body;
-
+  await sql.connect(config);
   try {
     // Initialize a new request object
     const request = new sql.Request();
@@ -161,7 +163,6 @@ const getRecipeFromDatabase = async (req, res) => {
       query += ' AND recipeid LIKE @recipeid';
       request.input('recipeid', sql.NVarChar, `%${recipeid}%`);
     }
-
 
     if (recipeCategory) {
       query += ' AND category LIKE @recipeCategory';
@@ -185,11 +186,19 @@ const getRecipeFromDatabase = async (req, res) => {
       request.input('recipeOwnerName', sql.NVarChar, `%${recipeOwnerName}%`);
     }
     
+    if (userid) {
+      query +=
+        ' AND userid = @userid';
+      request.input('userid', sql.Int, userid);
+    }
+
+    if (recipeidparams) {
+      query += ' AND recipeid LIKE @recipeid';
+      request.input('recipeid', sql.NVarChar, `%${recipeidparams}%`);
+    }
+    
     // Execute the query
     const result = await request.query(query);
-
-    console.log('SQL Query:', query);
-
     if (result.recordset.length > 0) {
       // Return the first record if any
       const recipes = result;
@@ -201,7 +210,9 @@ const getRecipeFromDatabase = async (req, res) => {
     // Handle errors
     console.error(error);
     return undefined;
-  }
+  } finally {
+    sql.close(); 
+    } 
 };
 
 const getAllUsersFromDatabase = async (req, res) => {
@@ -240,8 +251,95 @@ const deleteUserFromDatabase = async (userid)  => {
     throw error;
   }
 };
+      // // Poistetaan vanhat ainesosat
+      // const deleteIngredientsQuery = `
+      //   DELETE FROM [dbo].[ingredients]
+      //   WHERE recipeid = @RecipeID;
+      // `;
+      // await new sql.Request(transaction)
+      //   .input('RecipeID', sql.Int, recipeId)
+      //   .query(deleteIngredientsQuery);
+
+      // // Lisätään uudet ainesosat
+      // const ingredientInsertQuery = `
+      //   INSERT INTO [dbo].[ingredients] (recipeid, quantity, measure, ingredientname)
+      //   VALUES (@RecipeID, @Quantity, @Measure, @IngredientName);
+      // `;
+      // for (let i = 0; i < Ingredients.length; i++) {
+      //   const ingredient = Ingredients[i];
+      //   await new sql.Request(transaction)
+      //     .input('RecipeID', sql.Int, recipeId)
+      //     .input('Quantity', sql.NVarChar, ingredient.IngAmount)
+      //     .input('Measure', sql.NVarChar, ingredient.IngMeasure)
+      //     .input('IngredientName', sql.NVarChar, ingredient.IngName)
+      //     .query(ingredientInsertQuery);
+      // }
+const editRecipeToDatabase = async (req,res) => {
+  const { id, RecipeName, RecipeCategory, RecipeGuide, RecipeDesc, Tags} = req.body;
+  try {
+    await sql.connect(config);
+    const transaction = new sql.Transaction();
+
+    try {
+      await transaction.begin();
+      const recipeUpdateQuery = `
+      UPDATE [dbo].[recipes]
+      SET recipename = @RecipeName,
+          category = @RecipeCategory,
+          instructions = @RecipeGuide,
+          description = @RecipeDesc,
+          tags = @Tags
+          WHERE recipeid = @RecipeID;
+    `;
+  await new sql.Request(transaction)
+  .input('RecipeName', sql.NVarChar, RecipeName)
+  .input('RecipeCategory', sql.NVarChar, RecipeCategory)
+  .input('RecipeGuide', sql.NVarChar, RecipeGuide)
+  .input('RecipeDesc', sql.NVarChar, RecipeDesc)
+  .input('Tags', sql.NVarChar, Tags)
+  .input('RecipeID', sql.Int, id)
+  .query(recipeUpdateQuery);
 
 
-
+      await transaction.commit();
+      return true; 
+    } catch (error) {
+      await transaction.rollback();
+      console.error('Error updating recipe:', error);
+      return false; 
+    }
+  } catch (error) {
+    console.error('Error connecting to the database:', error);
+    return false; 
+  } finally {
+    sql.close(); 
+    } 
+  }
   
-module.exports = {addUserToDatabase, getUserFromDatabase, addRecipeToDatabase, getRecipeFromDatabase, getAllUsersFromDatabase, deleteUserFromDatabase};
+
+const getIngredientsFromDatabase = async (req,res) => {
+  const recipeid = req.params.recipeId;
+  console.log(recipeid)
+  try {
+    //creates connection to database
+    await sql.connect(config);
+
+    //initializes a new request object that is used to send SQL queries to the connected database using the sql module or library.
+    const request = new sql.Request();
+
+    //query for database
+    const query = `SELECT * FROM ingredients WHERE recipeid = @recipeId`;
+    const result = await request
+      .input("recipeId", sql.Int, recipeid)
+      .query(query);
+    if (result.recordset.length > 0) {
+      const ingredients = result.recordset;
+      return ingredients;
+    }
+    return undefined;
+  } catch (error) {
+    console.error("Error getting user from the database:", error);
+  }
+}
+  
+module.exports = {addUserToDatabase, getUserFromDatabase, addRecipeToDatabase, getRecipeFromDatabase, getAllUsersFromDatabase, deleteUserFromDatabase, editRecipeToDatabase, getIngredientsFromDatabase};
