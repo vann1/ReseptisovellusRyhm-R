@@ -251,33 +251,11 @@ const deleteUserFromDatabase = async (userid)  => {
     throw error;
   }
 };
-      // // Poistetaan vanhat ainesosat
-      // const deleteIngredientsQuery = `
-      //   DELETE FROM [dbo].[ingredients]
-      //   WHERE recipeid = @RecipeID;
-      // `;
-      // await new sql.Request(transaction)
-      //   .input('RecipeID', sql.Int, recipeId)
-      //   .query(deleteIngredientsQuery);
 
-      // // Lisätään uudet ainesosat
-      // const ingredientInsertQuery = `
-      //   INSERT INTO [dbo].[ingredients] (recipeid, quantity, measure, ingredientname)
-      //   VALUES (@RecipeID, @Quantity, @Measure, @IngredientName);
-      // `;
-      // for (let i = 0; i < Ingredients.length; i++) {
-      //   const ingredient = Ingredients[i];
-      //   await new sql.Request(transaction)
-      //     .input('RecipeID', sql.Int, recipeId)
-      //     .input('Quantity', sql.NVarChar, ingredient.IngAmount)
-      //     .input('Measure', sql.NVarChar, ingredient.IngMeasure)
-      //     .input('IngredientName', sql.NVarChar, ingredient.IngName)
-      //     .query(ingredientInsertQuery);
-      // }
 const editRecipeToDatabase = async (req,res) => {
 
-  const { id, RecipeName, RecipeCategory, RecipeGuide, RecipeDesc, Tags, updatedIngredients} = req.body;
-  console.log(updatedIngredients)
+  const { id, RecipeName, RecipeCategory, RecipeGuide, RecipeDesc, Tags, updatedIngredients, Ingredients} = req.body;
+  console.log(Ingredients)
   try {
     await sql.connect(config);
     const transaction = new sql.Transaction();
@@ -317,6 +295,19 @@ for (let i = 0; i < updatedIngredients.length; i++) {
     .input('IngredientID', sql.Int, ingredient.ingredientid)
     .query(ingredientQuery);
 }
+    const ingredientQueryAdd = `
+    INSERT INTO [dbo].[ingredients] (recipeid, quantity, measure, ingredientname)
+    VALUES (@RecipeID, @Quantity, @Measure, @IngredientName);
+    `;
+    for (let i = 0; i < Ingredients.length; i++) {
+    const ingredient = Ingredients[i];
+    await new sql.Request(transaction)
+      .input('RecipeID', sql.Int, id)
+      .input('Quantity', sql.NVarChar, ingredient.IngAmount)
+      .input('Measure', sql.NVarChar, ingredient.IngMeasure)
+      .input('IngredientName', sql.NVarChar, ingredient.IngName)
+      .query(ingredientQueryAdd);
+    }
 
       await transaction.commit();
       return true; 

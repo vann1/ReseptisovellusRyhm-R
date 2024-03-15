@@ -168,7 +168,6 @@ const EditRecipePage = () => {
           if(RecipeGuide){
             const UserID = `${user.userid}`
             try {
-              console.log(updatedIngredients)
               //checks if user is logged in to the site
               if(!user) {
                 throw Error('Sinun täytyy kirjautuu sisään jotta voit luoda uusia reseptejä.')
@@ -188,6 +187,7 @@ const EditRecipePage = () => {
                   RecipeDesc,
                   Tags,
                   updatedIngredients,
+                  Ingredients
                 }),
               });
         
@@ -229,6 +229,10 @@ const EditRecipePage = () => {
                   throw new Error(`HTTP error! Status: ${response.status}`);
                 }
                 setRecipe(data.data.recipes.recordset[0]);
+                setRecipeName(data.data.recipes.recordset[0].recipename)
+                setRecipeGuide(data.data.recipes.recordset[0].instructions)
+                setRecipeDesc(data.data.recipes.recordset[0].description)
+                setTags(data.data.recipes.recordset[0].tags)
                 setUserHasAccess(user.userid === data.data.recipes.recordset[0].userid);
                 setRecipeCategory(data.data.recipes.recordset[0].category);
               } catch (error) {
@@ -263,8 +267,7 @@ const EditRecipePage = () => {
     {userHasAccess ? (
     <form>
       <label>Reseptin nimi:</label>
-      <input type="text" placeholder={recipe.recipename} onChange={RecipeNameChange} />
-
+      <input type="text" value={RecipeName} onChange={RecipeNameChange} />
       {Kategoria.map((option, index) => (
         <div id="RuokaKategoria" key={index}>
           <input
@@ -303,7 +306,7 @@ const EditRecipePage = () => {
         <button type="button" onClick={editIngredients}>Tallenna muutokset</button> {missingFieldsMessage && <div style={{ color: 'red' }}>{missingFieldsMessage}</div>}
 
 
-      {/* <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+      <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
         <div>
           <label>Määrä:</label>
           <input type="text" value={IngAmount} onChange={IngAmountChange} />
@@ -325,19 +328,19 @@ const EditRecipePage = () => {
         <button type="button" onClick={addIngredient}>
         Lisää Ainesosa
         </button>
-      </div> */}
+      </div>
       <div>
         <label>Reseptin ohje:</label>
       <div>
-        <textarea type="text" value={RecipeGuide} placeholder={recipe.instructions} onChange={RecipeGuideChange}></textarea>
+        <textarea type="text" value={RecipeGuide} onChange={RecipeGuideChange}></textarea>
       </div>
        <label>Reseptin kuvaus:</label>
        <div>
-       <textarea type="text" value={RecipeDesc} placeholder={recipe.description} onChange={RecipeDescChange}></textarea>
+       <textarea type="text" value={RecipeDesc} onChange={RecipeDescChange}></textarea>
        </div>
        <label>tags:</label>
        <div>
-       <textarea type="text" value={Tags} placeholder={recipe.tags} onChange={TagsChange}></textarea>
+       <textarea type="text" value={Tags} onChange={TagsChange}></textarea>
        </div>
       </div>
       {/* <div>
