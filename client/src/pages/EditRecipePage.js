@@ -13,6 +13,7 @@ const EditRecipePage = () => {
   const [IngName, setIngName] = useState('');
   const [RecipeName, setRecipeName] = useState('');
   const [Ingredients, setIngredients] = useState([]); 
+  const [updatedIngredients, setUpdatededIngredients] = useState([]); 
   const [ingredientsPlaceholder, setIngredientsPlaceholder] = useState([]); 
   const [RecipeDesc, setRecipeDesc] = useState('');
   const [RecipeGuide, setRecipeGuide] = useState('');
@@ -20,6 +21,10 @@ const EditRecipePage = () => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [recipe, setRecipe] = useState(null);
   const [userHasAccess, setUserHasAccess] = useState(false);
+  const [ingAmountArray ,setIngAmountArray] = useState([])
+  const [ingNameArray, setIngNameArray] = useState([]);
+  const [ingMeasureArray ,setIngMeasureArray] = useState([]);
+  const [missingFieldsMessage, setMissingFieldsMessage] = useState('');
   //Vaihtoehdot kategorialle ja ainesosan mitalle
   const Kategoria = ['Alkupala', 'Juoma', 'Välipala', 'Pääruoka', 'Jälkiruoka', 'Leivonnaiset', 'Muu'];
   const options = ['ml', 'tl', 'rkl', 'dl', 'l', 'kkp' ,'g', 'kg', 'kpl'];
@@ -99,6 +104,21 @@ const EditRecipePage = () => {
   const TagsChange = (event) => {
     setTags(event.target.value)
   }
+  const IngAmountChangeArray = (event, index) => {
+    const newAmounts = [...ingAmountArray];
+    newAmounts[index] = event.target.value;
+    setIngAmountArray(newAmounts);
+  };
+  const IngNameChangeArray = (event, index) => {
+    const newNames = [...ingNameArray];
+    newNames[index] = event.target.value;
+    setIngNameArray(newNames);
+  };
+  const IngMeasureChangeArray = (event, index) => {
+    const newMeasures = [...ingMeasureArray];
+    newMeasures[index] = event.target.value;
+    setIngMeasureArray(newMeasures);
+  };
 
 
   //Ainesosan lisääminen Varmistaa että inputit eivät ole tyhjiä
@@ -116,7 +136,29 @@ const EditRecipePage = () => {
       alert('Ainesosan määrä puuttuu');
     }
   };
- 
+
+  const editIngredients = () => {
+      const combinedArray = ingredientsPlaceholder.map((ingredient, index) => ({
+      ingredientid: ingredient.ingredientid,
+      recipeid: ingredient.recipeid,
+      IngAmount: ingAmountArray[index] || '',
+      IngMeasure: ingMeasureArray[index] || '',
+      IngName: ingNameArray[index] || '',
+    }));
+    if(checkFields(combinedArray)){
+    setMissingFieldsMessage('');
+    setUpdatededIngredients(combinedArray)
+    }
+    else {
+      setMissingFieldsMessage('Täytä kaikki kentät ennen tallentamista');
+    }
+  }
+
+
+  const checkFields = (arrayOfObjects) => {
+    return arrayOfObjects.every(obj => Object.values(obj).every(value => value !== ''));
+  };
+
 
   //Heittää consoleen mitä tallentuu, tietokanta yhteys myöhemmin
   //Varmistaa että kentät eivät ole tyhjiä
@@ -126,7 +168,7 @@ const EditRecipePage = () => {
           if(RecipeGuide){
             const UserID = `${user.userid}`
             try {
-
+              console.log(updatedIngredients)
               //checks if user is logged in to the site
               if(!user) {
                 throw Error('Sinun täytyy kirjautuu sisään jotta voit luoda uusia reseptejä.')
@@ -145,7 +187,7 @@ const EditRecipePage = () => {
                   RecipeGuide,
                   RecipeDesc,
                   Tags,
-                  Ingredients,
+                  updatedIngredients,
                 }),
               });
         
@@ -210,13 +252,12 @@ const EditRecipePage = () => {
               if (!response.ok) {
                 throw new Error(`HTTP error! Status: ${response.status}`);
               }
-              console.log(data.data.ingredients)
+              console.log("ainesosat", data.data.ingredients)
               setIngredientsPlaceholder(data.data.ingredients);
             } catch (error) {
               console.error('Error during search:', error.message);
             }
           }
-
   return (
     <div>
     {userHasAccess ? (
@@ -236,30 +277,33 @@ const EditRecipePage = () => {
           <label htmlFor={`checkbox-${index}`}>{option}</label>
         </div>
       ))}
-{/* 
+
       {ingredientsPlaceholder.map((ingredient, index) => (
         <div key={index} style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
           <div>
             <label>Määrä:</label>
-            <input type="number" placeholder={ingredient.quantity} onChange={IngAmountChange}/>
+            <input type="number" placeholder={ingredient.quantity} value={ingAmountArray[index] || ''} onChange={(event) => IngAmountChangeArray(event, index)} />
           </div>
           <div>
-          <select onChange={IngMeasureChange}>
-            {options.map((option, index) => (
-              <option key={index} value={option} selected={option === ingredient.measure} >
-                {option} 
-              </option>
-            ))}
-          </select>
+          <select value={ingMeasureArray[index] || ''} onChange={(event) => IngMeasureChangeArray(event, index)}>
+            <option value="" disabled selected>{ingredientsPlaceholder[index].measure}</option>
+              {options.map((option, index) => (
+                <option key={index} value={option} selected={option === ingredient.measure} >
+                  {option} 
+                </option>
+              ))}
+            </select>
           </div>
           <div>
             <label>Ainesosa:</label>
-            <input type="text" placeholder={ingredient.ingredientname} value={IngAmount} onChange={IngNameChange} />
+            <input type="text" placeholder={ingredient.ingredientname} value={ingNameArray[index] || ''} onChange={(event) => IngNameChangeArray(event, index)} />
           </div>
         </div>
       ))}
+        <button type="button" onClick={editIngredients}>Tallenna muutokset</button> {missingFieldsMessage && <div style={{ color: 'red' }}>{missingFieldsMessage}</div>}
 
-      <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+
+      {/* <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
         <div>
           <label>Määrä:</label>
           <input type="text" value={IngAmount} onChange={IngAmountChange} />

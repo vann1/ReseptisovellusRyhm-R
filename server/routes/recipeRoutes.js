@@ -41,7 +41,7 @@ router.post('/add', async (req, res) => {
       return badRequest(res, "Content was not Json");
     }
     console.log('----------------------------------------------------------------------------------')
-    console.log(req.body)
+    console.log(req.body.updatedIngredients)
     console.log('----------------------------------------------------------------------------------')
     return editRecipe(req, res);
   });

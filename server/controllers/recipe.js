@@ -21,7 +21,6 @@ const SearchRecipe = async (req, res) => {
             return notFound(res, "Recipe not found in the database");
         }
 
-        console.log('Recipes: ', recipes);
         return ok(res, "Search completed.", { recipes });
 
     } catch (error) {

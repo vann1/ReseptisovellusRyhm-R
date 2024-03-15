@@ -9,7 +9,6 @@ const getIngredients = async (req, res) => {
         if (!ingredients || ingredients.length === 0) {
             return notFound(res, "Ingredients not found in the database");
         }
-        console.log('Ingredients: ', ingredients);
         return ok(res, "Ingredients found from database", { ingredients });
 
     } catch (error) {

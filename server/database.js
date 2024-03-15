@@ -275,7 +275,9 @@ const deleteUserFromDatabase = async (userid)  => {
       //     .query(ingredientInsertQuery);
       // }
 const editRecipeToDatabase = async (req,res) => {
-  const { id, RecipeName, RecipeCategory, RecipeGuide, RecipeDesc, Tags} = req.body;
+
+  const { id, RecipeName, RecipeCategory, RecipeGuide, RecipeDesc, Tags, updatedIngredients} = req.body;
+  console.log(updatedIngredients)
   try {
     await sql.connect(config);
     const transaction = new sql.Transaction();
@@ -300,6 +302,21 @@ const editRecipeToDatabase = async (req,res) => {
   .input('RecipeID', sql.Int, id)
   .query(recipeUpdateQuery);
 
+  const ingredientQuery = `
+  UPDATE [dbo].[ingredients]
+  SET quantity = @Quantity, measure = @Measure, ingredientname = @IngredientName
+  WHERE recipeid = @RecipeID AND ingredientid = @IngredientID;
+`;
+for (let i = 0; i < updatedIngredients.length; i++) {
+  const ingredient = updatedIngredients[i];
+  await new sql.Request(transaction)
+    .input('RecipeID', sql.Int, ingredient.recipeid)
+    .input('Quantity', sql.NVarChar, ingredient.IngAmount)
+    .input('Measure', sql.NVarChar, ingredient.IngMeasure)
+    .input('IngredientName', sql.NVarChar, ingredient.IngName)
+    .input('IngredientID', sql.Int, ingredient.ingredientid)
+    .query(ingredientQuery);
+}
 
       await transaction.commit();
       return true; 
@@ -319,7 +336,6 @@ const editRecipeToDatabase = async (req,res) => {
 
 const getIngredientsFromDatabase = async (req,res) => {
   const recipeid = req.params.recipeId;
-  console.log(recipeid)
   try {
     //creates connection to database
     await sql.connect(config);
