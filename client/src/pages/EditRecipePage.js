@@ -9,7 +9,7 @@ const EditRecipePage = () => {
   //Muuttujat
   const [RecipeCategory, setRecipeCategory] = useState(null);
   const [IngAmount, setIngAmount] = useState('');
-  const [IngMeasure, setIngMeasure] = useState('');
+  const [IngMeasure, setIngMeasure] = useState('ml');
   const [IngName, setIngName] = useState('');
   const [RecipeName, setRecipeName] = useState('');
   const [Ingredients, setIngredients] = useState([]); 
@@ -122,7 +122,7 @@ const EditRecipePage = () => {
 
 
   //Ainesosan lisääminen Varmistaa että inputit eivät ole tyhjiä
-  const addIngredient = () => {
+  const addIngredient = async (e) => {
     if (IngAmount) {
       if (IngName){
       setIngredients([...Ingredients, { IngAmount, IngMeasure, IngName }]);
@@ -130,9 +130,11 @@ const EditRecipePage = () => {
       setIngMeasure('ml');
       setIngName('');
     } else{
+      e.preventDefault();
       alert('Ainesosan nimi puuttuu');
     }
     } else {
+      e.preventDefault();
       alert('Ainesosan määrä puuttuu');
     }
   };
@@ -214,34 +216,69 @@ const EditRecipePage = () => {
     }
   };
 
-        useEffect(() => {
-            const getRecipe = async () => {
-              try {
-                const response = await fetch(`http://localhost:3001/api/recipe/${id}`, {
-                  method: 'GET',
-                  headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${user.token}`
-                  },
-                });
-                const data = await response.json();
-                if (!response.ok) {
-                  throw new Error(`HTTP error! Status: ${response.status}`);
-                }
-                setRecipe(data.data.recipes.recordset[0]);
-                setRecipeName(data.data.recipes.recordset[0].recipename)
-                setRecipeGuide(data.data.recipes.recordset[0].instructions)
-                setRecipeDesc(data.data.recipes.recordset[0].description)
-                setTags(data.data.recipes.recordset[0].tags)
-                setUserHasAccess(user.userid === data.data.recipes.recordset[0].userid);
-                setRecipeCategory(data.data.recipes.recordset[0].category);
-              } catch (error) {
-                console.error('Error during search:', error.message);
+  useEffect(() => {
+    const getRecipe = async () => {
+      try {
+        const response = await fetch(`http://localhost:3001/api/recipe/${id}`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${user.token}`
+          },
+        });
+        const data = await response.json();
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        setRecipe(data.data.recipes.recordset[0]);
+        setRecipeName(data.data.recipes.recordset[0].recipename)
+        setRecipeGuide(data.data.recipes.recordset[0].instructions)
+        setRecipeDesc(data.data.recipes.recordset[0].description)
+        setTags(data.data.recipes.recordset[0].tags)
+        setUserHasAccess(user.userid === data.data.recipes.recordset[0].userid);
+        setRecipeCategory(data.data.recipes.recordset[0].category);
+      } catch (error) {
+        console.error('Error during search:', error.message);
+      }
+    }
+    getRecipe();
+    getIngredients();
+  }, [id, user]);
+
+
+const addIngredient1 = async () => {
+            try {
+              const response = await fetch(`http://localhost:3001/api/ingredients/add`, {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                  'Authorization': `Bearer ${user.token}`
+                },
+                body: JSON.stringify({
+                  Ingredients,
+                  id
+                }),
+              });
+              
+              const data = await response.json();
+              if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
               }
+              
+              console.log("TEST", data.data)
+            } catch (error) {
+              console.error('Error during search:', error.message);
             }
-            getRecipe();
-            getIngredients();
-          }, [id, user]);
+}
+useEffect(() => {
+  if(Ingredients.length === 0){
+    
+    return;
+    
+  } 
+  console.log("asda")
+  addIngredient1();
+},[Ingredients])
 
           const getIngredients = async () => {
             try {
@@ -256,7 +293,18 @@ const EditRecipePage = () => {
               if (!response.ok) {
                 throw new Error(`HTTP error! Status: ${response.status}`);
               }
-              console.log("ainesosat", data.data.ingredients)
+              const newIngAmountArray = [];
+              const newIngNameArray = [];
+              const newIngMeasureArray = [];
+              for(let i = 0;i < data.data.ingredients.length; i++)
+              {
+                newIngAmountArray.push(data.data.ingredients[i].quantity);
+                newIngNameArray.push(data.data.ingredients[i].ingredientname);
+                newIngMeasureArray.push(data.data.ingredients[i].measure);
+              }
+              setIngAmountArray(newIngAmountArray);
+              setIngNameArray(newIngNameArray);
+              setIngMeasureArray(newIngMeasureArray);
               setIngredientsPlaceholder(data.data.ingredients);
             } catch (error) {
               console.error('Error during search:', error.message);
@@ -285,13 +333,20 @@ const EditRecipePage = () => {
         <div key={index} style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
           <div>
             <label>Määrä:</label>
-            <input type="number" placeholder={ingredient.quantity} value={ingAmountArray[index] || ''} onChange={(event) => IngAmountChangeArray(event, index)} />
+            <input type="number" value={ingAmountArray[index] || ''} onChange={(event) => IngAmountChangeArray(event, index)} />
           </div>
           <div>
-          <select value={ingMeasureArray[index] || ''} onChange={(event) => IngMeasureChangeArray(event, index)}>
+          {/* <select value={ingMeasureArray[index] || ''} onChange={(event) => IngMeasureChangeArray(event, index)}>
             <option value="" disabled selected>{ingredientsPlaceholder[index].measure}</option>
               {options.map((option, index) => (
                 <option key={index} value={option} selected={option === ingredient.measure} >
+                  {option} 
+                </option>
+              ))}
+            </select> */}
+            <select value={ingMeasureArray[index] || ''} onChange={(event) => IngMeasureChangeArray(event, index)}>
+              {options.map((option, index) => (
+                <option key={index} value={option}>
                   {option} 
                 </option>
               ))}
@@ -299,7 +354,7 @@ const EditRecipePage = () => {
           </div>
           <div>
             <label>Ainesosa:</label>
-            <input type="text" placeholder={ingredient.ingredientname} value={ingNameArray[index] || ''} onChange={(event) => IngNameChangeArray(event, index)} />
+            <input type="text" value={ingNameArray[index] || ''} onChange={(event) => IngNameChangeArray(event, index)} />
           </div>
         </div>
       ))}
@@ -312,7 +367,7 @@ const EditRecipePage = () => {
           <input type="text" value={IngAmount} onChange={IngAmountChange} />
         </div>
         <div>
-          <select value={IngMeasure} onChange={IngMeasureChange}>
+          <select  value={IngMeasure} onChange={IngMeasureChange}>
             {options.map((option, index) => (
               <option key={index} value={option}>
                 {option}
@@ -325,7 +380,7 @@ const EditRecipePage = () => {
           <label>Ainesosa:</label>
           <input type="text" value={IngName} onChange={IngNameChange} />
         </div>
-        <button type="button" onClick={addIngredient}>
+        <button type="submit" onClick={(e) => addIngredient(e)}>
         Lisää Ainesosa
         </button>
       </div>
