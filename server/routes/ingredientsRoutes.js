@@ -4,7 +4,7 @@ const {isJson} = require('../utils/requestUtils')
 const sql = require('mssql');
 const config = require('../config/config');
 const router = express.Router();
-const {getIngredients, addIngredient} = require("../controllers/ingredients")
+const {getIngredients, addIngredient, deleteIngredient} = require("../controllers/ingredients")
 const {requireAuth} = require('../middlewares/authMiddleware')
 
 router.use(requireAuth);
@@ -22,6 +22,14 @@ router.post('/add', async (req, res) => {
   }
   return addIngredient(req, res);
 });
+router.delete('/:ingredientId', async (req, res) => {
+  if(!isJson) {
+    //If it wasn't, the responseUtils.badRequest function is returned, which takes res and an error message as parameters.
+    return badRequest(res, "Content was not Json");
+  }
+  return deleteIngredient(req, res);
+});
+
 
 
 

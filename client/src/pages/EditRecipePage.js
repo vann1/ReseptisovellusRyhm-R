@@ -310,6 +310,27 @@ useEffect(() => {
               console.error('Error during search:', error.message);
             }
           }
+
+          const deleteIngredient = async (ingredientId) => {
+            try {
+                const response = await fetch(`http://localhost:3001/api/ingredients/${ingredientId}`, {
+                  method: 'DELETE',
+                  headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${user.token}`
+                  },
+                });
+                if (!response.ok) {
+                  throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                if(response.ok){
+                    console.log('Ingredient deleted:' + response.message);
+                }
+              } catch (error) {
+                console.error('Error deleting ingredient:', error.message);
+              }
+        }
+        
   return (
     <div>
     {userHasAccess ? (
@@ -348,7 +369,7 @@ useEffect(() => {
               {options.map((option, index) => (
                 <option key={index} value={option}>
                   {option} 
-                </option>
+                </option> 
               ))}
             </select>
           </div>
@@ -356,7 +377,10 @@ useEffect(() => {
             <label>Ainesosa:</label>
             <input type="text" value={ingNameArray[index] || ''} onChange={(event) => IngNameChangeArray(event, index)} />
           </div>
-        </div>
+          <div>
+            <button onClick={() => {deleteIngredient(ingredientsPlaceholder[index].ingredientid)}}>Poista</button>
+          </div>
+        </div> 
       ))}
         <button type="button" onClick={editIngredients}>Tallenna muutokset</button> {missingFieldsMessage && <div style={{ color: 'red' }}>{missingFieldsMessage}</div>}
 
@@ -380,9 +404,11 @@ useEffect(() => {
           <label>Ainesosa:</label>
           <input type="text" value={IngName} onChange={IngNameChange} />
         </div>
-        <button type="submit" onClick={(e) => addIngredient(e)}>
-        Lisää Ainesosa
-        </button>
+        <div>
+          <button type="submit" onClick={(e) => addIngredient(e)}>
+          Lisää Ainesosa
+          </button>
+        </div>
       </div>
       <div>
         <label>Reseptin ohje:</label>

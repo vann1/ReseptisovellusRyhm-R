@@ -1,5 +1,5 @@
 const {internalServerError, notFound, ok} = require('../utils/responseUtils')
-const {getIngredientsFromDatabase, addIngredientToDatabase} = require('../database')
+const {getIngredientsFromDatabase, addIngredientToDatabase, deleteIngredientFromDatabase} = require('../database')
 
 
 const getIngredients = async (req, res) => {
@@ -25,11 +25,26 @@ const addIngredient = async (req, res) => {
         if (!result || result.length === 0) {
             return notFound(res, "Ingredients not found in the database");
         }
-        return ok(res, "Ingredients found from database", { result });
+        return ok(res, "Ingredient added to database", { result });
 
     } catch (error) {
         console.error("Error getting ingredients: " + error);
         return internalServerError(res, "Internal server error while searching for recipes");
     }
 };
-module.exports = {getIngredients, addIngredient};
+
+
+const deleteIngredient = async (req, res) => {
+    try {
+        const result = await deleteIngredientFromDatabase(req, res);
+        if (!result || result.length === 0) {
+            return notFound(res, "Ingredient not found in the database");
+        }
+        return ok(res, "Ingredient delete from database");
+
+    } catch (error) {
+        console.error("Error deleting ingredient: " + error);
+        return internalServerError(res, "Internal server error while searching for recipes");
+    }
+};
+module.exports = {getIngredients, addIngredient, deleteIngredient};
