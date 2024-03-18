@@ -49,6 +49,9 @@ const addUserToDatabase = async (req, res) => {
     console.error("Error adding user to the database:", error);
     return false;
   }
+  finally {
+    await sql.close(); 
+    } 
 };
 
 /**
@@ -84,6 +87,9 @@ const getUserFromDatabase = async (req, res) => {
   } catch (error) {
     console.error("Error getting user from the database:", error);
   }
+  finally {
+    await sql.close(); 
+    } 
 };
 
 const addRecipeToDatabase = async (req, res) => {
@@ -136,16 +142,21 @@ const addRecipeToDatabase = async (req, res) => {
     console.error('Error connecting to the database:', error);
     return false;
   }
+  finally {
+    await sql.close(); 
+    } 
 }; 
   
 /********************************************************* */
 
 const getRecipeFromDatabase = async (req, res) => {
   // Assuming your database connection is already established and stored in the 'sql' variable
-
+  const recipeidparams = req.params.id;
+  //userid for getting recipe for certain user
+  const userid = req.params.userId;
   // Destructure parameters from the request body
   const { recipeName, recipeCategory, recipeTag, recipeUsername, recipeOwnerName, recipeid } = req.body;
-
+  await sql.connect(config);
   try {
     // Initialize a new request object
     const request = new sql.Request();
@@ -183,6 +194,17 @@ const getRecipeFromDatabase = async (req, res) => {
       request.input('recipeOwnerName', sql.NVarChar, `%${recipeOwnerName}%`);
     }
     
+    if (userid) {
+      query +=
+        ' AND userid = @userid';
+      request.input('userid', sql.Int, userid);
+    }
+
+    if (recipeidparams) {
+      query += ' AND recipeid LIKE @recipeid';
+      request.input('recipeid', sql.NVarChar, `%${recipeidparams}%`);
+    }
+    
     // Execute the query
     const result = await request.query(query);
 
@@ -199,7 +221,9 @@ const getRecipeFromDatabase = async (req, res) => {
     // Handle errors
     console.error(error);
     return undefined;
-  }
+  } finally {
+    await sql.close(); 
+    } 
 };
 
 const getAllUsersFromDatabase = async (req, res) => {
@@ -221,6 +245,9 @@ const getAllUsersFromDatabase = async (req, res) => {
     console.error("Error getting users from the database:", error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
+  finally {
+    await sql.close(); 
+    } 
 };
 
 const deleteUserFromDatabase = async (userid)  => {
@@ -237,9 +264,180 @@ const deleteUserFromDatabase = async (userid)  => {
     console.error("Error deleting user from the database:", error);
     throw error;
   }
+  finally {
+    await sql.close(); 
+    } 
 };
 
+const editRecipeToDatabase = async (req,res) => {
 
+  const { id, RecipeName, RecipeCategory, RecipeGuide, RecipeDesc, Tags, updatedIngredients, Ingredients} = req.body;
+  console.log(Ingredients)
+  try {
+    await sql.connect(config);
+    const transaction = new sql.Transaction();
+
+    try {
+      await transaction.begin();
+      const recipeUpdateQuery = `
+      UPDATE [dbo].[recipes]
+      SET recipename = @RecipeName,
+          category = @RecipeCategory,
+          instructions = @RecipeGuide,
+          description = @RecipeDesc,
+          tags = @Tags
+          WHERE recipeid = @RecipeID;
+    `;
+  await new sql.Request(transaction)
+  .input('RecipeName', sql.NVarChar, RecipeName)
+  .input('RecipeCategory', sql.NVarChar, RecipeCategory)
+  .input('RecipeGuide', sql.NVarChar, RecipeGuide)
+  .input('RecipeDesc', sql.NVarChar, RecipeDesc)
+  .input('Tags', sql.NVarChar, Tags)
+  .input('RecipeID', sql.Int, id)
+  .query(recipeUpdateQuery);
+
+  const ingredientQuery = `
+  UPDATE [dbo].[ingredients]
+  SET quantity = @Quantity, measure = @Measure, ingredientname = @IngredientName
+  WHERE recipeid = @RecipeID AND ingredientid = @IngredientID;
+`;
+for (let i = 0; i < updatedIngredients.length; i++) {
+  const ingredient = updatedIngredients[i];
+  await new sql.Request(transaction)
+    .input('RecipeID', sql.Int, ingredient.recipeid)
+    .input('Quantity', sql.Int, ingredient.IngAmount)
+    .input('Measure', sql.NVarChar, ingredient.IngMeasure)
+    .input('IngredientName', sql.NVarChar, ingredient.IngName)
+    .input('IngredientID', sql.Int, ingredient.ingredientid)
+    .query(ingredientQuery);
+}
+    // const ingredientQueryAdd = `
+    // INSERT INTO [dbo].[ingredients] (recipeid, quantity, measure, ingredientname)
+    // VALUES (@RecipeID, @Quantity, @Measure, @IngredientName);
+    // `;
+    // for (let i = 0; i < Ingredients.length; i++) {
+    // const ingredient = Ingredients[i];
+    // await new sql.Request(transaction)
+    //   .input('RecipeID', sql.Int, id)
+    //   .input('Quantity', sql.NVarChar, ingredient.IngAmount)
+    //   .input('Measure', sql.NVarChar, ingredient.IngMeasure)
+    //   .input('IngredientName', sql.NVarChar, ingredient.IngName)
+    //   .query(ingredientQueryAdd);
+    // }
+
+      await transaction.commit();
+      return true; 
+    } catch (error) {
+      await transaction.rollback();
+      console.error('Error updating recipe:', error);
+      return false; 
+    }
+  } catch (error) {
+    console.error('Error connecting to the database:', error);
+    return false; 
+  } finally {
+    await sql.close(); 
+    } 
+  }
+  
+
+const getIngredientsFromDatabase = async (req,res) => {
+  const recipeid = req.params.recipeId;
+  try {
+    //creates connection to database
+    await sql.connect(config);
+
+    //initializes a new request object that is used to send SQL queries to the connected database using the sql module or library.
+    const request = new sql.Request();
+
+    //query for database
+    const query = `SELECT * FROM ingredients WHERE recipeid = @recipeId`;
+    const result = await request
+      .input("recipeId", sql.Int, recipeid)
+      .query(query);
+    if (result.recordset.length > 0) {
+      const ingredients = result.recordset;
+      return ingredients;
+    }
+    return undefined;
+  } catch (error) {
+    console.error("Error getting user from the database:", error);
+  }
+  finally {
+    await sql.close(); 
+    } 
+}
+
+
+
+const addIngredientToDatabase = async (req, res) => {
+  const {Ingredients, id} = req.body;
+  try {
+    await sql.connect(config);
+    const transaction = new sql.Transaction();
+
+    try {
+      await transaction.begin();
+      const ingredientQuery = `
+        INSERT INTO [dbo].[ingredients] (recipeid, quantity, measure, ingredientname)
+        VALUES (@RecipeID, @Quantity, @Measure, @IngredientName);
+      `;
+      for (let i = 0; i < Ingredients.length; i++) {
+        const ingredient = Ingredients[i];
+        await new sql.Request(transaction)
+          .input('RecipeID', sql.Int, id)
+          .input('Quantity', sql.NVarChar, ingredient.IngAmount)
+          .input('Measure', sql.NVarChar, ingredient.IngMeasure)
+          .input('IngredientName', sql.NVarChar, ingredient.IngName)
+          .query(ingredientQuery);
+      }
+      await transaction.commit();
+      return true;
+    } catch (error) {
+      await transaction.rollback();
+      console.error('Error adding ingredient to the database:', error);
+      return false;
+    }
+  } catch (error) {
+    console.error('Error connecting to the database:', error);
+    return false;
+  }
+  finally {
+    await sql.close(); 
+    } 
+}; 
+
+
+const deleteIngredientFromDatabase = async (req, res) => {
+  const { ingredientId } = req.params; 
+  try {
+    await sql.connect(config);
+    const transaction = new sql.Transaction();
+    try {
+      await transaction.begin();
+      const deleteQuery = `
+        DELETE FROM [dbo].[ingredients] WHERE ingredientid = @IngredientID;
+      `;
+      await new sql.Request(transaction)
+        .input('IngredientID', sql.Int, ingredientId)
+        .query(deleteQuery);
+      
+      await transaction.commit();
+      return true; 
+    } catch (error) {
+      await transaction.rollback();
+      console.error('Error deleting ingredient from database:', error);
+      return false; 
+    }
+  } catch (error) {
+    console.error('Error connecting to the database:', error);
+    return false; 
+  }
+  finally {
+    await sql.close(); 
+    } 
+}
 
   
-module.exports = {addUserToDatabase, getUserFromDatabase, addRecipeToDatabase, getRecipeFromDatabase, getAllUsersFromDatabase, deleteUserFromDatabase};
+module.exports = {deleteIngredientFromDatabase ,addIngredientToDatabase, addUserToDatabase, getUserFromDatabase, addRecipeToDatabase, getRecipeFromDatabase, getAllUsersFromDatabase, deleteUserFromDatabase, editRecipeToDatabase, getIngredientsFromDatabase};

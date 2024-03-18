@@ -1,7 +1,7 @@
 const express = require("express");
 const { isJson } = require("../utils/requestUtils");
 const router = express.Router();
-const { createUser, loginUser, showUser, showAllUsers, deleteUser } = require("../controllers/user");
+const { createUser, loginUser, showUser, showAllUsers, deleteUser , getUserRecipe} = require("../controllers/user");
 const { badRequest, notFound, ok , internalServerError} = require("../utils/responseUtils");
 const {requireAuth} = require('../middlewares/authMiddleware');
 
@@ -87,6 +87,21 @@ router.delete('/:userId', (req,res) => {
       return badRequest(res, "Content was not Json");
     }
     return deleteUser(res, userid);
+  }
+  catch (err){
+    return internalServerError(res, "Internal server error: " + err)
+  }
+
+})
+
+router.get('/profile/:userId', (req,res) => {
+  try {
+    //First, it checks if the received request was in JSON format or not.
+    if (!isJson(req)) {
+      //If it wasn't, the responseUtils.badRequest function is returned, which takes res and an error message as parameters.
+      return badRequest(res, "Content was not Json");
+    }
+    return getUserRecipe(req,res);
   }
   catch (err){
     return internalServerError(res, "Internal server error: " + err)

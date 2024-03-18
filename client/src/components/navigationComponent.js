@@ -40,9 +40,6 @@ const Navigation = (props) => {
         <li className="navigation-item">
           <Link to="/SearchPage" className="navigation-link">Search</Link>
         </li>
-        <li className="navigation-item">
-          <Link to="/Recipe" className="navigation-link">Show Recipe</Link>
-        </li>
       </ul>
     </div>
     {user && (<>
