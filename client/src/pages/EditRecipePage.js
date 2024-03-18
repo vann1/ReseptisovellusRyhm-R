@@ -246,7 +246,7 @@ const EditRecipePage = () => {
   }, [id, user]);
 
 
-const addIngredient1 = async () => {
+const sendIngredients = async () => {
             try {
               const response = await fetch(`http://localhost:3001/api/ingredients/add`, {
                 method: 'POST',
@@ -277,7 +277,7 @@ useEffect(() => {
     
   } 
   console.log("asda")
-  addIngredient1();
+  sendIngredients();
 },[Ingredients])
 
           const getIngredients = async () => {

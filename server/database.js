@@ -49,6 +49,9 @@ const addUserToDatabase = async (req, res) => {
     console.error("Error adding user to the database:", error);
     return false;
   }
+  finally {
+    await sql.close(); 
+    } 
 };
 
 /**
@@ -84,6 +87,9 @@ const getUserFromDatabase = async (req, res) => {
   } catch (error) {
     console.error("Error getting user from the database:", error);
   }
+  finally {
+    await sql.close(); 
+    } 
 };
 
 const addRecipeToDatabase = async (req, res) => {
@@ -135,6 +141,9 @@ const addRecipeToDatabase = async (req, res) => {
     console.error('Error connecting to the database:', error);
     return false;
   }
+  finally {
+    await sql.close(); 
+    } 
 }; 
   
 /********************************************************* */
@@ -211,7 +220,7 @@ const getRecipeFromDatabase = async (req, res) => {
     console.error(error);
     return undefined;
   } finally {
-    sql.close(); 
+    await sql.close(); 
     } 
 };
 
@@ -234,6 +243,9 @@ const getAllUsersFromDatabase = async (req, res) => {
     console.error("Error getting users from the database:", error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
+  finally {
+    await sql.close(); 
+    } 
 };
 
 const deleteUserFromDatabase = async (userid)  => {
@@ -250,6 +262,9 @@ const deleteUserFromDatabase = async (userid)  => {
     console.error("Error deleting user from the database:", error);
     throw error;
   }
+  finally {
+    await sql.close(); 
+    } 
 };
 
 const editRecipeToDatabase = async (req,res) => {
@@ -320,7 +335,7 @@ for (let i = 0; i < updatedIngredients.length; i++) {
     console.error('Error connecting to the database:', error);
     return false; 
   } finally {
-    sql.close(); 
+    await sql.close(); 
     } 
   }
   
@@ -347,6 +362,9 @@ const getIngredientsFromDatabase = async (req,res) => {
   } catch (error) {
     console.error("Error getting user from the database:", error);
   }
+  finally {
+    await sql.close(); 
+    } 
 }
 
 
@@ -383,6 +401,9 @@ const addIngredientToDatabase = async (req, res) => {
     console.error('Error connecting to the database:', error);
     return false;
   }
+  finally {
+    await sql.close(); 
+    } 
 }; 
 
 
@@ -411,6 +432,9 @@ const deleteIngredientFromDatabase = async (req, res) => {
     console.error('Error connecting to the database:', error);
     return false; 
   }
+  finally {
+    await sql.close(); 
+    } 
 }
 
   
