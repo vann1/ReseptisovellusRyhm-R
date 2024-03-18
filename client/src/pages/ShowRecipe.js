@@ -4,6 +4,8 @@ import '../styles/ClientStyles.css';
 
 const ShowRecipe = () => {
   const [searchResults, setSearchResults] = useState([]);
+  const [userRating, setUserRating] = useState(0);
+  const [comment, setComment] = useState(''); // State to hold user's comment
   const { recipeId } = useParams();
 
   const handleSearch = async () => {
@@ -14,7 +16,7 @@ const ShowRecipe = () => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          recipeid: recipeId, // Pass the recipeId from the URL in the request body
+          recipeid: recipeId,
         }),
       });
 
@@ -33,6 +35,20 @@ const ShowRecipe = () => {
   useEffect(() => {
     handleSearch();
   }, [recipeId]);
+
+  const handleRatingChange = (rating) => {
+    setUserRating(rating);
+  };
+
+  const handleCommentChange = (event) => {
+    setComment(event.target.value);
+  };
+
+  const handleSubmit = () => {
+    // Here you can send the userRating and comment to your backend for processing or storage
+    console.log('User Rating:', userRating);
+    console.log('Comment:', comment);
+  };
 
   return (
     <div>
@@ -55,6 +71,35 @@ const ShowRecipe = () => {
                 <p><strong>Description:</strong> {recipe.description}</p>
                 <p><strong>Tags:</strong> {recipe.tags}</p>
                 <p><strong>Instructions:</strong> {recipe.instructions}</p>
+
+                <div>
+                  <strong>Rate this recipe:</strong><br />
+                  {[1, 2, 3, 4, 5].map((star, index) => (
+                    <span
+                      key={index}
+                      style={{ cursor: 'pointer', color: star <= userRating ? 'gold' : 'gray' }}
+                      onClick={() => handleRatingChange(star)}
+                    >
+                      &#9733;
+                    </span>
+                  ))}
+                </div>
+
+                {/* Text box for comment */}
+                <div style={{ marginTop: '10px' }}>
+                  <textarea
+                    rows="4"
+                    cols="50"
+                    placeholder="Leave a comment..."
+                    value={comment}
+                    onChange={handleCommentChange}
+                  />
+                </div>
+
+                {/* Submit button */}
+                <div style={{ marginTop: '10px' }}>
+                  <button onClick={handleSubmit}>Send Rating</button>
+                </div>
               </div>
             </div>
           ))}
@@ -65,6 +110,8 @@ const ShowRecipe = () => {
 };
 
 export default ShowRecipe;
+
+
 
 
 

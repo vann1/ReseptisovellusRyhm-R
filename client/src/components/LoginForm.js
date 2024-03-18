@@ -1,4 +1,5 @@
 import { useState , useContext} from "react";
+import { Link } from 'react-router-dom';
 import '../styles/styles.css'
 const LoginForm = ({onLogin, virheViesti, isLoading}) => {
   const [password, setPassword] = useState('');
@@ -27,7 +28,9 @@ const LoginForm = ({onLogin, virheViesti, isLoading}) => {
       />
       <br></br>
       <p className="loginError">{virheViesti}</p>
-      <button onClick={handleLogin} disabled={isLoading}>Kirjaudu</button>
+      <button onClick={handleLogin} disabled={isLoading}>Kirjaudu</button>'
+      <br></br>
+      <Link to={`/Password`}><p>Unohtuiko salasana?</p></Link>
     </div>
   );
 };
