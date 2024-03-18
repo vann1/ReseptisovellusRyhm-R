@@ -60,7 +60,8 @@ const ShowRecipe = () => {
               {recipe.images && (
                 <div style={{ flex: 1, marginRight: '20px' }}>
                   <strong>Image:</strong><br />
-                  <img src={`data:image/jpeg;base64,${recipe.images}`} alt="Recipe Image" style={{ maxWidth: '300px' }} />
+                  {/* Convert Buffer object to base64 encoded string */}
+                  <img src={`data:image/jpeg;base64,${arrayBufferToBase64(recipe.images.data)}`} alt="Recipe Image" style={{ maxWidth: '300px' }} />
                 </div>
               )}
               <div style={{ flex: 2 }}>
@@ -109,7 +110,21 @@ const ShowRecipe = () => {
   );
 };
 
+// Function to convert ArrayBuffer to base64
+const arrayBufferToBase64 = (buffer) => {
+  let binary = '';
+  const bytes = new Uint8Array(buffer);
+  const len = bytes.byteLength;
+  for (let i = 0; i < len; i++) {
+    binary += String.fromCharCode(bytes[i]);
+  }
+  return window.btoa(binary);
+};
+
 export default ShowRecipe;
+
+
+
 
 
 
