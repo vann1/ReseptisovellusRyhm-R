@@ -11,7 +11,7 @@ import {ProfilePage} from './pages/ProfilePage';
 import { useAuthContext } from "./hooks/useAuthContext";
 import ShowRecipe from './pages/ShowRecipe';
 import { AdminPage } from './pages/AdminPage';
-import LostPassword from './pages/LostPassword';
+import LostPassword from './pages/LostPasswordPage';
 function App() {
   const {user} = useAuthContext()
   //Navigatio komponentti on vaan testausta varten, voi poistaa
