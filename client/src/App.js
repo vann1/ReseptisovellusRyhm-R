@@ -11,6 +11,7 @@ import {ProfilePage} from './pages/ProfilePage';
 import { useAuthContext } from "./hooks/useAuthContext";
 import ShowRecipe from './pages/ShowRecipe';
 import { AdminPage } from './pages/AdminPage';
+import LostPassword from './pages/LostPasswordPage';
 function App() {
   const {user} = useAuthContext()
   //Navigatio komponentti on vaan testausta varten, voi poistaa
@@ -27,6 +28,7 @@ function App() {
         {!user && (<>
         <Route path="/RegisterPage" element={<RegisterPage></RegisterPage>}></Route>
         <Route path="/LoginPage" element={<LoginPage></LoginPage>}></Route>
+        <Route path='/Password' element={<LostPassword></LostPassword>}></Route>
         </>)}      
         {user && (<>
         <Route path='/ProfilePage' element={<ProfilePage></ProfilePage>}></Route>
