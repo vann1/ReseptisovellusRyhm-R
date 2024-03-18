@@ -6,7 +6,8 @@ const EditRecipePage = () => {
   const {user} = useAuthContext();
   const navigate = useNavigate();
   const { id } = useParams();
-  //Muuttujat
+  //Muuttuja
+
   const [RecipeCategory, setRecipeCategory] = useState(null);
   const [IngAmount, setIngAmount] = useState('');
   const [IngMeasure, setIngMeasure] = useState('ml');
@@ -219,6 +220,7 @@ const EditRecipePage = () => {
   useEffect(() => {
     const getRecipe = async () => {
       try {
+        console.log(id, user)
         const response = await fetch(`http://localhost:3001/api/recipe/${id}`, {
           method: 'GET',
           headers: {
@@ -230,13 +232,13 @@ const EditRecipePage = () => {
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
-        setRecipe(data.data.recipes.recordset[0]);
-        setRecipeName(data.data.recipes.recordset[0].recipename)
-        setRecipeGuide(data.data.recipes.recordset[0].instructions)
-        setRecipeDesc(data.data.recipes.recordset[0].description)
-        setTags(data.data.recipes.recordset[0].tags)
-        setUserHasAccess(user.userid === data.data.recipes.recordset[0].userid);
-        setRecipeCategory(data.data.recipes.recordset[0].category);
+        setRecipe(data.data.recipes[0]);
+        setRecipeName(data.data.recipes[0].recipename)
+        setRecipeGuide(data.data.recipes[0].instructions)
+        setRecipeDesc(data.data.recipes[0].description)
+        setTags(data.data.recipes[0].tags)
+        setUserHasAccess(user.userid === data.data.recipes[0].userid);
+        setRecipeCategory(data.data.recipes[0].category);
       } catch (error) {
         console.error('Error during search:', error.message);
       }
@@ -264,7 +266,6 @@ const sendIngredients = async () => {
               if (!response.ok) {
                 throw new Error(`HTTP error! Status: ${response.status}`);
               }
-              
               console.log("TEST", data.data)
             } catch (error) {
               console.error('Error during search:', error.message);
@@ -272,11 +273,10 @@ const sendIngredients = async () => {
 }
 useEffect(() => {
   if(Ingredients.length === 0){
-    
     return;
     
   } 
-  console.log("asda")
+
   sendIngredients();
 },[Ingredients])
 
@@ -291,8 +291,9 @@ useEffect(() => {
               });
               const data = await response.json();
               if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
+                throw new Error(data.error);
               }
+              console.log(data, "DATA")
               const newIngAmountArray = [];
               const newIngNameArray = [];
               const newIngMeasureArray = [];
@@ -320,6 +321,7 @@ useEffect(() => {
                     'Authorization': `Bearer ${user.token}`
                   },
                 });
+                console.log(response.status, "ADSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS")
                 if (!response.ok) {
                   throw new Error(`HTTP error! Status: ${response.status}`);
                 }

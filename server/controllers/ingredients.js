@@ -5,7 +5,9 @@ const {getIngredientsFromDatabase, addIngredientToDatabase, deleteIngredientFrom
 const getIngredients = async (req, res) => {
     try {
         const ingredients = await getIngredientsFromDatabase(req, res);
-        
+        console.log("--------------Ingredient----------------")
+        console.log(ingredients)
+        console.log("--------------Ingredient----------------")
         if (!ingredients || ingredients.length === 0) {
             return notFound(res, "Ingredients not found in the database");
         }
@@ -19,7 +21,6 @@ const getIngredients = async (req, res) => {
 
 const addIngredient = async (req, res) => {
     try {
-        console.log(req.body.updatedIngredients, "ASdasdas")
         const result = await addIngredientToDatabase(req, res);
         
         if (!result || result.length === 0) {
@@ -40,6 +41,7 @@ const deleteIngredient = async (req, res) => {
         if (!result || result.length === 0) {
             return notFound(res, "Ingredient not found in the database");
         }
+        console.log(result , "---------------------")
         return ok(res, "Ingredient delete from database");
 
     } catch (error) {

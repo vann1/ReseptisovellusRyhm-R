@@ -16,7 +16,9 @@ const addRecipe = (req, res) => {
 const SearchRecipe = async (req, res) => {
     try {
         const recipes = await getRecipeFromDatabase(req, res);
-
+        console.log("--------------Recipe----------------")
+        console.log(recipes)
+        console.log("--------------Recipe----------------")
         if (!recipes || recipes.length === 0) {
             return notFound(res, "Recipe not found in the database");
         }

@@ -44,11 +44,10 @@ const ProfileForm = () => {
         });
         const data = await response.json();
         if (!response.ok) {
-          console.log("debug")
           throw new Error(data.error);
         }
         if (response.ok) {
-            setUserRecipes(data.data.result.recordset);
+            setUserRecipes(data.data.result);
             setShowInfo(true);
         } 
       } catch (error) {

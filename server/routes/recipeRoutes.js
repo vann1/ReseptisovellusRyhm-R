@@ -40,9 +40,6 @@ router.post('/add', async (req, res) => {
       //If it wasn't, the responseUtils.badRequest function is returned, which takes res and an error message as parameters.
       return badRequest(res, "Content was not Json");
     }
-    console.log('----------------------------------------------------------------------------------')
-    console.log(req.body.updatedIngredients)
-    console.log('----------------------------------------------------------------------------------')
     return editRecipe(req, res);
   });
 module.exports = router;
