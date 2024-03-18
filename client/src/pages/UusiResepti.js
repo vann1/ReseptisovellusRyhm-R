@@ -103,6 +103,15 @@ const RuokaKategoria = () => {
     setTags(event.target.value)
   }
 
+  const handleInputChange = (index, field, value) => {
+    const updatedIngredients = [...Ingredients];
+    updatedIngredients[index] = {
+      ...updatedIngredients[index],
+      [field]: value,
+    };
+    setIngredients(updatedIngredients);
+  };
+
 
   //Ainesosan lisääminen Varmistaa että inputit eivät ole tyhjiä
   const addIngredient = () => {
@@ -212,16 +221,36 @@ const RuokaKategoria = () => {
       {Ingredients.map((ingredient, index) => (
         <div key={index} style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
           <div>
-            <label>Määrä:</label>
-            <input type="text" value={ingredient.IngAmount} readOnly />
+          <label>Määrä:</label>
+            <input
+              type="number"
+              min="0"
+              value={ingredient.IngAmount}
+              onChange={(e) => handleInputChange(index, 'IngAmount', e.target.value)}
+              pattern="[0-9]*"
+            />
           </div>
           <div>
             <label>Mitta:</label>
-            <input type="text" value={ingredient.IngMeasure} readOnly />
+            <select
+              type="text"
+              value={ingredient.IngMeasure}
+              onChange={(e) => handleInputChange(index, 'IngMeasure', e.target.value)}
+            >
+              {options.map((option, index) => (
+              <option key={index} value={option}>
+                {option}
+              </option>
+            ))}
+            </select>
           </div>
           <div>
             <label>Ainesosa:</label>
-            <input type="text" value={ingredient.IngName} readOnly />
+            <input
+              type="text"
+              value={ingredient.IngName}
+              onChange={(e) => handleInputChange(index, 'IngName', e.target.value)}
+            />
           </div>
         </div>
       ))}

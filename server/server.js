@@ -7,7 +7,7 @@ const app = express();
 const config = require("./config/config"); // Tietokantayhteysasetukset
 const userRoutes = require("./routes/userRoutes");
 const recipeRoutes = require("./routes/recipeRoutes");
-
+const ingredientsRoutes = require("./routes/ingredientsRoutes");
 app.use(cors()); // Enable CORS for all routes
 app.use(bodyParser.json());
 
@@ -25,6 +25,7 @@ app.use("/api/user", userRoutes);
 //Configure route for request /api/recipe which uses middleware functions from recipeRoutes file
 app.use("/api/recipe", recipeRoutes);
 
+app.use("/api/ingredients", ingredientsRoutes);
 const port = process.env.PORT || 3001;
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);

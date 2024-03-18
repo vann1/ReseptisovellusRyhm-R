@@ -1,7 +1,5 @@
-import { useAuthContext } from "../hooks/useAuthContext";
 import { useNavigate } from "react-router-dom";
 const ProfileButton = () => {
-    const {user} = useAuthContext();
     const navigate = useNavigate();
     const handleProfilePage = async () => {
         navigate('/ProfilePage');
@@ -9,7 +7,7 @@ const ProfileButton = () => {
 
 
     return(
-        <button onClick={handleProfilePage}>{user.email}</button>
+        <button onClick={handleProfilePage}>Oma profiili</button>
     )
 }
 

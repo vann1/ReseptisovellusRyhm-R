@@ -11,6 +11,7 @@ import {ProfilePage} from './pages/ProfilePage';
 import { useAuthContext } from "./hooks/useAuthContext";
 import ShowRecipe from './pages/ShowRecipe';
 import { AdminPage } from './pages/AdminPage';
+import { EditRecipePage } from './pages/EditRecipePage';
 import LostPassword from './pages/LostPasswordPage';
 function App() {
   const {user} = useAuthContext()
@@ -31,6 +32,7 @@ function App() {
         <Route path='/Password' element={<LostPassword></LostPassword>}></Route>
         </>)}      
         {user && (<>
+        <Route path="/userrecipe/:id" element={<EditRecipePage></EditRecipePage>} />
         <Route path='/ProfilePage' element={<ProfilePage></ProfilePage>}></Route>
         {user.role === 1  && (<Route path='/AdminPage' element={<AdminPage></AdminPage>}></Route>)}</>)}
       </Routes>
