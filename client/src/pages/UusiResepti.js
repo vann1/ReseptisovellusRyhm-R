@@ -310,15 +310,17 @@ const RuokaKategoria = () => {
        </div>
  
       <div>
-      <input type="file" accept=".jpg, .jpeg, .png" onChange={handleFileChange} />
+      
       </div>
       </div>
       <div className="recipehalf">
+        <label>Reseptin kuva:<br/></label>
         <div style={{height: '300px'}}>
+          
         {image ? (
   <img src={image} alt="Uploaded" style={{ maxWidth: '100%', maxHeight: '100%' }} />
 ) : (
-  <p>Kun lisäät kuvan, se tulee näkymään tähän.</p>
+  <input type="file" accept=".jpg, .jpeg, .png" onChange={handleFileChange} />
 )}
         </div>
       <div>
