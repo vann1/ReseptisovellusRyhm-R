@@ -6,6 +6,7 @@ const ProfileForm = () => {
     const [userDetails, setUserDetails] = useState({});
     const {user} = useAuthContext();
     const [showInfo, setShowInfo] = useState(false)
+    const [showNoRecipes, setShowNoRecipes] = useState(false)
     useEffect(() => {
         const getUserDetails = async () => {
             try {
@@ -33,6 +34,7 @@ const ProfileForm = () => {
     },[])
 
     const getUserRecipes = async () => {
+      setShowNoRecipes(false);
       const userid = user.userid;
       try {
         const response = await fetch(`http://localhost:3001/api/user/profile/${userid}`, {
@@ -44,6 +46,9 @@ const ProfileForm = () => {
         });
         const data = await response.json();
         if (!response.ok) {
+          if(response.status === 404) {
+            setShowNoRecipes(true);
+          } 
           throw new Error(data.error);
         }
         if (response.ok) {
@@ -55,6 +60,10 @@ const ProfileForm = () => {
       }
     }
     return (
+      <div>
+      {showNoRecipes ? <div>
+        <h1>Sinulla ei vielä ole reseptejä {userDetails.username}</h1>
+      </div> :
         <div>
           {showInfo ? <div>
             <h1>{userDetails.username}</h1>
@@ -79,7 +88,8 @@ const ProfileForm = () => {
                 </tbody>
               </table>
             </div>
-          </div>: <h1>Loading...</h1>}
+          </div>: <h1>Ladataan...</h1>}
+        </div>}
         </div>
       );
 }

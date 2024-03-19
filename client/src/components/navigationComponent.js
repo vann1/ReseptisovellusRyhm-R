@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { BrowserRouter as Router, Route, Link, useActionData } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 import '../styles/styles.css'
-import '../styles/ClientStyles.css'
 import { useAuthContext } from "../hooks/useAuthContext";
 import { ProfileButton } from './ProfileButton';
 import { AdminButton } from '../components/AdminButton';
 const Navigation = (props) => {
   const {dispatch, user} = useAuthContext()
-  
+  const [isOpen, setIsOpen] = useState(false);
   const logout = () => {
     // remove user from storage
     localStorage.removeItem('user');
@@ -19,34 +18,38 @@ const Navigation = (props) => {
     logout();
   }
 
+  const toggleMenu = () => {
+    setIsOpen((open) => !open);
+  }
 
   return(
-    <nav className="navigation container">
-    <div>
-      <ul className="navigation-list">
+    <nav className="navigation">
+        <Link to="/" className="home"></Link>
+    <button className='trigger' onClick={toggleMenu}></button>
+      <ul className={`navigation-list ${isOpen ? 'is-open' : ""}`}>
         <li className="navigation-item">
-          <Link to="/" className="navigation-link">Home</Link>
-        </li>
-        {!user && (<><li className="navigation-item">
-          <Link to="/RegisterPage" className="navigation-link">Registration</Link>
+          <Link to="/" className="navigation-link" id="home"></Link>
         </li>
         <li className="navigation-item">
-          <Link to="/LoginPage" className="navigation-link">Log in</Link>
+            <Link to="/ProfilePage" className="navigation-link">Oma profiili</Link>
         </li>
-        </>)}
+        <li className="navigation-item navright">
+          <Link to="/SearchPage" className="navigation-link">Haku</Link>
+        </li>
+        {!user && (<div><li className="navigation-item ">
+          <Link to="/RegisterPage" className="navigation-link">Rekisteröidy</Link>
+        </li>
         <li className="navigation-item">
-          <Link to="/NewRecipe" className="navigation-link">New recipe</Link>
+          <Link to="/LoginPage" className="navigation-link">Kirjaudu</Link>
         </li>
+        </div>)}
+          {user && (<>
         <li className="navigation-item">
-          <Link to="/SearchPage" className="navigation-link">Search</Link>
-        </li>
+            <Link to="/NewRecipe" className="navigation-link">Uusi resepti</Link>
+          </li>
+          {user.role === 1  && (<div><Link to="/AdminPage" className="navigation-link">Ylläpito</Link></div>)}
+          <button className='logout' onClick={handleClick}>Kirjaudu ulos</button></>)}
       </ul>
-    </div>
-    {user && (<>
-      <ProfileButton></ProfileButton>
-        <button onClick={handleClick}>Log out</button>
-        {user.role === 1  && (<><AdminButton></AdminButton></>)}</>)}
-    
     </nav>
   )
 };
