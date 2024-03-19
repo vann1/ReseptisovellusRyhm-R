@@ -28,9 +28,9 @@ const Navigation = (props) => {
         <li className="navigation-item">
           <Link to="/" className="navigation-link" id="home"></Link>
         </li>
-        <li className="navigation-item">
+        {user && (<li className="navigation-item">
             <Link to="/ProfilePage" className="navigation-link">Oma profiili</Link>
-        </li>
+        </li>)}
         <li className="navigation-item navright">
           <Link to="/SearchPage" className="navigation-link">Haku</Link>
         </li>
