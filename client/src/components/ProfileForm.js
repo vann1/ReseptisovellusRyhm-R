@@ -3,38 +3,42 @@ import { useAuthContext } from "../hooks/useAuthContext";
 import {Link} from 'react-router-dom';
 const ProfileForm = () => {
     const [userRecipes, setUserRecipes] = useState([]);
-    const [userDetails, setUserDetails] = useState({});
+    // const [userDetails, setUserDetails] = useState({});
     const {user} = useAuthContext();
     const [showInfo, setShowInfo] = useState(false)
     const [showNoRecipes, setShowNoRecipes] = useState(false)
+    const [refresh, setRefresh] = useState(false);
+    // useEffect(() => {
+    //     const getUserDetails = async () => {
+    //         try {
+    //             const response = await fetch('http://localhost:3001/api/user/profile', {
+    //               method: 'POST',
+    //               headers: {
+    //                 'Content-Type': 'application/json',
+    //                 'Authorization': `Bearer ${user.token}`
+    //               },
+    //               body: JSON.stringify({ email: user.email }),
+    //             });
+    //             const data = await response.json();
+    //             if (!response.ok) {
+    //               throw new Error(data.error);
+    //             }
+    //             if (response.ok) {
+    //                 setUserDetails(data.data.userWithoutPassword)
+    //             } 
+    //           } catch (error) {
+    //             console.error('Error:', error);
+    //           }
+    //     }
+    //     getUserDetails();
+    // },[])
+
     useEffect(() => {
-        const getUserDetails = async () => {
-            try {
-                const response = await fetch('http://localhost:3001/api/user/profile', {
-                  method: 'POST',
-                  headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${user.token}`
-                  },
-                  body: JSON.stringify({ email: user.email }),
-                });
-                const data = await response.json();
-                if (!response.ok) {
-                  throw new Error(data.error);
-                }
-                if (response.ok) {
-                    setUserDetails(data.data.userWithoutPassword)
-                } 
-              } catch (error) {
-                console.error('Error:', error);
-              }
-        }
-        getUserDetails();
-        getUserRecipes();
-    },[])
+      // Load user recipes whenever userRecipes state changes
+      getUserRecipes();
+  }, [refresh])
 
     const getUserRecipes = async () => {
-      setShowNoRecipes(false);
       const userid = user.userid;
       try {
         const response = await fetch(`http://localhost:3001/api/user/profile/${userid}`, {
@@ -46,12 +50,11 @@ const ProfileForm = () => {
         });
         const data = await response.json();
         if (!response.ok) {
-          if(response.status === 404) {
-            setShowNoRecipes(true);
-          } 
+          setShowNoRecipes(true)
           throw new Error(data.error);
         }
-        if (response.ok) {
+          if (response.ok) {
+            setShowNoRecipes(false)
             setUserRecipes(data.data.result);
             setShowInfo(true);
         } 
@@ -59,14 +62,34 @@ const ProfileForm = () => {
         console.error('Error:', error);
       }
     }
+
+    const deleteRecipe = async (recipeid) => {
+      try {
+          const response = await fetch(`http://localhost:3001/api/recipe/${recipeid}`, {
+            method: 'DELETE',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${user.token}`
+            },
+          });
+          if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+          }
+          if(response.ok){
+            setRefresh((prev) => !prev)
+            console.log('Recipe deleted');
+          }
+        } catch (error) {
+          console.error('Error deleting recipe:', error.message);
+        }
+  }
     return (
       <div>
-      {showNoRecipes ? <div>
-        <h1>Sinulla ei vielä ole reseptejä {userDetails.username}</h1>
-      </div> :
-        <div>
+        {showNoRecipes ? <div> <h1>Sinulla ei ole vielä reseptejä</h1>
+          </div> :
+          <div>
           {showInfo ? <div>
-            <h1>{userDetails.username}</h1>
+            <h1>{user.email}</h1>
             <div>
               <table>
                 <thead>
@@ -82,7 +105,8 @@ const ProfileForm = () => {
                       {recipe.recipename}
                     </Link>{" "}
                     - {recipe.category} - {recipe.username}
-                  </td>
+                    <button onClick={() => deleteRecipe(recipe.recipeid)}>Poista</button>
+                  </td>        
                 </tr>
               ))}
                 </tbody>

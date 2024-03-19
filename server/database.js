@@ -418,6 +418,35 @@ const deleteIngredientFromDatabase = async (req, res) => {
     await sql.close(); 
     } 
 }
+const deleteRecipeFromDatabase = async (req, res) => {
+  const { recipeId } = req.params; 
+  try {
+    await sql.connect(config);
+    const transaction = new sql.Transaction();
+    try {
+      await transaction.begin();
+      const deleteQuery = `
+        DELETE FROM [dbo].[recipes] WHERE recipeid = @RecipeId;
+      `;
+      await new sql.Request(transaction)
+        .input('RecipeId', sql.Int, recipeId)
+        .query(deleteQuery);
+      
+      await transaction.commit();
+      return true; 
+    } catch (error) {
+      await transaction.rollback();
+      console.error('Error deleting recipe from database:', error);
+      return false; 
+    }
+  } catch (error) {
+    console.error('Error connecting to the database:', error);
+    return false; 
+  }
+  finally {
+    await sql.close(); 
+    } 
+}
 
   
-module.exports = {deleteIngredientFromDatabase ,addIngredientToDatabase, addUserToDatabase, getUserFromDatabase, addRecipeToDatabase, getRecipeFromDatabase, getAllUsersFromDatabase, deleteUserFromDatabase, editRecipeToDatabase, getIngredientsFromDatabase};
+module.exports = {deleteRecipeFromDatabase, deleteIngredientFromDatabase ,addIngredientToDatabase, addUserToDatabase, getUserFromDatabase, addRecipeToDatabase, getRecipeFromDatabase, getAllUsersFromDatabase, deleteUserFromDatabase, editRecipeToDatabase, getIngredientsFromDatabase};

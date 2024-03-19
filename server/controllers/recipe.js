@@ -1,5 +1,5 @@
 const {badRequest, created, internalServerError, notFound, ok} = require('../utils/responseUtils')
-const {addRecipeToDatabase, getRecipeFromDatabase, editRecipeToDatabase} = require('../database')
+const {addRecipeToDatabase, getRecipeFromDatabase, editRecipeToDatabase, deleteRecipeFromDatabase} = require('../database')
 
 const addRecipe = (req, res) => {
     try {
@@ -8,17 +8,14 @@ const addRecipe = (req, res) => {
         }
         return created(res, "Recipe added to database successfully.")
     }catch(error) {
-        console.error("Error adding user to database: " + error)
-        return internalServerError(res, "Internal server error, while creating user");
+        console.error("Error adding recipe to database: " + error)
+        return internalServerError(res, "Internal server error, while creating recipe");
     }
 }
 
 const SearchRecipe = async (req, res) => {
     try {
         const recipes = await getRecipeFromDatabase(req, res);
-        console.log("--------------Recipe----------------")
-        console.log(recipes)
-        console.log("--------------Recipe----------------")
         if (!recipes || recipes.length === 0) {
             return notFound(res, "Recipe not found in the database");
         }
@@ -39,8 +36,20 @@ const editRecipe = async (req,res) => {
         return ok(res, "Recipe edited successfully.");
 
     } catch (error) {
-        return internalServerError(res, "Internal server error while searching for recipes");
+        return internalServerError(res, "Internal server error while editing recipes");
     }
 }
 
-module.exports = {addRecipe, SearchRecipe, editRecipe}
+const deleteRecipe = async (req,res) => {
+    try {
+        const result = await deleteRecipeFromDatabase(req, res);
+        if(!result) {
+            return notFound(res, "Couldnt delete recipe to database")
+        }
+        return ok(res, "Recipe deleted successfully.");
+    } catch (error) {
+        return internalServerError(res, "Internal server error while deleting recipe")
+    }
+}
+
+module.exports = {deleteRecipe,addRecipe, SearchRecipe, editRecipe}

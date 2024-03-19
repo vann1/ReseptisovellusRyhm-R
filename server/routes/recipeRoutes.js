@@ -4,7 +4,7 @@ const config = require('../config/config');
 const {badRequest} = require("../utils/responseUtils")
 const {isJson} = require('../utils/requestUtils')
 const router = express.Router();
-const {addRecipe, SearchRecipe, editRecipe} = require("../controllers/recipe")
+const {addRecipe, SearchRecipe, editRecipe,deleteRecipe} = require("../controllers/recipe")
 const {requireAuth} = require('../middlewares/authMiddleware')
 
 router.post('/search', async (req, res) => {
@@ -41,5 +41,13 @@ router.post('/add', async (req, res) => {
       return badRequest(res, "Content was not Json");
     }
     return editRecipe(req, res);
+  });
+
+  router.delete('/:recipeId', async (req, res) => {
+    if(!isJson) {
+      //If it wasn't, the responseUtils.badRequest function is returned, which takes res and an error message as parameters.
+      return badRequest(res, "Content was not Json");
+    }
+    return deleteRecipe(req, res);
   });
 module.exports = router;
