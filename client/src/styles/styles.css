@@ -207,3 +207,76 @@
     margin-top:-30px;
     margin-bottom: 13px;
   }
+
+  /*UUSI RESEPTI SIVU JUTTUJA*/
+  .component-background {
+    background-color: #fcf3d8;
+    width: 80%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 10px;
+}
+
+
+.component-background h1 {
+  color: #624e08;
+  text-align: center;
+}
+
+.newrecipe{
+  display: flex;
+  flex-wrap: wrap;
+  background-color: #ffedb2;
+  padding:10px;
+  border-radius: 10px;
+}
+
+.category-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  background-color: #ffe58e;
+  border-radius: 10px;
+  padding: 1%;
+}
+
+#RuokaKategoria {
+  display: flex;
+  align-items: center;
+}
+
+.recipehalf{
+  flex: 0 0 50%; /* Each item takes up 50% of the container width */
+  box-sizing: border-box; /* Include padding and border in item's width */
+  width: 100%;
+  padding:1%;
+}
+
+.ingredientlist {
+  background-color: #ffe58e;
+  border-radius: 10px;
+  padding: 1%;
+}
+
+
+.ingredientlist th {
+  font-weight: 400;
+}
+
+.recipehalf textarea{
+  width:100%;
+  resize:none;
+}
+
+.newingredient{
+  width: 90%;
+}
+
+@media screen and (max-width: 625px) {
+    .component-background {
+        width: 100%;
+        padding:0;
+    }
+
+}
+
+/*UUSI RESEPTI SIVU JUTUT LOPPU*/

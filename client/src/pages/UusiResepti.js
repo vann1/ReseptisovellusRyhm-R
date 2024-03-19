@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { useAuthContext } from "../hooks/useAuthContext";
 import { useNavigate } from 'react-router-dom';
+import '../styles/styles.css'
+
 const RuokaKategoria = () => {
   //ContextApi for current user
   const {user} = useAuthContext();
@@ -18,8 +20,9 @@ const RuokaKategoria = () => {
   const [selectedFile, setSelectedFile] = useState(null);
   //Vaihtoehdot kategorialle ja ainesosan mitalle
   const Kategoria = ['Alkupala', 'Juoma', 'Välipala', 'Pääruoka', 'Jälkiruoka', 'Leivonnaiset', 'Muu'];
-  const options = ['ml', 'tl', 'rkl', 'dl', 'l', 'kkp' ,'g', 'kg', 'kpl'];
+   const options = ['ml', 'tl', 'rkl', 'dl', 'l', 'kkp' ,'g', 'kg', 'kpl'];
   const [RecipeReg, setRecipeReg] = useState(0);
+  const [image, setImage] = useState(null);
 
   
   /*Mitat:
@@ -40,6 +43,11 @@ const RuokaKategoria = () => {
   const handleFileChange = async (event) => {
     const file = event.target.files[0];
     if (file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        setImage(reader.result);
+      };
+      reader.readAsDataURL(file);
       try {
         const base64Data = await readFileAsBase64(file);
         setSelectedFile(base64Data);
@@ -192,112 +200,141 @@ const RuokaKategoria = () => {
   };
 
   return (
+    <div className="component-background">
+      <h1>Lisää uusi resepti</h1>
+   
     <form>
-      <label>Reseptin nimi:</label>
+       <div className="newrecipe">
+      <div className="recipehalf">
+      <label>Reseptin nimi: <br></br></label>
       <input type="text" value={RecipeName} onChange={RecipeNameChange} />
-        <p>Reseptin kategoria:</p>
-      {Kategoria.map((option, index) => (
-        <div id="RuokaKategoria" key={index}>
-          <input
-            type="checkbox"
-            id={`checkbox-${index}`}
-            value={option}
-            checked={RecipeCategory === option}
-            onChange={() => CategoryChange(option)}
-          />
-          <label htmlFor={`checkbox-${index}`}>{option}</label>
-        </div>
-      ))}
+      <p>Reseptin kategoria:</p>
+<div className="category-grid">
+  {Kategoria.map((option, index) => (
+    <div id="RuokaKategoria" key={index}>
+      <input
+        type="checkbox"
+        id={`checkbox-${index}`}
+        value={option}
+        checked={RecipeCategory === option}
+        onChange={() => CategoryChange(option)}
+      />
+      <label htmlFor={`checkbox-${index}`}>{option}</label>
+    </div>
+  ))}
+</div>
       
       <label >
-        <input
+        
+        Vain rekisteröityneille käyttäjille?<br></br><input
           type="checkbox"
           checked={RecipeReg}
           onChange={handleCheckboxChange}
-        />
-        Vain rekisteröityneille käyttäjille?
+        /> Kyllä
       </label>
-      <p>Ainesosat:</p>
-      {Ingredients.map((ingredient, index) => (
-        <div key={index} style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-          <div>
-          <label>Määrä:</label>
-            <input
-              type="number"
-              min="0"
-              value={ingredient.IngAmount}
-              onChange={(e) => handleInputChange(index, 'IngAmount', e.target.value)}
-              pattern="[0-9]*"
-            />
-          </div>
-          <div>
-            <label>Mitta:</label>
-            <select
-              type="text"
-              value={ingredient.IngMeasure}
-              onChange={(e) => handleInputChange(index, 'IngMeasure', e.target.value)}
-            >
-              {options.map((option, index) => (
-              <option key={index} value={option}>
-                {option}
-              </option>
-            ))}
-            </select>
-          </div>
-          <div>
-            <label>Ainesosa:</label>
-            <input
-              type="text"
-              value={ingredient.IngName}
-              onChange={(e) => handleInputChange(index, 'IngName', e.target.value)}
-            />
-          </div>
-        </div>
-      ))}
-      
-      <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-        <div>
-          <label>Määrä:</label>
-          <input type="text" value={IngAmount} onChange={IngAmountChange} />
-        </div>
-        <div>
-          <select value={IngMeasure} onChange={IngMeasureChange}>
+     <p>Ainesosat:</p>
+<div className="ingredientlist">
+   <div className="newingredient">
+<table>
+  <thead>
+    <tr>
+      <th>Määrä</th>
+      <th>Mitta</th>
+      <th>Ainesosa</th>
+    </tr>
+  </thead>
+  <tbody>
+    {Ingredients.map((ingredient, index) => (
+      <tr key={index}>
+        <td>
+          <input
+            type="number"
+            min="0"
+            value={ingredient.IngAmount}
+            onChange={(e) => handleInputChange(index, 'IngAmount', e.target.value)}
+            pattern="[0-9]*"
+          />
+        </td>
+        <td>
+          <select
+            value={ingredient.IngMeasure}
+            onChange={(e) => handleInputChange(index, 'IngMeasure', e.target.value)}
+          >
             {options.map((option, index) => (
               <option key={index} value={option}>
                 {option}
               </option>
             ))}
           </select>
-        </div>
-        <div>
-          <label>Ainesosa:</label>
-          <input type="text" value={IngName} onChange={IngNameChange} />
-        </div>
-        <button type="button" onClick={addIngredient}>
-        Lisää Ainesosa
-        </button>
-      </div>
+        </td>
+        <td>
+          <input
+            type="text"
+            value={ingredient.IngName}
+            onChange={(e) => handleInputChange(index, 'IngName', e.target.value)}
+          />
+        </td>
+      </tr>
+    ))}
+  </tbody>
+</table>
+
+<div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+  <div>
+    <input type="text" value={IngAmount} onChange={IngAmountChange} />
+  </div>
+  <div>
+    <select value={IngMeasure} onChange={IngMeasureChange}>
+      {options.map((option, index) => (
+        <option key={index} value={option}>
+          {option}
+        </option>
+      ))}
+    </select>
+  </div>
+  <div>
+    <input type="text" value={IngName} onChange={IngNameChange} />
+  </div>
+  </div>
+</div>
+<button type="button" onClick={addIngredient}>Lisää Ainesosa</button>
+</div>
+        
       <div>
-        <div>
-        <label>Reseptin ohje:</label>
-        <textarea type="text" value={RecipeGuide} onChange={RecipeGuideChange}></textarea>
-      </div>
-      <div>
-       <label>Reseptin kuvaus:</label>
-       <textarea type="text" value={RecipeDesc} onChange={RecipeDescChange}></textarea>
+       <label>Reseptin kuvaus:<br></br></label>
+       <textarea type="text" value={RecipeDesc} onChange={RecipeDescChange} style={{height: '80px'}}></textarea>
        </div>
        <div>
        <label>tags:</label>
-       <textarea type="text" value={Tags} onChange={TagsChange}></textarea>
+       <textarea type="text" value={Tags} onChange={TagsChange}style={{height: '60px'}}></textarea>
        </div>
-      </div>
+ 
       <div>
       <input type="file" accept=".jpg, .jpeg, .png" onChange={handleFileChange} />
       </div>
+      </div>
+      <div className="recipehalf">
+        <div style={{height: '300px'}}>
+        {image ? (
+  <img src={image} alt="Uploaded" style={{ maxWidth: '100%', maxHeight: '100%' }} />
+) : (
+  <p>Kun lisäät kuvan, se tulee näkymään tähän.</p>
+)}
+        </div>
+      <div>
+        <label>Reseptin ohje:</label>
+        <textarea type="text" value={RecipeGuide} onChange={RecipeGuideChange} style={{height: '300px'}}></textarea>
+      </div>
+      
+</div>
+<p></p>
       <button type="button" onClick={TallennaBtnClick}>
         Tallenna
       </button>
+      </div>
     </form>
+
+</div>
   );
 };
 
