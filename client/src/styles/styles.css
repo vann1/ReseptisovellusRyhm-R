@@ -6,15 +6,17 @@
   box-sizing: border-box; /* Sisällytä reunukset ja täytöt leveyteen */
   background-color: rgba(252, 243, 216, 0.5);
   word-wrap: break-word;
-  
 }
 
 .navigation {
     background-color: #ffca17;
-    padding: 10px;
+    padding: 4px;
     align-items: center;
     height: 35px;
-    
+    position:sticky;
+    width: 100%;
+    top: 0;
+    height: 35px;
   }
   
 
@@ -25,11 +27,10 @@
     padding: 0;
     margin-top: 6px;
     background-color: #ffca17;
-    
-
   }
   
   .navigation-item {
+
     margin-right: 20px;
   }
   
@@ -54,24 +55,50 @@
   .home {
     display: none;
   }
+  .navigation-list.is-open {
+    max-height: 500px; 
+  }
 
-  @media (max-width: 515px) {
+  @keyframes slideDown {
+    from {
+      max-height: 0; /* Alkutilanne: korkeus 0 */
+    }
+    to {
+      max-height: 500px; /* Lopputilanne: maksimikorkeus */
+    }
+  }
+
+  @media (max-width: 625px) {
     .logout{
       width: 110px;
+      margin-bottom: 15px;
+      position: relative;
+      top: 5px;
+      right: 6px;
     }
     .navigation-list{
       display: none;
     }
     .navigation-list.is-open {
       display:flex;
-      position:sticky;
       flex-direction:column;
       padding: 5px;
-      margin: -28px 0 0 -10px;
-      width: 600px;
+      margin: -32px -5px;
+      width: 100%;
+      animation: slideDown 0.7s ease;
+      
+    }
+    
+    .navigation.is-open {
+      margin-bottom: 210px;
+    }
+
+    .navigation-item {
+      margin-left: 10px;
+      margin-bottom: 10px;
     }
     .navright  {
-      margin: 0;
+      margin-left: 10px;
     }
     #home {
       display: none;
@@ -121,6 +148,7 @@
     cursor: pointer; 
     font-weight: bold;
     margin-left: 15px;
+    margin-right:35px;
     margin-top: -5px;
   }
   

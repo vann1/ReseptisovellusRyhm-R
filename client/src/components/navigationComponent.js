@@ -2,8 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 import '../styles/styles.css'
 import { useAuthContext } from "../hooks/useAuthContext";
-import { ProfileButton } from './ProfileButton';
-import { AdminButton } from '../components/AdminButton';
 const Navigation = (props) => {
   const {dispatch, user} = useAuthContext()
   const [isOpen, setIsOpen] = useState(false);
@@ -23,7 +21,7 @@ const Navigation = (props) => {
   }
 
   return(
-    <nav className="navigation">
+    <nav className={`navigation ${isOpen ? 'is-open' : ""}`}>
         <Link to="/" className="home"></Link>
     <button className='trigger' onClick={toggleMenu}></button>
       <ul className={`navigation-list ${isOpen ? 'is-open' : ""}`}>
@@ -36,18 +34,18 @@ const Navigation = (props) => {
         <li className="navigation-item navright">
           <Link to="/SearchPage" className="navigation-link">Haku</Link>
         </li>
-        {!user && (<div><li className="navigation-item ">
+        {!user && (<><li className="navigation-item ">
           <Link to="/RegisterPage" className="navigation-link">Rekisteröidy</Link>
         </li>
         <li className="navigation-item">
           <Link to="/LoginPage" className="navigation-link">Kirjaudu</Link>
         </li>
-        </div>)}
+        </>)}
           {user && (<>
         <li className="navigation-item">
             <Link to="/NewRecipe" className="navigation-link">Uusi resepti</Link>
           </li>
-          {user.role === 1  && (<div><Link to="/AdminPage" className="navigation-link">Ylläpito</Link></div>)}
+          {user.role === 1  && (<div className='navigation-item'><Link to="/AdminPage" className="navigation-link">Ylläpito</Link></div>)}
           <button className='logout' onClick={handleClick}>Kirjaudu ulos</button></>)}
       </ul>
     </nav>
