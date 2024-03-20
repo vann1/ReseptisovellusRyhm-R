@@ -231,7 +231,7 @@
   /*UUSI RESEPTI SIVU JUTTUJA*/
   .component-background {
     background-color: #fcf3d8;
-    width: 80%;
+    width: 90%;
     max-width: 1200px;
     margin: 0 auto;
     padding: 10px;
@@ -258,6 +258,8 @@
   cursor: pointer;
   font-size: 16px;
   font-weight: bold;
+  height: 50px;
+  width: 100px;
 }
 
 #newrecipesavebtn:hover{
@@ -310,7 +312,7 @@
   padding-top: 10%;
 }
 
-@media screen and (max-width: 1140px) {
+@media screen and (max-width: 1200px) {
     .component-background {
         width: 100%;
         padding:0;
@@ -319,7 +321,7 @@
     
 }
 
-@media screen and (max-width: 1000px) {
+@media screen and (max-width: 1134px) {
 .recipehalf{
       flex: 0 0 100%; /* Each item takes up 50% of the container width */
       text-align: center;

@@ -272,7 +272,7 @@ const deleteUserFromDatabase = async (userid)  => {
 
 const editRecipeToDatabase = async (req,res) => {
 
-  const { id, RecipeName, RecipeCategory, RecipeGuide, RecipeDesc, Tags, updatedIngredients, Ingredients, selectedFile} = req.body;
+  const { id, RecipeName, RecipeCategory, RecipeGuide, RecipeDesc, Tags, updatedIngredients, Ingredients, RecipeReg, selectedFile} = req.body;
   try {
     await sql.connect(config);
     const transaction = new sql.Transaction();
@@ -286,6 +286,7 @@ const editRecipeToDatabase = async (req,res) => {
           instructions = @RecipeGuide,
           description = @RecipeDesc,
           tags = @Tags,
+          regonly = @RecipeReg,
           images = @selectedFile
           WHERE recipeid = @RecipeID;
     `;
@@ -295,6 +296,7 @@ const editRecipeToDatabase = async (req,res) => {
   .input('RecipeGuide', sql.NVarChar, RecipeGuide)
   .input('RecipeDesc', sql.NVarChar, RecipeDesc)
   .input('Tags', sql.NVarChar, Tags)
+  .input('RecipeReg', sql.Int, RecipeReg)
   .input('RecipeID', sql.Int, id)
   .input('selectedFile', sql.VarBinary, selectedFile ? Buffer.from(selectedFile, 'base64') : null)
   .query(recipeUpdateQuery);

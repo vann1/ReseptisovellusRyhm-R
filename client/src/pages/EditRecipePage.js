@@ -26,6 +26,7 @@ const EditRecipePage = () => {
   const [ingNameArray, setIngNameArray] = useState([]);
   const [ingMeasureArray ,setIngMeasureArray] = useState([]);
   const [missingFieldsMessage, setMissingFieldsMessage] = useState('');
+  const [RecipeReg, setRecipeReg] = useState();
   //Vaihtoehdot kategorialle ja ainesosan mitalle
   const Kategoria = ['Alkupala', 'Juoma', 'Välipala', 'Pääruoka', 'Jälkiruoka', 'Leivonnaiset', 'Muu'];
   const options = ['ml', 'tl', 'rkl', 'dl', 'l', 'kkp' ,'g', 'kg', 'kpl'];
@@ -138,6 +139,11 @@ const EditRecipePage = () => {
   };
 
 
+  const handleCheckboxChange = () => {
+    setRecipeReg(RecipeReg === 0 ? 1 : 0);
+    
+  };
+
   //Ainesosan lisääminen Varmistaa että inputit eivät ole tyhjiä
   const addIngredient = async (e) => {
     if (IngAmount) {
@@ -182,6 +188,7 @@ const EditRecipePage = () => {
   //Heittää consoleen mitä tallentuu, tietokanta yhteys myöhemmin
   //Varmistaa että kentät eivät ole tyhjiä
   const editBtnClick = async () => {
+    console.log(RecipeReg);
     if (RecipeName) {
       if (RecipeCategory){
           if(RecipeGuide){
@@ -207,6 +214,7 @@ const EditRecipePage = () => {
                   Tags,
                   updatedIngredients,
                   Ingredients,
+                  RecipeReg,
                   selectedFile
                 }),
               });
@@ -254,6 +262,7 @@ const EditRecipePage = () => {
         setRecipeGuide(data.data.recipes[0].instructions)
         setRecipeDesc(data.data.recipes[0].description)
         setTags(data.data.recipes[0].tags)
+        setRecipeReg(data.data.recipes[0].regonly)
         setUserHasAccess(user.userid === data.data.recipes[0].userid);
         setRecipeCategory(data.data.recipes[0].category);
         if(data.data.recipes[0].images !== null) {
@@ -384,9 +393,19 @@ const handleDeleteImageButtonClick = (e) => {
   return (
     <div>
     {userHasAccess ? (
-    <form>
-      <label>Reseptin nimi:</label>
+
+    <div className="component-background">
+      <h1>Muokkaa reseptiä</h1>
+      <form>
+      <div className="newrecipe">
+
+    
+      <div className="recipehalf">
+      <label>Reseptin nimi:<br></br></label>
       <input type="text" value={RecipeName} onChange={RecipeNameChange} />
+      <br></br>
+      <label>Reseptin kategoria:</label>
+      <div className="category-grid">
       {Kategoria.map((option, index) => (
         <div id="RuokaKategoria" key={index}>
           <input
@@ -399,14 +418,35 @@ const handleDeleteImageButtonClick = (e) => {
           <label htmlFor={`checkbox-${index}`}>{option}</label>
         </div>
       ))}
+</div>
 
+<label >
+        
+        Vain rekisteröityneille käyttäjille?<br></br><input
+          type="checkbox"
+          checked={RecipeReg}
+          onChange={handleCheckboxChange}
+        /> Kyllä
+      </label>
+
+<p>Ainesosat:</p>
+<div className="ingredientlist">
+  <table>
+    <thead>
+      <tr>
+        <th>Määrä</th>
+        <th>Mitta</th>
+        <th>Ainesosa</th>
+        <th>Toiminto</th>
+      </tr>
+    </thead>
+  <tbody>
       {ingredientsPlaceholder.map((ingredient, index) => (
-        <div key={index} style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-          <div>
-            <label>Määrä:</label>
+        <tr key={index}>
+          <td>
             <input type="text" value={ingAmountArray[index] || ''} onChange={(event) => IngAmountChangeArray(event, index)} />
-          </div>
-          <div>
+          </td>
+          <td>
           {/* <select value={ingMeasureArray[index] || ''} onChange={(event) => IngMeasureChangeArray(event, index)}>
             <option value="" disabled selected>{ingredientsPlaceholder[index].measure}</option>
               {options.map((option, index) => (
@@ -422,69 +462,96 @@ const handleDeleteImageButtonClick = (e) => {
                 </option> 
               ))}
             </select>
-          </div>
-          <div>
-            <label>Ainesosa:</label>
+          </td>
+          <td>
             <input type="text" value={ingNameArray[index] || ''} onChange={(event) => IngNameChangeArray(event, index)} />
-          </div>
-          <div>
+          </td>
+          <td>
             <button onClick={() => {deleteIngredient(ingredientsPlaceholder[index].ingredientid)}}>Poista</button>
-          </div>
-        </div> 
+          </td>
+         </tr>
       ))}
-        <button type="button" onClick={editIngredients}>Tallenna muutokset</button> {missingFieldsMessage && <div style={{ color: 'red' }}>{missingFieldsMessage}</div>}
-
-
-      <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-        <div>
-          <label>Määrä:</label>
+      <tr>
+        <td>
+         <button type="button" onClick={editIngredients}>Tallenna muutokset</button> {missingFieldsMessage && <div style={{ color: 'red' }}>{missingFieldsMessage}</div>}
+        </td>
+      </tr>
+      <tr>
+        <td>
           <input type="text" value={IngAmount} onChange={IngAmountChange} />
-        </div>
-        <div>
+        </td>
+        <td>
           <select  value={IngMeasure} onChange={IngMeasureChange}>
-            {options.map((option, index) => (
-              <option key={index} value={option}>
-                {option}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        <div>
-          <label>Ainesosa:</label>
+              {options.map((option, index) => (
+                <option key={index} value={option}>
+                  {option}
+                </option>
+              ))}
+            </select>
+        </td>
+        <td>
           <input type="text" value={IngName} onChange={IngNameChange} />
-        </div>
-        <div>
+        </td>
+        <td>
           <button type="submit" onClick={(e) => addIngredient(e)}>
-          Lisää Ainesosa
+          Lisää
           </button>
-        </div>
-      </div>
-      <div>
-        <label>Reseptin ohje:</label>
-      <div>
-        <textarea type="text" value={RecipeGuide} onChange={RecipeGuideChange}></textarea>
-      </div>
+        </td>
+      </tr>
+      </tbody>
+      </table>  
+       
+    
+</div>
+
        <label>Reseptin kuvaus:</label>
+       <textarea type="text" value={RecipeDesc} onChange={RecipeDescChange} style={{height: '80px'}}></textarea>
+       
        <div>
-       <textarea type="text" value={RecipeDesc} onChange={RecipeDescChange}></textarea>
-       </div>
        <label>tags:</label>
-       <div>
-       <textarea type="text" value={Tags} onChange={TagsChange}></textarea>
+       <textarea type="text" value={Tags} onChange={TagsChange} style={{height: '80px'}}></textarea>
        </div>
-      </div>
-      <div>
+
+
+
+</div>
+<div className="recipehalf">
+  <div className="recipehalf2">
+
+ 
+     <div>
+      <label>Reseptin kuva: <br></br></label>
         <input type="file" accept=".jpg, .jpeg, .png" onChange={handleFileChange}/><button onClick={(e) => handleDeleteImageButtonClick(e)}>Poista kuva</button>
-      </div>
+      <br></br>
       {imagePreview ?         
-        <div>
+        
           <img src={imagePreview} alt="Recipe Image" style={{ maxWidth: '300px' }} />
-        </div> : <div><img src={`data:image/jpeg;base64,${arrayBufferToBase64(selectedFile)}`} alt="Recipe Image" style={{ maxWidth: '300px' }} /></div>}
-      <button type="button" onClick={editBtnClick}>
+        : <img src={`data:image/jpeg;base64,${arrayBufferToBase64(selectedFile)}`} alt="Recipe Image" style={{ maxWidth: '300px' }} />}
+      
+      </div>
+      <div className="recipeGuideContainer">
+        <label>Reseptin ohje:</label>
+      
+        <textarea type="text" value={RecipeGuide} onChange={RecipeGuideChange} style={{height: '300px'}}></textarea>
+      </div>
+      
+     
+
+      
+     
+       </div>
+</div>
+      <button id="newrecipesavebtn" type="button" onClick={editBtnClick}>
         Tallenna muokkaus
       </button>
-    </form>
+    
+
+
+</div>
+</form>
+</div>
+
+
     ) : (         <div>
         <h1>Loading...</h1>
       </div> )}

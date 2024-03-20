@@ -204,7 +204,8 @@ const isValidIngredients = () => {
       <div className="recipehalf">
       <label>Reseptin nimi: <br></br></label>
       <input type="text" value={RecipeName} onChange={RecipeNameChange} style={{width: '100%'}}/>
-      <p>Reseptin kategoria:</p>
+      <br></br>
+      <label>Reseptin kategoria:</label>
 <div className="category-grid">
   {Kategoria.map((option, index) => (
     <div id="RuokaKategoria" key={index}>
@@ -288,11 +289,9 @@ const isValidIngredients = () => {
        <label>tags:</label>
        <textarea type="text" value={Tags} onChange={TagsChange}style={{height: '60px'}}></textarea>
        </div>
- 
-      <div>
-      
+
       </div>
-      </div>
+
       <div className="recipehalf">
         <div className="recipehalf2">
   
@@ -314,7 +313,7 @@ const isValidIngredients = () => {
 </div>
 
 
-      <button id="newrecipesavebtn" type="button" onClick={TallennaBtnClick} style={{height: '50px', width: '100px'}}>
+      <button id="newrecipesavebtn" type="button" onClick={TallennaBtnClick}>
         Tallenna
       </button>
       </div>
