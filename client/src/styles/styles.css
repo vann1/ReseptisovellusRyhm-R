@@ -271,8 +271,6 @@
   background-color: #ffe58e;
   border-radius: 10px;
   padding: 1%;
-  position: relative;
-  top: -13px;
 }
 
 #RuokaKategoria {
@@ -291,8 +289,6 @@
   background-color: #ffe58e;
   border-radius: 10px;
   padding: 1%;
-  position: relative;
-  top: -13px;
 }
 .recipehalf2 div{
   height: 300px;

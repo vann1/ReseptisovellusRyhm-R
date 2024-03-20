@@ -107,7 +107,11 @@ const RuokaKategoria = () => {
     setIngredients(updatedIngredients);
   };
 
-
+const isValidIngredients = () => {
+  return Ingredients.every(ingredient => {
+    return ingredient.IngAmount.trim() !== "" && ingredient.IngName.trim() !== "";
+  });
+};
   //Ainesosan lisääminen Varmistaa että inputit eivät ole tyhjiä
   const addIngredient = () => {
       setIngredients([...Ingredients, { IngAmount, IngMeasure, IngName }]);
@@ -132,6 +136,7 @@ const RuokaKategoria = () => {
     if (RecipeName) {
       if (RecipeCategory){
         if(Ingredients.length > 0){
+          if (isValidIngredients()){
           if(RecipeGuide){
             const UserID = `${user.userid}`
             console.log(user);
@@ -175,6 +180,9 @@ const RuokaKategoria = () => {
 
           } else{
             alert('Reseptin ohje puuttuu');
+          }
+          } else{
+            alert('Täytä ainesosat.')
           }
         } else {
           alert('Reseptillä pitää olla vähintään 1 ainesosa.');
