@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Link ,NavLink} from 'react-router-dom';
 import '../styles/styles.css'
 import { useAuthContext } from "../hooks/useAuthContext";
 const Navigation = (props) => {
@@ -20,32 +20,33 @@ const Navigation = (props) => {
     setIsOpen((open) => !open);
   }
 
+
   return(
     <nav className={`navigation ${isOpen ? 'is-open' : ""}`}>
-        <Link to="/" className="home"></Link>
+        <NavLink exact to="/" className="home" activeClassName="active"></NavLink>
     <button className='trigger' onClick={toggleMenu}></button>
       <ul className={`navigation-list ${isOpen ? 'is-open' : ""}`}>
         <li className="navigation-item">
-          <Link to="/" className="navigation-link" id="home"></Link>
+        <NavLink exact to="/" className="navigation-link" activeClassName="active" id="home"></NavLink>
         </li>
         {user && (<li className="navigation-item">
-            <Link to="/ProfilePage" className="navigation-link">Oma profiili</Link>
+        <NavLink to="/ProfilePage" className="navigation-link" activeClassName="active">Oma profiili</NavLink>
         </li>)}
         <li className="navigation-item navright">
-          <Link to="/SearchPage" className="navigation-link">Haku</Link>
+        <NavLink to="/SearchPage" className="navigation-link" activeClassName="active">Haku</NavLink>
         </li>
         {!user && (<><li className="navigation-item ">
-          <Link to="/RegisterPage" className="navigation-link">Rekisteröidy</Link>
+        <NavLink to="/RegisterPage" className="navigation-link" activeClassName="active">Rekisteröidy</NavLink>
         </li>
         <li className="navigation-item">
-          <Link to="/LoginPage" className="navigation-link">Kirjaudu</Link>
+        <NavLink to="/LoginPage" className="navigation-link" activeClassName="active">Kirjaudu</NavLink>
         </li>
         </>)}
           {user && (<>
         <li className="navigation-item">
-            <Link to="/NewRecipe" className="navigation-link">Uusi resepti</Link>
+        <NavLink to="/NewRecipe" className="navigation-link" activeClassName="active">Uusi resepti</NavLink>
           </li>
-          {user.role === 1  && (<div className='navigation-item'><Link to="/AdminPage" className="navigation-link">Ylläpito</Link></div>)}
+          {user.role === 1  && (<div className='navigation-item'><NavLink to="/AdminPage" className="navigation-link" activeClassName="active">Ylläpito</NavLink></div>)}
           <button className='logout' onClick={handleClick}>Kirjaudu ulos</button></>)}
       </ul>
     </nav>

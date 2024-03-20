@@ -1,5 +1,5 @@
 const {badRequest, created, internalServerError, notFound, ok} = require('../utils/responseUtils')
-const {addRecipeToDatabase, getRecipeFromDatabase, editRecipeToDatabase, deleteRecipeFromDatabase} = require('../database')
+const {addRecipeToDatabase, getRecipeFromDatabase, editRecipeToDatabase, deleteRecipeFromDatabase, deleteRecipeImageFromDatabase} = require('../database')
 
 const addRecipe = (req, res) => {
     try {
@@ -44,7 +44,7 @@ const deleteRecipe = async (req,res) => {
     try {
         const result = await deleteRecipeFromDatabase(req, res);
         if(!result) {
-            return notFound(res, "Couldnt delete recipe to database")
+            return notFound(res, "Couldnt delete recipe from database")
         }
         return ok(res, "Recipe deleted successfully.");
     } catch (error) {
@@ -52,4 +52,17 @@ const deleteRecipe = async (req,res) => {
     }
 }
 
-module.exports = {deleteRecipe,addRecipe, SearchRecipe, editRecipe}
+const deleteRecipeImage = async (req,res) => {
+    try {
+        const result = await deleteRecipeImageFromDatabase(req, res);
+        if(!result) {
+            return notFound(res, "Couldnt delete recipe image from database")
+        }
+        return ok(res, "Recipe image deleted successfully.");
+    } catch (error) {
+        return internalServerError(res, "Internal server error while deleting recipe image")
+    }
+}
+
+
+module.exports = {deleteRecipeImage, deleteRecipe,addRecipe, SearchRecipe, editRecipe}
