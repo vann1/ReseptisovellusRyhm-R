@@ -231,12 +231,28 @@
   border-radius: 10px;
 }
 
+ #newrecipesavebtn {
+  background-color: #ffc400;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+#newrecipesavebtn:hover{
+  background-color: #fccc30;
+  text-decoration: underline;
+}
+
 .category-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   background-color: #ffe58e;
   border-radius: 10px;
   padding: 1%;
+  position: relative;
+  top: -13px;
 }
 
 #RuokaKategoria {
@@ -245,8 +261,8 @@
 }
 
 .recipehalf{
-  flex: 0 0 50%; /* Each item takes up 50% of the container width */
-  box-sizing: border-box; /* Include padding and border in item's width */
+  flex: 0 0 50%;
+  box-sizing: border-box;
   width: 100%;
   padding:1%;
 }
@@ -255,8 +271,12 @@
   background-color: #ffe58e;
   border-radius: 10px;
   padding: 1%;
+  position: relative;
+  top: -13px;
 }
-
+.recipehalf2 div{
+  height: 300px;
+}
 
 .ingredientlist th {
   font-weight: 400;
@@ -267,14 +287,52 @@
   resize:none;
 }
 
-.newingredient{
-  width: 90%;
+
+
+
+.recipeGuideContainer {
+  padding-top: 10%;
 }
 
-@media screen and (max-width: 625px) {
+@media screen and (max-width: 1140px) {
     .component-background {
         width: 100%;
         padding:0;
+    }
+    
+    
+}
+
+@media screen and (max-width: 1000px) {
+.recipehalf{
+      flex: 0 0 100%; /* Each item takes up 50% of the container width */
+      text-align: center;
+      align-items: center;
+    }
+    .recipehalf2 {
+      display: flex;
+      flex-direction: column;
+    }
+    .recipehalf2 div{
+      height: auto;
+    }
+    .recipeGuideContainer {
+      order: -1; /* Move this div to the top */
+      margin-bottom: 20px; /* Add some space between the image and the text area */
+      padding-top: 0%;
+    }
+    .ingredientlist{
+      display: flex;
+     justify-content: center;
+      align-items: center;
+    }
+    .newrecipe input {
+      text-align: center;
+    }
+    .newrecipe {
+      display: flex;
+     justify-content: center;
+      align-items: center;
     }
 
 }

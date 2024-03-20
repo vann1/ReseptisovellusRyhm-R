@@ -82,19 +82,6 @@ const RuokaKategoria = () => {
     setRecipeCategory(option);
   };
 
-  const IngAmountChange = (event) => {
-    const input = event.target.value.replace(/[^0-9]/g, '');
-    setIngAmount(input);
-  };
-
-  const IngMeasureChange = (event) => {
-    setIngMeasure(event.target.value);
-  };
-
-  const IngNameChange = (event) => {
-    setIngName(event.target.value);
-  };
-
   const RecipeNameChange = (event) => {
     setRecipeName(event.target.value);
   };
@@ -123,20 +110,21 @@ const RuokaKategoria = () => {
 
   //Ainesosan lisääminen Varmistaa että inputit eivät ole tyhjiä
   const addIngredient = () => {
-    if (IngAmount) {
-      if (IngName){
       setIngredients([...Ingredients, { IngAmount, IngMeasure, IngName }]);
       setIngAmount('');
       setIngMeasure('ml');
       setIngName('');
-    } else{
-      alert('Ainesosan nimi puuttuu');
-    }
-    } else {
-      alert('Ainesosan määrä puuttuu');
-    }
   };
  
+  const deleteLastIngredient = () => {
+    const newIngredients = [...Ingredients];
+    // Remove the last item from the array
+    newIngredients.pop();
+    // Update state with the modified array
+    setIngredients(newIngredients);
+  };
+
+
 
   //Heittää consoleen mitä tallentuu, tietokanta yhteys myöhemmin
   //Varmistaa että kentät eivät ole tyhjiä
@@ -207,7 +195,7 @@ const RuokaKategoria = () => {
        <div className="newrecipe">
       <div className="recipehalf">
       <label>Reseptin nimi: <br></br></label>
-      <input type="text" value={RecipeName} onChange={RecipeNameChange} />
+      <input type="text" value={RecipeName} onChange={RecipeNameChange} style={{width: '100%'}}/>
       <p>Reseptin kategoria:</p>
 <div className="category-grid">
   {Kategoria.map((option, index) => (
@@ -278,26 +266,10 @@ const RuokaKategoria = () => {
     ))}
   </tbody>
 </table>
-
-<div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-  <div>
-    <input type="text" value={IngAmount} onChange={IngAmountChange} />
-  </div>
-  <div>
-    <select value={IngMeasure} onChange={IngMeasureChange}>
-      {options.map((option, index) => (
-        <option key={index} value={option}>
-          {option}
-        </option>
-      ))}
-    </select>
-  </div>
-  <div>
-    <input type="text" value={IngName} onChange={IngNameChange} />
-  </div>
-  </div>
+  <button type="button" onClick={addIngredient}>Lisää Ainesosa</button>
+  <button type="button" onClick={deleteLastIngredient}>Poista ainesosa</button>
 </div>
-<button type="button" onClick={addIngredient}>Lisää Ainesosa</button>
+
 </div>
         
       <div>
@@ -314,23 +286,27 @@ const RuokaKategoria = () => {
       </div>
       </div>
       <div className="recipehalf">
-        <label>Reseptin kuva:<br/></label>
-        <div style={{height: '300px'}}>
-          
-        {image ? (
-  <img src={image} alt="Uploaded" style={{ maxWidth: '100%', maxHeight: '100%' }} />
-) : (
-  <input type="file" accept=".jpg, .jpeg, .png" onChange={handleFileChange} />
-)}
-        </div>
-      <div>
-        <label>Reseptin ohje:</label>
-        <textarea type="text" value={RecipeGuide} onChange={RecipeGuideChange} style={{height: '300px'}}></textarea>
-      </div>
-      
+        <div className="recipehalf2">
+  
+  <div>
+    <label>Reseptin kuva:<br/></label>
+    <input type="file" accept=".jpg, .jpeg, .png" onChange={handleFileChange} />
+    <br></br>
+    {image ? (
+      <img src={image} alt="Uploaded" style={{ maxWidth: '100%', maxHeight: '100%' }} />
+    ) : (
+      <p>Kuva tulee tähän</p>
+    )}
+  </div>
+  <div className="recipeGuideContainer">
+    <label>Reseptin ohje:</label>
+    <textarea type="text" value={RecipeGuide} onChange={RecipeGuideChange} style={{height: '300px'}}></textarea>
+  </div>
 </div>
-<p></p>
-      <button type="button" onClick={TallennaBtnClick}>
+</div>
+
+
+      <button id="newrecipesavebtn" type="button" onClick={TallennaBtnClick} style={{height: '50px', width: '100px'}}>
         Tallenna
       </button>
       </div>
