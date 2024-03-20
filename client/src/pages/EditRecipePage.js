@@ -72,6 +72,20 @@ const EditRecipePage = () => {
       }
     });
   };
+
+  const arrayBufferToBase64 = (buffer) => {
+    let binary = '';
+    const bytes = new Uint8Array(buffer);
+    const len = bytes.byteLength;
+    for (let i = 0; i < len; i++) {
+      binary += String.fromCharCode(bytes[i]);
+    }
+    return window.btoa(binary);
+  };
+  
+
+
+
   //use state changerit
   const CategoryChange = (option) => {
     setRecipeCategory(option);
@@ -190,7 +204,8 @@ const EditRecipePage = () => {
                   RecipeDesc,
                   Tags,
                   updatedIngredients,
-                  Ingredients
+                  Ingredients,
+                  selectedFile
                 }),
               });
         
@@ -239,6 +254,9 @@ const EditRecipePage = () => {
         setTags(data.data.recipes[0].tags)
         setUserHasAccess(user.userid === data.data.recipes[0].userid);
         setRecipeCategory(data.data.recipes[0].category);
+        if(data.data.recipes[0].images !== null) {
+        setSelectedFile(data.data.recipes[0].images.data);
+        }
       } catch (error) {
         console.error('Error during search:', error.message);
       }
@@ -266,7 +284,6 @@ const sendIngredients = async () => {
               if (!response.ok) {
                 throw new Error(`HTTP error! Status: ${response.status}`);
               }
-              console.log("TEST", data.data)
             } catch (error) {
               console.error('Error during search:', error.message);
             }
@@ -279,6 +296,7 @@ useEffect(() => {
 
   sendIngredients();
 },[Ingredients])
+
 
           const getIngredients = async () => {
             try {
@@ -293,7 +311,6 @@ useEffect(() => {
               if (!response.ok) {
                 throw new Error(data.error);
               }
-              console.log(data, "DATA")
               const newIngAmountArray = [];
               const newIngNameArray = [];
               const newIngMeasureArray = [];
@@ -321,7 +338,6 @@ useEffect(() => {
                     'Authorization': `Bearer ${user.token}`
                   },
                 });
-                console.log(response.status, "ADSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS")
                 if (!response.ok) {
                   throw new Error(`HTTP error! Status: ${response.status}`);
                 }
@@ -332,7 +348,36 @@ useEffect(() => {
                 console.error('Error deleting ingredient:', error.message);
               }
         }
+        const deleteImage = async () => {
+          try {
+              const response = await fetch(`http://localhost:3001/api/recipe/image/${recipe.recipeid}`, {
+                method: 'DELETE',
+                headers: {
+                  'Content-Type': 'application/json',
+                  'Authorization': `Bearer ${user.token}`
+                },
+              });
+              if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+              }
+              if(response.ok){
+                  console.log('Image deleted:' + response.message);
+              }
+            } catch (error) {
+              console.error('Error deleting image:', error.message);
+            }
+      }
+
+const handleDeleteImageButtonClick = (e) => {
+  if(selectedFile !== null) {
+  deleteImage();
+  }
+  else {
+    e.preventDefault();
+  }
+}
         
+
   return (
     <div>
     {userHasAccess ? (
@@ -426,9 +471,10 @@ useEffect(() => {
        <textarea type="text" value={Tags} onChange={TagsChange}></textarea>
        </div>
       </div>
-      {/* <div>
-      <input type="file" accept=".jpg, .jpeg, .png" onChange={handleFileChange} />
-      </div> */}
+      <div>
+        <input type="file" accept=".jpg, .jpeg, .png" onChange={handleFileChange}/><button onClick={(e) => handleDeleteImageButtonClick(e)}>Poista kuva</button>
+      </div>
+      {selectedFile ? <div><img src={`data:image/jpeg;base64,${arrayBufferToBase64(selectedFile)}`} alt="Recipe Image" style={{ maxWidth: '300px' }} /></div> : <div><p>Ei valittua kuvaa</p></div>}
       <button type="button" onClick={editBtnClick}>
         Tallenna muokkaus
       </button>

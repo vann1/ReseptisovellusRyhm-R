@@ -92,6 +92,8 @@ const getUserFromDatabase = async (req, res) => {
     } 
 };
 
+console.log("...")
+
 const addRecipeToDatabase = async (req, res) => {
   const { UserID, RecipeName, RecipeCategory, RecipeGuide, RecipeDesc, Tags, Ingredients, selectedFile, RecipeReg } = req.body;
   try {
@@ -222,9 +224,7 @@ const getRecipeFromDatabase = async (req, res) => {
     // Handle errors
     console.error(error);
     return undefined;
-  }   finally {
-    await sql.close(); 
-    } 
+  } 
 };
 
 const getAllUsersFromDatabase = async (req, res) => {
@@ -272,7 +272,7 @@ const deleteUserFromDatabase = async (userid)  => {
 
 const editRecipeToDatabase = async (req,res) => {
 
-  const { id, RecipeName, RecipeCategory, RecipeGuide, RecipeDesc, Tags, updatedIngredients, Ingredients} = req.body;
+  const { id, RecipeName, RecipeCategory, RecipeGuide, RecipeDesc, Tags, updatedIngredients, Ingredients, selectedFile} = req.body;
   try {
     await sql.connect(config);
     const transaction = new sql.Transaction();
@@ -285,7 +285,8 @@ const editRecipeToDatabase = async (req,res) => {
           category = @RecipeCategory,
           instructions = @RecipeGuide,
           description = @RecipeDesc,
-          tags = @Tags
+          tags = @Tags,
+          images = @selectedFile
           WHERE recipeid = @RecipeID;
     `;
   await new sql.Request(transaction)
@@ -295,6 +296,7 @@ const editRecipeToDatabase = async (req,res) => {
   .input('RecipeDesc', sql.NVarChar, RecipeDesc)
   .input('Tags', sql.NVarChar, Tags)
   .input('RecipeID', sql.Int, id)
+  .input('selectedFile', sql.VarBinary, selectedFile ? Buffer.from(selectedFile, 'base64') : null)
   .query(recipeUpdateQuery);
 
   const ingredientQuery = `
@@ -350,8 +352,7 @@ const getIngredientsFromDatabase = async (req,res) => {
     return undefined;
   } catch (error) {
     console.error("Error getting ingredients from the database:", error);
-  }
-
+  }  
 }
 
 
@@ -385,7 +386,9 @@ const addIngredientToDatabase = async (req, res) => {
   } catch (error) {
     console.error('Error connecting to the database:', error);
     return false;
-  }
+  }  finally {
+    await sql.close(); 
+    } 
 }; 
 
 
@@ -448,5 +451,32 @@ const deleteRecipeFromDatabase = async (req, res) => {
     } 
 }
 
+const deleteRecipeImageFromDatabase = async (req, res) => {
+  const { recipeId } = req.params; 
+  try {
+    const pool = await sql.connect(config);
+    const deleteQuery = `
+      UPDATE [dbo].[recipes] 
+      SET images = NULL 
+      WHERE recipeid = @RecipeId;
+    `;
+    const result = await pool.request()
+      .input('RecipeId', sql.Int, recipeId)
+      .query(deleteQuery);
+      
+    if (result.rowsAffected[0] > 0) {
+      return true; // Image deletion successful
+    } else {
+      return false; // Recipe ID not found or no image associated
+    }
+  } catch (error) {
+    console.error('Error deleting recipe image from database:', error);
+    return false; // Error occurred during deletion
+  } finally {
+    sql.close();
+  } 
+}
   
-module.exports = {deleteRecipeFromDatabase, deleteIngredientFromDatabase ,addIngredientToDatabase, addUserToDatabase, getUserFromDatabase, addRecipeToDatabase, getRecipeFromDatabase, getAllUsersFromDatabase, deleteUserFromDatabase, editRecipeToDatabase, getIngredientsFromDatabase};
+module.exports = {deleteRecipeImageFromDatabase, deleteRecipeFromDatabase, deleteIngredientFromDatabase ,addIngredientToDatabase,
+   addUserToDatabase, getUserFromDatabase, addRecipeToDatabase, getRecipeFromDatabase, getAllUsersFromDatabase, deleteUserFromDatabase,
+    editRecipeToDatabase, getIngredientsFromDatabase};

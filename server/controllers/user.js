@@ -118,7 +118,6 @@ const deleteUser = async (res, userid) => {
 const getUserRecipe = async (req, res) => {
   try {
     const result = await getRecipeFromDatabase(req,res);
-    console.log("MIKSI")
     if(!result) {
       return notFound(res, "Error finding recipe from database")
     }

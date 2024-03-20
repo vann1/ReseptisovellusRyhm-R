@@ -104,7 +104,7 @@ const ProfileForm = () => {
                     <Link to={`/userrecipe/${recipe.recipeid}`}>
                       {recipe.recipename}
                     </Link>{" "}
-                    - {recipe.category} - {recipe.username}
+                    - {recipe.category}
                     <button onClick={() => deleteRecipe(recipe.recipeid)}>Poista</button>
                   </td>        
                 </tr>
