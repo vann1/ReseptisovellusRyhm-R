@@ -10,7 +10,7 @@
 
 .navigation {
     background-color: #ffca17;
-    padding: 4px;
+    padding: 10px;
     align-items: center;
     height: 35px;
     position:sticky;
@@ -34,15 +34,16 @@
   }
   
   .navigation-link {
-
     color: #fff;
     text-decoration: none;
     padding-left: 10px;
     border-left: solid 5px;
+    
   }
   
   .navigation-link:hover {
-    text-decoration: underline;
+    text-shadow: 2px 2px 5px #888888;
+    font-weight: bold;
   }
   .navright {
     margin-left: auto;
@@ -67,9 +68,9 @@
     }
   }
 
-  @media (max-width: 625px) {
+  @media (max-width: 645px) {
     .logout{
-      width: 110px;
+      width: 120px;
       margin-bottom: 15px;
       position: relative;
       top: 5px;
@@ -81,8 +82,8 @@
     .navigation-list.is-open {
       display:flex;
       flex-direction:column;
-      padding: 5px;
-      margin: -32px -5px;
+      padding: 9px;
+      margin: -27px -9px;
       width: 100%;
       animation: slideDown 0.7s ease;
       
@@ -120,13 +121,22 @@
       background-image: url("../../public/pics/Homelogo.png");
       margin-top: 2px;
       padding-top: 36px;
+      width:40px;
       background-repeat: no-repeat;
       list-style-type: none;
+    }
+    .home:hover {
+      background-image: url("../../public/pics/Homelogohovered.png");
     }
   }
   body {
     background-image: url("../../public/pics/repetbackground.png");
 
+  }
+
+  .active {
+    color:#ff9900;
+    font-weight: bold;
   }
   #home {
     position: relative;
@@ -137,22 +147,25 @@
     background-image: url("../../public/pics/Homelogo.png");
     border: none;
   }
+  #home:hover {
+    background-image: url("../../public/pics/Homelogohovered.png");
+  }
 
   .logout {
     background-color: #ff9900; 
     color:#fff; 
-    padding: 10px 10px; 
+    padding: 10px 15px; 
     border: none;
-    border-radius: 5px;
+    border-radius: 20px;
     cursor: pointer; 
     font-weight: bold;
     margin-left: 15px;
     margin-right:35px;
-    margin-top: -5px;
+    margin-top: -6px;
   }
   
   .logout:hover {
-    background-color: #ffc107; /* Väri hiiren ollessa päällä */
+    box-shadow: 2px 2px 5px #888888;
   }
 
 
@@ -203,6 +216,13 @@
   }
   .loginError {
     color :red;
+    font-size: 80%;
+    margin-top:-30px;
+    margin-bottom: 13px;
+  }
+
+  .userDeletedSuccess {
+    color :green;
     font-size: 80%;
     margin-top:-30px;
     margin-bottom: 13px;

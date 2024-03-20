@@ -4,6 +4,7 @@ import {useNavigate} from "react-router-dom"
 
 const RegisterPage = () => {
   const navigate = useNavigate();
+  const [signinsuccess, setSigninsuccess] = useState(false);
   const handleRegister = async (name, password, email, username) => {
       try {
         const response = await fetch('http://localhost:3001/api/user/create', {
@@ -19,7 +20,7 @@ const RegisterPage = () => {
         }
         if (response.ok) {
           console.log('User created successfully', response.status);
-          navigate('/LoginPage');
+          setSigninsuccess(true);
         } 
       } catch (error) {
         console.error('Error:', error);
@@ -28,8 +29,14 @@ const RegisterPage = () => {
 
   return (
     <div>
+      {signinsuccess ? 
+      <div>
+      <h1>Rekisteröityminen onnistui! Voit nyt kirjautua.</h1> 
+      </div>:
+      <div>
       <h1>Rekisteröidy</h1>
       <RegisterForm onRegister={handleRegister} />
+      </div>}
     </div>
   );
 };

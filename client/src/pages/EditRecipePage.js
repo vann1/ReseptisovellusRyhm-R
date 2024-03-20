@@ -213,6 +213,7 @@ const EditRecipePage = () => {
         
               if (response.ok) {
                 console.log('Recipe edited successfully');
+                window.alert('Resepti muokattu.')
                 navigate('/ProfilePage')
               } else {
                 console.error('Failed to add recipe:', response.statusText);
@@ -237,7 +238,6 @@ const EditRecipePage = () => {
   useEffect(() => {
     const getRecipe = async () => {
       try {
-        console.log(id, user)
         const response = await fetch(`http://localhost:3001/api/recipe/${id}`, {
           method: 'GET',
           headers: {
@@ -265,7 +265,7 @@ const EditRecipePage = () => {
     }
     getRecipe();
     getIngredients();
-  }, [id, user]);
+  }, [/*id, user*/]);
 
 
 const sendIngredients = async () => {
@@ -298,6 +298,7 @@ useEffect(() => {
 
   sendIngredients();
 },[Ingredients])
+
 
 
           const getIngredients = async () => {

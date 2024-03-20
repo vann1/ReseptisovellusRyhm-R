@@ -4,7 +4,10 @@ import '../styles/styles.css'
 const AdminForm = () => {
     const [usersList, setUsersList] = useState([]);
     const { user } = useAuthContext();
-    const [errors, setErrors] = useState();
+    const [errors, setErrors] = useState('');
+    const [deleteSuccess, setDeleteDuccess] = useState('');
+
+    
     useEffect(() => {
         const getAllUsers = async () => {
             try {
@@ -30,6 +33,8 @@ const AdminForm = () => {
     },[usersList])
 
     const handleDeleteUser = async (userid, email, role) => {
+      setErrors('');
+      setDeleteDuccess('');
         try {
             if(userid === user.userid) {
                 throw new Error('Et voi poistaa itseäsi.');
@@ -48,7 +53,7 @@ const AdminForm = () => {
               throw new Error(`HTTP error! Status: ${response.status}`);
             }
             if(response.ok){
-                setErrors('Käyttäjä ' + email +  ' poistettiin onnistuneesti.')
+                setDeleteDuccess('Käyttäjä ' + email +  ' poistettiin onnistuneesti.')
                 console.log('User deleted: ', email);
             }
           } catch (error) {
@@ -75,6 +80,7 @@ const AdminForm = () => {
             </table>
             <br></br>
             {errors && <p className="pError">{errors}</p>}
+            {deleteSuccess && <p className="userDeletedSuccess">{deleteSuccess}</p>}
         </div>
       );
 }
