@@ -7,7 +7,7 @@ const EditRecipePage = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   //Muuttuja
-
+  const [imagePreview, setImagePreview] = useState(null);
   const [RecipeCategory, setRecipeCategory] = useState(null);
   const [IngAmount, setIngAmount] = useState('');
   const [IngMeasure, setIngMeasure] = useState('ml');
@@ -50,6 +50,7 @@ const EditRecipePage = () => {
       try {
         const base64Data = await readFileAsBase64(file);
         setSelectedFile(base64Data);
+        setImagePreview(URL.createObjectURL(file)); 
       } catch (error) {
         console.error('Error reading file as base64:', error);
       }
@@ -120,8 +121,9 @@ const EditRecipePage = () => {
     setTags(event.target.value)
   }
   const IngAmountChangeArray = (event, index) => {
+    const input = event.target.value.replace(/[^0-9]/g, '');
     const newAmounts = [...ingAmountArray];
-    newAmounts[index] = event.target.value;
+    newAmounts[index] = input;
     setIngAmountArray(newAmounts);
   };
   const IngNameChangeArray = (event, index) => {
@@ -401,7 +403,7 @@ const handleDeleteImageButtonClick = (e) => {
         <div key={index} style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
           <div>
             <label>Määrä:</label>
-            <input type="number" value={ingAmountArray[index] || ''} onChange={(event) => IngAmountChangeArray(event, index)} />
+            <input type="text" value={ingAmountArray[index] || ''} onChange={(event) => IngAmountChangeArray(event, index)} />
           </div>
           <div>
           {/* <select value={ingMeasureArray[index] || ''} onChange={(event) => IngMeasureChangeArray(event, index)}>
@@ -474,7 +476,10 @@ const handleDeleteImageButtonClick = (e) => {
       <div>
         <input type="file" accept=".jpg, .jpeg, .png" onChange={handleFileChange}/><button onClick={(e) => handleDeleteImageButtonClick(e)}>Poista kuva</button>
       </div>
-      {selectedFile ? <div><img src={`data:image/jpeg;base64,${arrayBufferToBase64(selectedFile)}`} alt="Recipe Image" style={{ maxWidth: '300px' }} /></div> : <div><p>Ei valittua kuvaa</p></div>}
+      {imagePreview ?         
+        <div>
+          <img src={imagePreview} alt="Recipe Image" style={{ maxWidth: '300px' }} />
+        </div> : <div><img src={`data:image/jpeg;base64,${arrayBufferToBase64(selectedFile)}`} alt="Recipe Image" style={{ maxWidth: '300px' }} /></div>}
       <button type="button" onClick={editBtnClick}>
         Tallenna muokkaus
       </button>
