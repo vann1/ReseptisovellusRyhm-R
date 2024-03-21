@@ -478,7 +478,69 @@ const deleteRecipeImageFromDatabase = async (req, res) => {
     sql.close();
   } 
 }
-  
-module.exports = {deleteRecipeImageFromDatabase, deleteRecipeFromDatabase, deleteIngredientFromDatabase ,addIngredientToDatabase,
+
+
+const getReviewFromDatabase = async (req, res) => {
+  const {recipeid} = req.body;
+
+  try {
+    await sql.connect(config);
+    const request = new sql.Request();
+    
+    const query = `SELECT * FROM [dbo].[reviews] WHERE recipeid = @recipeId`;
+    const result = await request
+      .input("recipeId", sql.Int, recipeid)
+      .query(query);
+    if (result.recordset.length > 0) {
+      const reviews = result.recordset;
+      console.log(reviews);
+      return reviews;
+    } else{
+      return undefined;
+    }
+    
+  } catch (error) {
+    console.error("Error getting reviews from the database:", error);
+  }  
+};
+
+
+const addReviewToDatabase = async (req, res) => {
+  const {recipeid, userid, rating, comment, favorite} = req.body;
+  try {
+    await sql.connect(config);
+    const transaction = new sql.Transaction();
+
+    try {
+      await transaction.begin();
+      const reviewQuery = `
+        INSERT INTO [dbo].[reviews] (recipeid, userid, favorite, review, rating)
+        VALUES (@recipeid, @userid, @favorite, @comment, @rating);
+      `;
+        await new sql.Request(transaction)
+          .input('recipeid', sql.Int, recipeid)
+          .input('userid', sql.Int, userid)
+          .input('favorite', sql.Int, favorite)
+          .input('comment', sql.NVarChar, comment)
+          .input('rating', sql.Int, rating)
+          .query(reviewQuery);
+
+      await transaction.commit();
+      return true;
+    } catch (error) {
+      await transaction.rollback();
+      console.error('Error adding review to the database:', error);
+      return false;
+    }
+  } catch (error) {
+    console.error('Error connecting to the database:', error);
+    return false;
+  }  finally {
+    await sql.close(); 
+    } 
+}; 
+
+
+module.exports = {addReviewToDatabase, getReviewFromDatabase, deleteRecipeImageFromDatabase, deleteRecipeFromDatabase, deleteIngredientFromDatabase ,addIngredientToDatabase,
    addUserToDatabase, getUserFromDatabase, addRecipeToDatabase, getRecipeFromDatabase, getAllUsersFromDatabase, deleteUserFromDatabase,
     editRecipeToDatabase, getIngredientsFromDatabase};
