@@ -1,11 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { RatingComponent } from '../components/RecipeRating';
+import { useAuthContext } from "../hooks/useAuthContext";
+
+
 
 const ShowRecipe = () => {
   const [searchResults, setSearchResults] = useState([]);
-  const [userRating, setUserRating] = useState(0);
-  const [comment, setComment] = useState(''); // State to hold user's comment
+  const [recipeReviews, setRecipeReviews] = useState([]);
   const { recipeId } = useParams();
+  const {user} = useAuthContext();
+  const hasReviewed = recipeReviews.some(review => review.userid === user.userid);
 
   const handleSearch = async () => {
     try {
@@ -29,26 +34,36 @@ const ShowRecipe = () => {
       console.error('Error during search:', error.message);
       setSearchResults([]);
     }
+
+    try {
+      const response = await fetch('http://localhost:3001/api/review/search', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          recipeid: recipeId,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      setRecipeReviews(data.data.reviews);
+    } catch (error) {
+      console.error('Error during reviewsearch:', error.message);
+      setRecipeReviews([]);
+    } 
+
   };
 
   useEffect(() => {
     handleSearch();
   }, [recipeId]);
 
-  const handleRatingChange = (rating) => {
-    setUserRating(rating);
-  };
-
-  const handleCommentChange = (event) => {
-    setComment(event.target.value);
-  };
-
-  const handleSubmit = () => {
-    // Here you can send the userRating and comment to your backend for processing or storage
-    console.log('User Rating:', userRating);
-    console.log('Comment:', comment);
-  };
-
+ 
   return (
     <div>
       <h1>Recipe</h1>
@@ -72,35 +87,20 @@ const ShowRecipe = () => {
                 <p><strong>Tags:</strong> {recipe.tags}</p>
                 <p><strong>Instructions:</strong> {recipe.instructions}</p>
 
-                <div>
-                  <strong>Rate this recipe:</strong><br />
-                  {[1, 2, 3, 4, 5].map((star, index) => (
-                    <span
-                      key={index}
-                      style={{ cursor: 'pointer', color: star <= userRating ? 'gold' : 'gray' }}
-                      onClick={() => handleRatingChange(star)}
-                    >
-                      &#9733;
-                    </span>
-                  ))}
-                </div>
+                {!hasReviewed && <RatingComponent userid={user.userid} recipeid={recipe.recipeid} />}
+                
 
-                {/* Text box for comment */}
-                <div style={{ marginTop: '10px' }}>
-                  <textarea
-                    rows="4"
-                    cols="50"
-                    placeholder="Leave a comment..."
-                    value={comment}
-                    onChange={handleCommentChange}
-                  />
-                </div>
-
-                {/* Submit button */}
-                <div style={{ marginTop: '10px' }}>
-                  <button onClick={handleSubmit}>Send Rating</button>
-                </div>
+                {recipeReviews.map(review => (
+                  <div key={review.reviewid}>
+                    <p>User ID: {review.userid}</p>
+                    <p>Rating: {review.rating}</p>
+                    {/* You can render more details of the review here */}
+                  </div>
+                ))}
+                
               </div>
+
+              
             </div>
           ))}
         </div>
