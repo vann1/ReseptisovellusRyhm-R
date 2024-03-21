@@ -1,4 +1,4 @@
-.container {
+.container-home {
   width: 100%; /* Voit määrittää leveyden tarpeidesi mukaan */
   max-width: 1200px; /* Maksimileveys */
   margin: 0 auto; /* Keskitä container */
@@ -8,6 +8,8 @@
   word-wrap: break-word;
 }
 
+
+/*Navigation*/
 .navigation {
     background-color: #ffca17;
     padding: 10px;
@@ -131,7 +133,6 @@
   }
   body {
     background-image: url("../../public/pics/repetbackground.png");
-
   }
 
   .active {
@@ -167,7 +168,7 @@
   .logout:hover {
     box-shadow: 2px 2px 5px #888888;
   }
-
+/*Navigation end*/
 
 .pError {
     color :red;
@@ -358,3 +359,77 @@
 }
 
 /*UUSI RESEPTI SIVU JUTUT LOPPU*/
+
+
+
+/*RECIPE SEARCH*/
+
+.container-search {
+  background-color: #ffedb2;
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 auto; /* Keskitä container */
+  max-width: 1200px;
+  padding: 10px;
+}
+
+.reciperesults {
+
+}
+.searchform {
+  background-color: #ffe58e;
+  border-radius: 10px;
+  padding: 1%;
+  width: 80%;
+  margin: auto;
+}
+
+.searchpage {
+  display: flex;
+  flex-wrap: wrap;
+  padding:10px;
+  border-radius: 10px;
+}
+
+.search-option{
+  margin-left: 10px;
+  margin: 20px;
+  margin-top: 0px;
+}
+
+.search {
+  display: flex;
+  justify-content: center;
+  height: 40px;
+}
+
+.searchbutton {
+  margin: auto;
+  display: block;
+  margin-top: 10px;
+  width: 100px;
+}
+
+.h1-reseptihaku {
+    display: flex;
+    color: #624e08;
+    margin-bottom: 30px;
+    justify-content: center;
+}
+
+@media screen and (max-width: 1064px) {
+  input {
+    width: 80%;
+  }
+}
+
+@media screen and (max-width: 850px) {
+  input {
+    width: 100%;
+  }
+  .searchform {
+    display: flex;
+    flex-direction: column;
+  }
+}
+/*RECIPE SEARCH END*/

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuthContext } from "../hooks/useAuthContext";
-
+import '../styles/styles.css'
 
 const SearchPage = () => {
   const [recipeName, setrecipeName] = useState('');
@@ -48,7 +48,6 @@ const SearchPage = () => {
           return recipe.regonly === 0 || recipe.regonly === null;
         }
       });
-  
       setSearchResults(filteredRecipes);
   
     } catch (error) {
@@ -67,36 +66,43 @@ const SearchPage = () => {
     handleSearch();
   },[])
   return (
-    <div>
-      <h1>Recipe Search</h1>
-      <div>
-        <label>Recipe id:</label>
-        <input type="text" value={recipeid} onChange={(e) => setrecipeID(e.target.value)} />
-      </div>
-      <div>
-        <label>Recipe Name:</label>
-        <input type="text" value={recipeName} onChange={(e) => setrecipeName(e.target.value)} />
-      </div>
-      <div>
-        <label>Category:</label>
-        <input type="text" value={recipeCategory} onChange={(e) => setrecipeCategory(e.target.value)} />
-      </div>
-      <div>
-        <label>Tags:</label>
-        <input type="text" value={recipeTag} onChange={(e) => setrecipeTag(e.target.value)} />
-      </div>
-      <div>
-        <label>Username:</label>
-        <input type="text" value={recipeUsername} onChange={(e) => setrecipeUsername(e.target.value)} />
-      </div>
-      <div>
-        <label>Name:</label>
-        <input type="text" value={recipeownerName} onChange={(e) => setrecipeownerName(e.target.value)} />
-      </div>
-      <button onClick={handleSearch}>Search</button>
-
+    <div className='container-search'>
+      <h1 className='h1-reseptihaku'>Resepti haku</h1>
+      <form className='searchform'>
+          {/* <div>
+            <label>Resepti id:</label>
+            <input type="text" value={recipeid} onChange={(e) => setrecipeID(e.target.value)} />
+          </div> */}
+          <div className='search'>
+            <div className='search-option'>
+              <label>Resepti nimi:</label>
+              <br></br>
+              <input type="text" value={recipeName} onChange={(e) => setrecipeName(e.target.value)} />
+            </div>
+            <div className='search-option'>
+              <label>Kategoria:</label>
+              <br></br>
+              <input type="text" value={recipeCategory} onChange={(e) => setrecipeCategory(e.target.value)} />
+            </div>
+            <div className='search-option'>
+              <label>Tagi:</label>
+              <br></br>
+              <input type="text" value={recipeTag} onChange={(e) => setrecipeTag(e.target.value)} />
+            </div>
+            <div className='search-option'>
+              <label>Nimimerkki:</label>
+              <br></br>
+              <input type="text" value={recipeUsername} onChange={(e) => setrecipeUsername(e.target.value)} />
+            </div>
+          </div>
+          {/* <div>
+            <label>Käyttäjänimi:</label>
+            <input type="text" value={recipeownerName} onChange={(e) => setrecipeownerName(e.target.value)} />
+          </div> */}
+            <button className='searchbutton' onClick={handleSearch}>Hae</button>
+      </form>
       {searchResults.length > 0 && (
-        <div>
+        <div className='reciperesults'>
           <table>
             <thead>
               <tr>
@@ -117,8 +123,7 @@ const SearchPage = () => {
             </tbody>
           </table>
         </div>
-      )}
-    </div>
+      )}</div>
   );
 };
 
