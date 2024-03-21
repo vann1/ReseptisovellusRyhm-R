@@ -124,17 +124,24 @@ const SearchPage = () => {
               {searchResults.map((recipe, index) => (
                 <tr key={index} className='reciperow'>
                     <td>
-                    <div className='recipeindructions'>
+                      <div className='search-flex'>
+                    <div className='search-top'>
+                      <div className='search-top-column'>
                       <Link className='recipename' to={`/Recipe/${recipe.recipeid}`}>
                         <p className='border4name'></p><h2 >Reseptin nimi: {recipe.recipename}</h2>
                       </Link>{" "}
-                      <h4 className='recipecategory'>Kategoria: {recipe.category}</h4>
-                      <h5 className='recipedesctiptiontitle'>Kuvaus: </h5><p className='recipedesctiption'>{recipe.description}</p>
+                      <h3 className='recipecategory'>Kategoria: {recipe.category}</h3>
                       </div>
-
+                      <div className='search-image'>
                       {recipe.images ?
                           <img   className='recipeimage'  src={`data:image/jpeg;base64,${arrayBufferToBase64(recipe.images.data)}`} alt="Recipe Image"/> :
                           <img   className='alterimage' src="/pics/noimage.png" alt="No Image"/>}
+                      </div>
+                      </div>
+                      <div className='search-bottom'>
+                      <h4 className='recipedesctiptiontitle'>Kuvaus: </h4><p className='recipedesctiption'>{recipe.description}</p>
+                      </div>
+                      </div>
                   </td>
                 </tr>
               ))}
