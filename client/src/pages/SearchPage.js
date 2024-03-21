@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { useAuthContext } from "../hooks/useAuthContext";
 import '../styles/styles.css'
 
+
 const SearchPage = () => {
   const [recipeName, setrecipeName] = useState('');
   const [recipeCategory, setrecipeCategory] = useState('');
@@ -49,14 +50,12 @@ const SearchPage = () => {
         }
       });
       setSearchResults(filteredRecipes);
-  
     } catch (error) {
       console.error('Error during search:', error.message);
       setSearchResults([]);
     }
   };
 
-  
   useEffect(() => {
   handleSearch();
   },[])
@@ -65,10 +64,22 @@ const SearchPage = () => {
   useEffect(() => {
     handleSearch();
   },[])
+
+  const arrayBufferToBase64 = (buffer) => {
+    let binary = '';
+    const bytes = new Uint8Array(buffer);
+    const len = bytes.byteLength;
+    for (let i = 0; i < len; i++) {
+      binary += String.fromCharCode(bytes[i]);
+    }
+    return window.btoa(binary);
+  };
   return (
     <div className='container-search'>
+    <div className='search-header'>
       <h1 className='h1-reseptihaku'>Resepti haku</h1>
-      <form className='searchform'>
+      </div>
+      <div className='searchform'>
           {/* <div>
             <label>Resepti id:</label>
             <input type="text" value={recipeid} onChange={(e) => setrecipeID(e.target.value)} />
@@ -100,23 +111,30 @@ const SearchPage = () => {
             <input type="text" value={recipeownerName} onChange={(e) => setrecipeownerName(e.target.value)} />
           </div> */}
             <button className='searchbutton' onClick={handleSearch}>Hae</button>
-      </form>
+      </div>
       {searchResults.length > 0 && (
         <div className='reciperesults'>
-          <table>
-            <thead>
+          <table >
+            <thead  className='reciperesult-thead'>
               <tr>
-                <th>Resepti tulokset:</th>
+                <th>Resepti tulokset</th>
               </tr>
             </thead>
             <tbody>
               {searchResults.map((recipe, index) => (
-                <tr key={index}>
-                  <td>
-                    <Link to={`/Recipe/${recipe.recipeid}`}>
-                      {recipe.recipename}
-                    - {recipe.category} - {recipe.username}
-                    </Link>{" "}
+                <tr key={index} className='reciperow'>
+                    <td>
+                    <div className='recipeindructions'>
+                      <Link className='recipename' to={`/Recipe/${recipe.recipeid}`}>
+                        <p className='border4name'></p><h2 >Reseptin nimi: {recipe.recipename}</h2>
+                      </Link>{" "}
+                      <h4 className='recipecategory'>Kategoria: {recipe.category}</h4>
+                      <h5 className='recipedesctiptiontitle'>Kuvaus: </h5><p className='recipedesctiption'>{recipe.description}</p>
+                      </div>
+
+                      {recipe.images ?
+                          <img   className='recipeimage'  src={`data:image/jpeg;base64,${arrayBufferToBase64(recipe.images.data)}`} alt="Recipe Image"/> :
+                          <img   className='alterimage' src="/pics/noimage.png" alt="No Image"/>}
                   </td>
                 </tr>
               ))}
