@@ -414,10 +414,12 @@
 .reciperesults {
   display: flex;
   margin: auto;
+
 }
 .reciperesults td {
   display: flex;
   width: 780px;
+
 }
 .search-header {
   display: flex;
@@ -432,6 +434,7 @@
   border-radius: 10px;
   width: 800px;
   flex-wrap: wrap; 
+  
 }
 
 .reciperesult-thead {
@@ -479,7 +482,7 @@
   margin-bottom: -10px;
 }
 .recipedesctiption {
-  word-break: break-word; 
+  word-break: break-all;
   
 }
 .recipeindructions {
@@ -507,7 +510,7 @@
   }
 }
 
-@media screen and (max-width: 820px) {
+@media screen and (max-width: 844px) {
   input {
     
     width: 50%;
@@ -515,6 +518,7 @@
   .search {
     margin-top: 70px;
     flex-direction: column;
+    
 
   }
   .search-option {
@@ -523,12 +527,27 @@
 
   }
   .searchform {
-    width: 600px;
-    height: 200px;
+
   }
   .searchbutton {
     margin-top: 60px;
   }
+  
+  .reciperow {
+    background-color: #ffe58e;
+    display: flex;
+    margin-bottom: 100px;
+    border-radius: 10px;
+    width: 600px;
+    flex-wrap: wrap; 
+  }
+  
+  .reciperesults td {
+    display: flex;
+    width:580px;
+  }
+
+
 }
 
 @media (max-width: 660px) {
@@ -553,10 +572,57 @@
   .searchbutton {
     margin-top: 60px;
   }
+
+
+  .reciperow {
+    width: 450px;
+    padding: 10px;
+  }
+  
+  .recipeindructions p,h2{
+
+
+  }
+
+  .reciperesults td {
+    display: flex;
+    width:450px;
+    flex-wrap: wrap;
+
+  }
+
+  .recipedesctiption {
+
+  }
+  .recipeimage {
+    margin-left: auto;
+    margin-bottom: auto;
+    max-height: 200px;
+    max-width: 300px;
+    border-radius: 10px;
+    margin: auto;
+    
+
+  }
+  .recipeindructions {
+    margin-top: -30px;
+
+
+
+  }
+  .alterimage {
+    margin-left: auto;
+    margin-bottom: auto;
+    max-height: 200px;
+    max-width: 300px;
+    border-radius: 10px;
+    margin: auto;
+  }
+  
 }
 
 
-@media (max-width: 470px) {
+@media (max-width: 500px) {
   input {
     width: 50%;
   }
@@ -577,6 +643,101 @@
   .searchbutton {
     margin-top: 60px;
   }
+  .reciperow {
+    width:350px;
+    padding: 10px;
+  }
+  
+  .recipeindructions p,h2{
+
+
+  }
+
+  .reciperesults td {
+    display: flex;
+    width:350px;
+    flex-wrap: wrap;
+
+  }
+
+  .recipedesctiption {
+
+  }
+  .recipeimage {
+    margin-left: auto;
+    margin-bottom: auto;
+    max-height: 200px;
+    max-width: 300px;
+    border-radius: 10px;
+    margin: auto;
+    
+
+  }
+  .recipeindructions {
+    margin-top: -30px;
+
+
+
+  }
+  .alterimage {
+    margin-left: auto;
+    margin-bottom: auto;
+    max-height: 200px;
+    max-width: 300px;
+    border-radius: 10px;
+    margin: auto;
+  }
+  
+
+}
+
+@media (max-width: 410px) {
+  .reciperow {
+    width:250px;
+    padding: 10px;
+  }
+  
+  .recipeindructions p,h2{
+
+
+  }
+
+  .reciperesults td {
+    display: flex;
+    width:250px;
+    flex-wrap: wrap;
+
+  }
+
+  .recipedesctiption {
+
+  }
+  .recipeimage {
+    margin-left: auto;
+    margin-bottom: auto;
+    max-height: 190px;
+    max-width: 250px;
+    border-radius: 10px;
+    margin: auto;
+  }
+  .recipeindructions {
+    margin-top: -30px;
+  }
+
+  .recipeindructions h2 {
+    font-size: 1.2em;
+
+  }
+  .alterimage {
+    margin-left: auto;
+    margin-bottom: auto;
+    max-height: 190px;
+    max-width: 250px;
+    border-radius: 10px;
+    margin: auto;
+  }
+  
+
 }
 
 /*RECIPE SEARCH END*/
