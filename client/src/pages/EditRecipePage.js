@@ -87,7 +87,6 @@ const EditRecipePage = () => {
   
 
 
-
   //use state changerit
   const CategoryChange = (option) => {
     setRecipeCategory(option);
@@ -188,7 +187,7 @@ const EditRecipePage = () => {
   //Heittää consoleen mitä tallentuu, tietokanta yhteys myöhemmin
   //Varmistaa että kentät eivät ole tyhjiä
   const editBtnClick = async () => {
-    console.log(RecipeReg);
+    console.log(selectedFile);
     if (RecipeName) {
       if (RecipeCategory){
           if(RecipeGuide){
@@ -266,7 +265,8 @@ const EditRecipePage = () => {
         setUserHasAccess(user.userid === data.data.recipes[0].userid);
         setRecipeCategory(data.data.recipes[0].category);
         if(data.data.recipes[0].images !== null) {
-        setSelectedFile(data.data.recipes[0].images.data);
+          const base64Image = arrayBufferToBase64(data.data.recipes[0].images.data);
+          setSelectedFile(base64Image);
         }
       } catch (error) {
         console.error('Error during search:', error.message);
@@ -526,7 +526,7 @@ const handleDeleteImageButtonClick = (e) => {
       {imagePreview ?         
         
           <img src={imagePreview} alt="Recipe Image" style={{ maxWidth: '300px' }} />
-        : <img src={`data:image/jpeg;base64,${arrayBufferToBase64(selectedFile)}`} alt="Recipe Image" style={{ maxWidth: '300px' }} />}
+        : <img src={`data:image/jpeg;base64,${selectedFile}`} alt="Recipe Image" style={{ maxWidth: '300px' }} />}
       
       </div>
       <div className="recipeGuideContainer">
