@@ -532,13 +532,15 @@ const getReviewFromDatabase = async (req, res) => {
     connection = await sql.connect(config);
     const request = connection.request();
     
-    const query = `SELECT * FROM [dbo].[reviews] WHERE recipeid = @recipeId`;
+    const query = `SELECT r.*, u.name, u.username
+    FROM [dbo].[reviews] AS r
+    JOIN [dbo].[users] AS u ON r.userid = u.userid
+    WHERE r.recipeid = @recipeId`;
     const result = await request
       .input("recipeId", sql.Int, recipeid)
       .query(query);
     if (result.recordset.length > 0) {
       const reviews = result.recordset;
-      console.log(reviews);
       return reviews;
     } else{
       return undefined;
@@ -552,13 +554,14 @@ const getReviewFromDatabase = async (req, res) => {
     }
   }
 };
-
+ 
 
 const addReviewToDatabase = async (req, res) => {
   const {recipeid, userid, rating, comment, favorite} = req.body;
+  let connection;
   try {
-    await sql.connect(config);
-    const transaction = new sql.Transaction();
+    connection = await sql.connect(config);
+    const transaction = new sql.Transaction(connection);
 
     try {
       await transaction.begin();
@@ -578,15 +581,17 @@ const addReviewToDatabase = async (req, res) => {
       return true;
     } catch (error) {
       await transaction.rollback();
-      console.error('Error adding review to the database:', error);
+      console.error('Error adding ingredient to the database:', error);
       return false;
     }
   } catch (error) {
     console.error('Error connecting to the database:', error);
     return false;
   }  finally {
-    await sql.close(); 
-    } 
+    if (connection) {
+      connection.close();
+    }
+  } 
 }; 
 
 
