@@ -4,6 +4,25 @@ const sql = require("mssql");
 const config = require("./config/config");
 const bcrypt = require("bcrypt"); // for password encrypting
 
+let pool;
+
+const connectToDatabase = async () => {
+  try {
+    pool = await sql.connect(config);
+  } catch (error) {
+    console.error("Error connecting to the database:", error);
+  }
+};
+
+const closeDatabaseConnection = async () => {
+  try {
+    await pool.close();
+  } catch (error) {
+    console.error("Error closing database connection:", error);
+  }
+};
+
+
 /**
  * Adds a user to the database.
  * @param {object} req - The request object.
@@ -24,10 +43,10 @@ const addUserToDatabase = async (req, res) => {
   }
   try {
     //creates connection to database
-    await sql.connect(config);
+    await connectToDatabase();
 
     //initializes a new request object that is used to send SQL queries to the connected database using the sql module or library.
-    const request = new sql.Request();
+    const request = pool.request();
 
     //encrypts password for database
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -50,7 +69,7 @@ const addUserToDatabase = async (req, res) => {
     return false;
   }
   finally {
-    await sql.close(); 
+    await closeDatabaseConnection();
     } 
 };
 
@@ -65,10 +84,11 @@ const getUserFromDatabase = async (req, res) => {
   const { email } = req.body;
   try {
     //creates connection to database
-    await sql.connect(config);
+    await connectToDatabase();
+
 
     //initializes a new request object that is used to send SQL queries to the connected database using the sql module or library.
-    const request = new sql.Request();
+    const request = pool.request();
 
     //query for database
     const query = `SELECT * FROM users WHERE email = @email`;
@@ -88,7 +108,7 @@ const getUserFromDatabase = async (req, res) => {
     console.error("Error getting user from the database:", error);
   }
   finally {
-    await sql.close(); 
+    await closeDatabaseConnection();
     } 
 };
 
@@ -96,9 +116,10 @@ console.log("...")
 
 const addRecipeToDatabase = async (req, res) => {
   const { UserID, RecipeName, RecipeCategory, RecipeGuide, RecipeDesc, Tags, Ingredients, selectedFile, RecipeReg } = req.body;
+  let connection;
   try {
-    await sql.connect(config);
-    const transaction = new sql.Transaction();
+    connection = await sql.connect(config);
+    const transaction = new sql.Transaction(connection);
 
     try {
       await transaction.begin();
@@ -145,8 +166,10 @@ const addRecipeToDatabase = async (req, res) => {
     return false;
   }
   finally {
-    await sql.close(); 
-    } 
+    if (connection) {
+      connection.close();
+    }
+  } 
 }; 
   
 /********************************************************* */
@@ -159,10 +182,11 @@ const getRecipeFromDatabase = async (req, res) => {
   // Destructure parameters from the request body
   const { recipeName, recipeCategory, recipeTag, recipeUsername, recipeOwnerName, recipeid } = req.body;
 
-  await sql.connect(config);
   try {
+    await connectToDatabase();
+
     // Initialize a new request object
-    const request = new sql.Request();
+    const request = pool.request();
 
     // Build the query based on the provided parameters
     let query = 'SELECT recipes.*, users.username, users.name FROM recipes INNER JOIN users ON recipes.userid = users.userid WHERE 1=1'; // Start with a true condition
@@ -223,14 +247,15 @@ const getRecipeFromDatabase = async (req, res) => {
     console.error(error);
     return undefined;
   }     finally {
-    await sql.close(); 
+    await closeDatabaseConnection();
     } 
 };
 
 const getAllUsersFromDatabase = async (req, res) => {
   try {
-    await sql.connect(config);
-    const request = new sql.Request();
+    await connectToDatabase();
+
+    const request = pool.request();
 
     const query = `SELECT * FROM users`;
 
@@ -247,14 +272,14 @@ const getAllUsersFromDatabase = async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
   finally {
-    await sql.close(); 
+    await closeDatabaseConnection();
     } 
 };
 
 const deleteUserFromDatabase = async (userid)  => {
   try {
-    await sql.connect(config);
-    const request = new sql.Request();
+    await connectToDatabase();
+    const request = pool.request();
     const query = `DELETE FROM users WHERE userid = @userid`;
 
     const result = await request
@@ -266,16 +291,17 @@ const deleteUserFromDatabase = async (userid)  => {
     throw error;
   }
   finally {
-    await sql.close(); 
+    await closeDatabaseConnection();
     } 
 };
 
 const editRecipeToDatabase = async (req,res) => {
 
   const { id, RecipeName, RecipeCategory, RecipeGuide, RecipeDesc, Tags, updatedIngredients, Ingredients, RecipeReg, selectedFile} = req.body;
+  let connection;
   try {
-    await sql.connect(config);
-    const transaction = new sql.Transaction();
+    connection = await sql.connect(config);
+    const transaction = new sql.Transaction(connection);
 
     try {
       await transaction.begin();
@@ -328,8 +354,10 @@ for (let i = 0; i < updatedIngredients.length; i++) {
     console.error('Error connecting to the database:', error);
     return false; 
   } finally {
-    await sql.close(); 
-    } 
+    if (connection) {
+      connection.close();
+    }
+  } 
   }
   
 
@@ -337,10 +365,11 @@ const getIngredientsFromDatabase = async (req,res) => {
   const recipeid = req.params.recipeId;
   try {
     //creates connection to database
-    await sql.connect(config);
+    await connectToDatabase();
 
     //initializes a new request object that is used to send SQL queries to the connected database using the sql module or library.
-    const request = new sql.Request();
+    const request = pool.request();
+
 
     //query for database
     const query = `SELECT * FROM ingredients WHERE recipeid = @recipeId`;
@@ -355,15 +384,19 @@ const getIngredientsFromDatabase = async (req,res) => {
   } catch (error) {
     console.error("Error getting ingredients from the database:", error);
   }  
+  finally {
+    await closeDatabaseConnection();
+  }
 }
 
 
 
 const addIngredientToDatabase = async (req, res) => {
   const {Ingredients, id} = req.body;
+  let connection;
   try {
-    await sql.connect(config);
-    const transaction = new sql.Transaction();
+    connection = await sql.connect(config);
+    const transaction = new sql.Transaction(connection);
 
     try {
       await transaction.begin();
@@ -389,16 +422,19 @@ const addIngredientToDatabase = async (req, res) => {
     console.error('Error connecting to the database:', error);
     return false;
   }  finally {
-    await sql.close(); 
-    } 
+    if (connection) {
+      connection.close();
+    }
+  } 
 }; 
 
 
 const deleteIngredientFromDatabase = async (req, res) => {
   const { ingredientId } = req.params; 
+  let connection;
   try {
-    await sql.connect(config);
-    const transaction = new sql.Transaction();
+    connection = await sql.connect(config);
+    const transaction = new sql.Transaction(connection);
     try {
       await transaction.begin();
       const deleteQuery = `
@@ -420,14 +456,17 @@ const deleteIngredientFromDatabase = async (req, res) => {
     return false; 
   }
   finally {
-    await sql.close(); 
-    } 
+    if (connection) {
+      connection.close();
+    }
+  } 
 }
 const deleteRecipeFromDatabase = async (req, res) => {
   const { recipeId } = req.params; 
+  let connection;
   try {
-    await sql.connect(config);
-    const transaction = new sql.Transaction();
+    connection = await sql.connect(config);
+    const transaction = new sql.Transaction(connection);
     try {
       await transaction.begin();
       const deleteQuery = `
@@ -449,20 +488,24 @@ const deleteRecipeFromDatabase = async (req, res) => {
     return false; 
   }
   finally {
-    await sql.close(); 
-    } 
+    if (connection) {
+      connection.close();
+    }
+  } 
 }
 
 const deleteRecipeImageFromDatabase = async (req, res) => {
   const { recipeId } = req.params; 
+  let connection;
   try {
-    const pool = await sql.connect(config);
+    connection = await sql.connect(config);
+    const request = connection.request();
     const deleteQuery = `
       UPDATE [dbo].[recipes] 
       SET images = NULL 
       WHERE recipeid = @RecipeId;
     `;
-    const result = await pool.request()
+    const result = await request
       .input('RecipeId', sql.Int, recipeId)
       .query(deleteQuery);
       
@@ -475,17 +518,19 @@ const deleteRecipeImageFromDatabase = async (req, res) => {
     console.error('Error deleting recipe image from database:', error);
     return false; // Error occurred during deletion
   } finally {
-    sql.close();
+    if (connection) {
+      connection.close();
+    }
   } 
 }
 
 
 const getReviewFromDatabase = async (req, res) => {
   const {recipeid} = req.body;
-
+  let connection;
   try {
-    await sql.connect(config);
-    const request = new sql.Request();
+    connection = await sql.connect(config);
+    const request = connection.request();
     
     const query = `SELECT * FROM [dbo].[reviews] WHERE recipeid = @recipeId`;
     const result = await request
@@ -501,7 +546,11 @@ const getReviewFromDatabase = async (req, res) => {
     
   } catch (error) {
     console.error("Error getting reviews from the database:", error);
-  }  
+  }  finally {
+    if (connection) {
+      connection.close();
+    }
+  }
 };
 
 
