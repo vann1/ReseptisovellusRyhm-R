@@ -3,35 +3,35 @@ import { useAuthContext } from "../hooks/useAuthContext";
 import {Link} from 'react-router-dom';
 const ProfileForm = () => {
     const [userRecipes, setUserRecipes] = useState([]);
-    // const [userDetails, setUserDetails] = useState({});
+    const [userDetails, setUserDetails] = useState({});
     const {user} = useAuthContext();
     const [showInfo, setShowInfo] = useState(false)
-    const [showNoRecipes, setShowNoRecipes] = useState(false)
+    const [showNoRecipes, setShowNoRecipes] = useState()
     const [refresh, setRefresh] = useState(false);
-    // useEffect(() => {
-    //     const getUserDetails = async () => {
-    //         try {
-    //             const response = await fetch('http://localhost:3001/api/user/profile', {
-    //               method: 'POST',
-    //               headers: {
-    //                 'Content-Type': 'application/json',
-    //                 'Authorization': `Bearer ${user.token}`
-    //               },
-    //               body: JSON.stringify({ email: user.email }),
-    //             });
-    //             const data = await response.json();
-    //             if (!response.ok) {
-    //               throw new Error(data.error);
-    //             }
-    //             if (response.ok) {
-    //                 setUserDetails(data.data.userWithoutPassword)
-    //             } 
-    //           } catch (error) {
-    //             console.error('Error:', error);
-    //           }
-    //     }
-    //     getUserDetails();
-    // },[])
+    useEffect(() => {
+        const getUserDetails = async () => {
+            try {
+                const response = await fetch('http://localhost:3001/api/user/profile', {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${user.token}`
+                  },
+                  body: JSON.stringify({ email: user.email }),
+                });
+                const data = await response.json();
+                if (!response.ok) {
+                  throw new Error(data.error);
+                }
+                if (response.ok) {
+                    setUserDetails(data.data.userWithoutPassword)
+                } 
+              } catch (error) {
+                console.error('Error:', error);
+              }
+        }
+        getUserDetails();
+    },[])
 
     useEffect(() => {
       // Load user recipes whenever userRecipes state changes
@@ -87,12 +87,12 @@ const ProfileForm = () => {
       <div>
         {showNoRecipes ? <div> <h1>Sinulla ei ole vielä reseptejä</h1>
           </div> :
-          <div>
+          <div className="container-profile">
           {showInfo ? <div>
-            <h1>{user.email}</h1>
+            <h1 className="h1-profile">{userDetails.username}</h1>
             <div>
               <table>
-                <thead>
+                <thead className="thead-profile">
                   <tr>
                     <th>Omat Reseptit</th>
                   </tr>
@@ -100,12 +100,12 @@ const ProfileForm = () => {
                 <tbody>
                 {userRecipes.map((recipe, index) => (
                 <tr key={index}>
-                  <td>
-                    <Link to={`/userrecipe/${recipe.recipeid}`}>
-                      {recipe.recipename}
+                  <td className="td-profile">
+                    <Link className="link-profile-recipe" to={`/userrecipe/${recipe.recipeid}`}>
+                    <p className='border4name'></p><p>{recipe.recipename}</p>
                     </Link>{" "}
-                    - {recipe.category}
-                    <button onClick={() => deleteRecipe(recipe.recipeid)}>Poista</button>
+                    <p className="p-profile-category">{recipe.category}</p>
+                    <button className="recipe-delete-button" onClick={() => deleteRecipe(recipe.recipeid)}>Poista</button>
                   </td>        
                 </tr>
               ))}

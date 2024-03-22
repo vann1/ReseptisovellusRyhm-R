@@ -211,8 +211,6 @@ const getRecipeFromDatabase = async (req, res) => {
     // Execute the query
     const result = await request.query(query);
 
-
-
     if (result.recordset.length > 0) {
       // Return the first record if any
       const recipes = result.recordset;
@@ -224,7 +222,9 @@ const getRecipeFromDatabase = async (req, res) => {
     // Handle errors
     console.error(error);
     return undefined;
-  } 
+  }     finally {
+    await sql.close(); 
+    } 
 };
 
 const getAllUsersFromDatabase = async (req, res) => {

@@ -4,7 +4,7 @@
   margin: 0 auto; /* Keskitä container */
   padding: 0 15px; /* Lisää sisätilaa tarpeidesi mukaan */
   box-sizing: border-box; /* Sisällytä reunukset ja täytöt leveyteen */
-  background-color: rgba(252, 243, 216, 0.5);
+  background-color: #fcf3d886;
   word-wrap: break-word;
 }
 
@@ -167,6 +167,7 @@
   
   .logout:hover {
     box-shadow: 2px 2px 5px #888888;
+    background-color: red;
   }
 /*Navigation end*/
 
@@ -407,7 +408,7 @@
   margin: auto;
   display: flex;
   text-align: center;
-  margin-top: 10px;
+  margin-top: 15px;
   width: 150px;
 }
 
@@ -471,7 +472,9 @@
   text-shadow: 2px 2px 5px #888888;
   font-weight: bold;
 }
-
+.recipedesctiption {
+  word-break: break-all;
+}
 
 .recipedesctiptiontitle {
   margin-bottom: -10px;
@@ -513,8 +516,22 @@
   margin-top: -40px;
 }
 
+.searchbutton {
+  background-color: #ff9900; 
+  color:#fff; 
+  padding: 10px 15px; 
+  border: none;
+  border-radius: 20px;
+  cursor: pointer; 
+  font-weight: bold;
+  text-align: center;
+  display: block;
+}
 
 
+.searchbutton:hover {
+  box-shadow: 2px 2px 5px #888888;
+}
 @media screen and (max-width: 1064px) {
   input {
     width: 80%;
@@ -541,7 +558,7 @@
 
   }
   .searchbutton {
-    margin-top: 60px;
+    margin-top: 50px;
   }
   
   .reciperow {
@@ -581,7 +598,7 @@
     height: 200px;
   }
   .searchbutton {
-    margin-top: 60px;
+    margin-top: 50px;
   }
 
 
@@ -668,7 +685,7 @@
     height: 200px;
   }
   .searchbutton {
-    margin-top: 60px;
+    margin-top: 50px;
   }
   .reciperow {
     width:350px;
@@ -727,6 +744,9 @@
   .recipeindructions p,h2{
 
 
+  }
+  .searchbutton {
+    margin-top: 50px;
   }
 
   .reciperesults td {
@@ -801,3 +821,82 @@
 }
 
 /*RECIPE SEARCH END*/
+
+
+
+
+
+/*PROFILEPAGE*/
+.container-profile {
+  background-color: #fcf3d886;
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 auto; /* Keskitä container */
+  max-width: 1200px;
+  padding: 10px;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.thead-profile {
+  font-size: 1.5em;
+  color: #624e08;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+  margin-top: 20px;
+}
+
+.h1-profile {
+  color: #624e08;
+  display: flex;
+  margin-bottom: 20px;
+  margin-top: 20px;
+}
+
+.recipe-delete-button {
+  background-color: #ff9900; 
+  color:#fff; 
+  padding: 2px 15px; 
+  height: 35px;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer; 
+  font-weight: bold;
+  margin-left: auto;
+  margin-top: 9px;
+}
+
+
+
+.recipe-delete-button:hover {
+  box-shadow: 2px 2px 5px #888888;
+  background-color: red;
+}
+
+.td-profile {
+  background-color: #ffe58e;
+  display: flex;
+  padding: 15px;
+  border-radius: 10px;
+  flex-direction: row;
+  gap: 30px;
+}
+
+
+.p-profile-category {
+  font-weight: bold;
+}
+
+.link-profile-recipe {
+  font-weight: bold;
+  text-decoration: none;
+  display: flex;
+  color: #624e08;
+
+}
+.link-profile-recipe:hover {
+  text-shadow: 2px 2px 5px #888888;
+}
+
+/*PROFILEPAGE*/
