@@ -11,7 +11,7 @@ const RatingComponent = (props) => {
     const [Editcomment, setEditComment] = useState('');
     const [recipeReviews, setRecipeReviews] = useState([]);
     const [userReview, setUserReview] = useState(null);
-    const [key, setKey] = useState(0);
+
 
 
     const handleRatingChange = (rating) => {
@@ -75,10 +75,7 @@ const RatingComponent = (props) => {
   
     };
 
-    const nappiclk = () => {
-      SearchReviews();
-    }
-    
+  
     useEffect(() => {
       SearchReviews();
     },[])
@@ -130,6 +127,9 @@ const RatingComponent = (props) => {
             console.error('Error adding review:', error.message);
           } 
           setUserReview(true);
+          setUserEditFavorite(userFavorite);
+          setUserEditRating(userRating);
+          setEditComment(comment)
           SearchReviews();
 
       };
@@ -181,7 +181,7 @@ const RatingComponent = (props) => {
                       <div>
                 <div>
                 <div>
-                  <strong>Muokkaa arvosteluasi:</strong> <button onClick={nappiclk}>Nappi</button><br />
+                  <strong>Muokkaa arvosteluasi:</strong><br />
                   {[1, 2, 3, 4, 5].map((star, index) => (
                     <span
                       key={index}
