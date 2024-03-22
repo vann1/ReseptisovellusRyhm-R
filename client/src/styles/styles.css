@@ -900,3 +900,42 @@
 }
 
 /*PROFILEPAGE*/
+
+/*SHOW RECIPE STARTS*/
+.app {
+  background-color: #fcf3d886;
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 auto; /* Keskitä container */
+  max-width: 1200px;
+  padding: 10px;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.compartment-container {
+  display: flex;
+  flex: 1;
+  gap: 30px;
+}
+
+.compartment1 {
+  flex: 1;
+  padding: 20px;
+  background-color: #ffe58e;
+  margin: 20px;
+}
+.compartment2 {
+  flex: 1;
+  padding: 20px;
+  background-color: #ffe58e;
+  margin: 20px;
+}
+
+.compartment3 {
+  padding: 20px;
+  border: 1px solid #ccc;
+  background-color: #ffe58e;
+  margin: 20px;
+}
+
