@@ -62,25 +62,30 @@ const AdminForm = () => {
           }
     }
     return (
-        <div>
-            <table>
+        <div className="Admin-container">
+          <div className="Admin-Div">
+          <div className="Admin-h1">
+          <h1>Ylläpito</h1>
+          </div>
+            <table className="Admin-table">
                 <thead>
                     <tr>
-                        <th>Email</th>
+                        <th>Käyttäjät</th>
                     </tr>
                 </thead>
                 <tbody>
                     {usersList.map((user, index) => (
-                    <tr key={index}>
-                        <td>{user.email}</td>
-                        <td><button onClick={() => handleDeleteUser(user.userid, user.email, user.ROLE)}>Poista käyttäjä: {user.name}</button></td>
+                    <tr className="Admin-tr" key={index}>
+                        <td className="Admin-Page-User ">{user.email}</td>
+                        <td className="Admin-button-td"><button className="Admin-button"  onClick={() => handleDeleteUser(user.userid, user.email, user.ROLE)}>Poista käyttäjä: {user.name}</button></td>
                     </tr>
                     ))}
                 </tbody>
             </table>
             <br></br>
-            {errors && <p className="pError">{errors}</p>}
+            {errors && <p className="pErrorAdmin">{errors}</p>}
             {deleteSuccess && <p className="userDeletedSuccess">{deleteSuccess}</p>}
+            </div>
         </div>
       );
 }
