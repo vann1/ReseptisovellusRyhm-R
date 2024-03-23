@@ -4,7 +4,7 @@ const {isJson} = require('../utils/requestUtils')
 const sql = require('mssql');
 const config = require('../config/config');
 const router = express.Router();
-const {searchReviews, addReview} =require("../controllers/review")
+const {searchReviews, addReview, editReview, deleteReview} =require("../controllers/review")
 
 const {requireAuth} = require('../middlewares/authMiddleware')
 
@@ -12,7 +12,7 @@ const {requireAuth} = require('../middlewares/authMiddleware')
 
 
 
-router.post('/search', async (req, res) => {
+router.get('/search/:recipeid', async (req, res) => {
     if(!isJson) {
     return badRequest(res, "Content was not Json");
     }
@@ -26,9 +26,25 @@ router.post('/add', async (req, res) => {
   }
   return addReview(req, res);
   
+}); 
+
+router.post('/edit', async (req, res) => {
+    
+  if(!isJson) {
+     return badRequest(res, "Content was not Json");
+  }
+  return editReview(req, res);
+  
 });
 
-
+router.delete('/delete/:reviewid', async (req, res) => {
+    
+  if(!isJson) {
+     return badRequest(res, "Content was not Json");
+  }
+  return deleteReview(req, res);
+   
+});
 
 
 

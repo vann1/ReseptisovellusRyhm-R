@@ -1,6 +1,7 @@
 import React, {  useEffect, useState } from 'react';
 
 
+
 const RatingComponent = (props) => {
 
     const [userRating, setUserRating] = useState(0);
@@ -11,7 +12,7 @@ const RatingComponent = (props) => {
     const [Editcomment, setEditComment] = useState('');
     const [recipeReviews, setRecipeReviews] = useState([]);
     const [userReview, setUserReview] = useState(null);
-
+    const [recipeid, setRecipeID] = useState(props.recipeid);
 
 
     const handleRatingChange = (rating) => {
@@ -36,7 +37,7 @@ const RatingComponent = (props) => {
     };
     
     const handleEditCheckboxChange = () => {
-      setUserEditFavorite(userFavorite === 0 ? 1 : 0);
+      setUserEditFavorite(userEditFavorite === 0 ? 1 : 0);
         
       };
 
@@ -47,14 +48,11 @@ const RatingComponent = (props) => {
 
     const SearchReviews = async () => {
       try {
-        const response = await fetch('http://localhost:3001/api/review/search', {
-          method: 'POST',
+        const response = await fetch(`http://localhost:3001/api/review/search/${recipeid}`, {
+          method: 'GET',
           headers: {
             'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            recipeid: props.recipeid,
-          }),
+          }
         });
   
         if (!response.ok) {
@@ -64,7 +62,6 @@ const RatingComponent = (props) => {
         const data = await response.json();
         setRecipeReviews(data.data.reviews);
         
-        console.log(recipeReviews);
       } catch (error) {
         console.error('Error during reviewsearch:', error.message);
         setRecipeReviews([]);
@@ -87,11 +84,13 @@ const RatingComponent = (props) => {
         
         setUserReview(removedReview);
         console.log('Removed review:', removedReview);
-        setRecipeReviews([...recipeReviews]); // Update state with the modified array
+        setRecipeReviews([...recipeReviews]);
         setUserEditFavorite(removedReview.favorite);
         setUserEditRating(removedReview.rating);
         setEditComment(removedReview.review)
        
+      } else {
+        setUserReview(null);
       }
     };
   
@@ -102,37 +101,87 @@ const RatingComponent = (props) => {
       }
     }, [recipeReviews, props.userid]);
 
-
-      const handleSubmit = async () => {
+    const updateReview = async () => {
+      try {
+          const response = await fetch('http://localhost:3001/api/review/edit', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              recipeid: props.recipeid,
+              userid: props.userid,
+              rating: userEditRating,
+              comment: Editcomment,
+              favorite: userEditFavorite,
+              reviewid: userReview.reviewid
+            }),
+          });
+    
+          if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+          }
+        } catch (error) {
+          console.error('Error editing review:', error.message);
+        } 
         
-        try {
-            const response = await fetch('http://localhost:3001/api/review/add', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({
-                recipeid: props.recipeid,
-                userid: props.userid,
-                rating: userRating,
-                comment: comment,
-                favorite: userFavorite,
-              }),
-            });
-      
-            if (!response.ok) {
-              throw new Error(`HTTP error! Status: ${response.status}`);
-            }
-          } catch (error) {
-            console.error('Error adding review:', error.message);
-          } 
-          setUserReview(true);
-          setUserEditFavorite(userFavorite);
-          setUserEditRating(userRating);
-          setEditComment(comment)
-          SearchReviews();
+        
+    };
 
-      };
+
+    const deleteReview = async () => {
+      const reviewid = userReview.reviewid;
+      try {
+          const response = await fetch(`http://localhost:3001/api/review/delete/${reviewid}`, {
+            method: 'DELETE',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          });
+    
+          if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+          }
+        } catch (error) {
+          console.error('Error deleting review:', error.message);
+        } 
+        
+        setUserReview(null);
+     
+
+    };
+
+
+    const handleSubmit = async () => {
+      if(userRating && comment) {
+      try {
+          const response = await fetch('http://localhost:3001/api/review/add', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              recipeid: props.recipeid,
+              userid: props.userid,
+              rating: userRating,
+              comment: comment,
+              favorite: userFavorite,
+            }),
+          });
+    
+          if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+          }
+        } catch (error) {
+          console.error('Error adding review:', error.message);
+        } 
+        window.location.reload();
+
+    } else {
+      alert("Täytä arvostelu.");
+    }
+
+    };
 
 
 
@@ -193,6 +242,7 @@ const RatingComponent = (props) => {
                     </span>
                   ))}
                   <br></br><input
+                  
                     type="checkbox"
                     checked={userEditFavorite}
                     onChange={handleEditCheckboxChange}
@@ -207,7 +257,10 @@ const RatingComponent = (props) => {
                     onChange={handleEditCommentChange}
                   />
                 </div>
-                
+                <div style={{ marginTop: '10px' }}>
+                  <button onClick={updateReview}>Tallenna</button>
+                  <button onClick={deleteReview}>Poista</button>
+                </div>
                 
                 </div>
                   
