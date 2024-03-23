@@ -526,7 +526,7 @@ const deleteRecipeImageFromDatabase = async (req, res) => {
 
 
 const getReviewFromDatabase = async (req, res) => {
-  const {recipeid} = req.body;
+  const recipeid = req.params.recipeid;
   let connection;
   try {
     connection = await sql.connect(config);
@@ -581,7 +581,82 @@ const addReviewToDatabase = async (req, res) => {
       return true;
     } catch (error) {
       await transaction.rollback();
-      console.error('Error adding ingredient to the database:', error);
+      console.error('Error adding review to the database:', error);
+      return false;
+    }
+  } catch (error) {
+    console.error('Error connecting to the database:', error);
+    return false;
+  }  finally {
+    if (connection) {
+      connection.close();
+    }
+  } 
+}; 
+
+const editReviewInDatabase = async (req, res) => {
+  const {recipeid, userid, rating, comment, favorite, reviewid} = req.body;
+  let connection;
+  try {
+    connection = await sql.connect(config);
+    const transaction = new sql.Transaction(connection);
+
+    try {
+      await transaction.begin();
+      const reviewQuery = `
+      UPDATE [dbo].[reviews]
+      SET recipeid = @recipeid,
+          userid = @userid,
+          favorite = @favorite,
+          review = @comment,
+          rating = @rating
+          WHERE reviewid = @reviewid;
+    `;
+        await new sql.Request(transaction)
+          .input('recipeid', sql.Int, recipeid)
+          .input('userid', sql.Int, userid)
+          .input('favorite', sql.Int, favorite)
+          .input('comment', sql.NVarChar, comment)
+          .input('rating', sql.Int, rating)
+          .input('reviewid', sql.Int, reviewid)
+          .query(reviewQuery);
+
+      await transaction.commit();
+      return true;
+    } catch (error) {
+      await transaction.rollback();
+      console.error('Error editing review in database:', error);
+      return false;
+    }
+  } catch (error) {
+    console.error('Error connecting to the database:', error);
+    return false;
+  }  finally {
+    if (connection) {
+      connection.close();
+    }
+  } 
+}; 
+
+const deleteReviewInDatabase = async (req, res) => {
+  const reviewid = req.params.reviewid;
+  let connection;
+  try {
+    connection = await sql.connect(config);
+    const transaction = new sql.Transaction(connection);
+
+    try {
+      await transaction.begin();
+      const reviewQuery = `DELETE FROM [dbo].[reviews] WHERE reviewid = @reviewid `;
+        await new sql.Request(transaction)
+          .input('reviewid', sql.Int, reviewid)
+          .query(reviewQuery);
+
+      await transaction.commit();
+      return true;
+    } catch (error) {
+      await transaction.rollback();
+      console.error('Error deleting review from database:', error);
       return false;
     }
   } catch (error) {
@@ -595,6 +670,7 @@ const addReviewToDatabase = async (req, res) => {
 }; 
 
 
-module.exports = {addReviewToDatabase, getReviewFromDatabase, deleteRecipeImageFromDatabase, deleteRecipeFromDatabase, deleteIngredientFromDatabase ,addIngredientToDatabase,
+
+module.exports = {deleteReviewInDatabase, editReviewInDatabase, addReviewToDatabase, getReviewFromDatabase, deleteRecipeImageFromDatabase, deleteRecipeFromDatabase, deleteIngredientFromDatabase ,addIngredientToDatabase,
    addUserToDatabase, getUserFromDatabase, addRecipeToDatabase, getRecipeFromDatabase, getAllUsersFromDatabase, deleteUserFromDatabase,
     editRecipeToDatabase, getIngredientsFromDatabase};

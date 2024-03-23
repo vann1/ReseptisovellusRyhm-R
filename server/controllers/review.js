@@ -1,5 +1,5 @@
 const {badRequest, created, internalServerError, notFound, ok} = require('../utils/responseUtils')
-const {getReviewFromDatabase, addReviewToDatabase} = require('../database')
+const {getReviewFromDatabase, addReviewToDatabase, editReviewInDatabase, deleteReviewInDatabase} = require('../database')
 
 
 
@@ -31,5 +31,35 @@ const addReview = async (req, res) => {
     }
 }
 
-module.exports = {searchReviews, addReview}
+const editReview = async (req, res) => {
+    try {
+        if(!editReviewInDatabase(req, res)) {
+            badRequest(res, "Failed to edit review.")
+        }
+        return created(res, "Review edited successfully.")
+    }catch(error) {
+        console.error("Error editing review: " + error)
+        return internalServerError(res, "Internal server error, while adding review");
+    }
+}
+
+const deleteReview = async (req, res) => {
+    try {
+        if(!deleteReviewInDatabase(req, res)) {
+            badRequest(res, "Failed to edit review.")
+        }
+        return created(res, "Review edited successfully.")
+    }catch(error) {
+        console.error("Error editing review: " + error)
+        return internalServerError(res, "Internal server error, while adding review");
+    }
+}
+
+
+
+
+
+
+
+module.exports = {searchReviews, addReview, editReview, deleteReview}
 
