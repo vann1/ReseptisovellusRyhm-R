@@ -60,11 +60,6 @@ const SearchPage = () => {
   handleSearch();
   },[])
 
-
-  useEffect(() => {
-    handleSearch();
-  },[])
-
   const arrayBufferToBase64 = (buffer) => {
     let binary = '';
     const bytes = new Uint8Array(buffer);
