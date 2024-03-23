@@ -229,9 +229,9 @@
 
   .userDeletedSuccess {
     color :green;
-    font-size: 80%;
-    margin-top:-30px;
+    font-size: 90%;
     margin-bottom: 13px;
+    font-weight: bold;
   }
 
   /*UUSI RESEPTI SIVU JUTTUJA*/
@@ -705,6 +705,7 @@
     
 
   }
+
   .recipeindructions {
     margin-top: -30px;
 
@@ -970,6 +971,7 @@
 
 .Register-form {
   width: 380px;
+
   background-color:  #ffe58e;
   box-shadow: 2px 2px 5px 5px#888888;
   height: 515px;
@@ -1065,3 +1067,66 @@
 
 
 /*LoginPage Style ENDS*/
+
+
+/*AdminPage Style STARTS*/
+.Admin-container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 15px;
+  box-sizing: border-box;
+  word-wrap: break-word;
+  height: 94vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #fcf3d886;
+}
+
+.Admin-h1 {
+  color: #624e08;
+  display: flex;
+  justify-content: center;
+}
+
+.Admin-Div {
+  width: 600px;
+  background-color: #ffedb2;
+  box-shadow: 2px 2px 5px 5px #888888;
+  padding: 20px;
+  margin-top: 100px;
+}
+
+.Admin-Page-User {
+  max-width: 330px;
+
+}
+
+.Admin-button-td {
+  text-align: right;
+}
+
+.Admin-button {
+  background-color: #ff9900;
+  color: #fff;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.Admin-button:hover {
+  background-color: red;
+}
+
+.Admin-table {
+  border-radius: 10px;
+  padding: 50px;
+  margin: auto;
+  background-color: #ffe58e;
+  
+}
+
+/*AdminPage Style ENDS*/
