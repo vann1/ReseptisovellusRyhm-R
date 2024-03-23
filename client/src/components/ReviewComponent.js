@@ -1,5 +1,5 @@
 import React, {  useEffect, useState } from 'react';
-
+import '../styles/styles.css'
 
 
 const RatingComponent = (props) => {
@@ -195,11 +195,11 @@ const RatingComponent = (props) => {
                   {!userReview ? (
                 <div>
                 <div>
-                  <strong>Rate this recipe:</strong><br />
+                  <strong>Arvostele resepti:</strong><br />
                   {[1, 2, 3, 4, 5].map((star, index) => (
                     <span
                       key={index}
-                      style={{ cursor: 'pointer', color: star <= userRating ? 'gold' : 'gray' }}
+                      style={{ cursor: 'pointer', color: star <= userRating ? '#ff9100' : 'gray' }}
                       onClick={() => handleRatingChange(star)}
                     >
                       &#9733;
@@ -213,18 +213,15 @@ const RatingComponent = (props) => {
                 </div>
                 <div style={{ marginTop: '10px' }}>
                   <textarea
-                    rows="4"
-                    cols="50"
                     placeholder="Leave a comment..."
                     value={comment}
                     onChange={handleCommentChange}
-                    className="regInput register-input-field"
+                    className="reviewtext"
                   />
                 </div>
-                {/* Submit button */}
-                <div style={{ marginTop: '10px' }}>
-                  <button className='Register-button' onClick={handleSubmit}>Send Rating</button>
-                </div>
+                
+                  <button id="revieweditbtn" onClick={handleSubmit}>Tallenna</button>
+                
                 </div>
 
                     ): (
@@ -235,7 +232,7 @@ const RatingComponent = (props) => {
                   {[1, 2, 3, 4, 5].map((star, index) => (
                     <span
                       key={index}
-                      style={{ cursor: 'pointer', color: star <= userEditRating ? 'gold' : 'gray' }}
+                      style={{ cursor: 'pointer', color: star <= userEditRating ? '#ff9100' : 'gray' }}
                       onClick={() => handleEditRatingChange(star)}
                     >
                       &#9733;
@@ -250,37 +247,42 @@ const RatingComponent = (props) => {
                 </div>
                 <div style={{ marginTop: '10px' }}>
                   <textarea
-                    rows="4"
-                    cols="50"
                     placeholder="Leave a comment..."
                     value={Editcomment}
                     onChange={handleEditCommentChange}
-                  />
-                </div>
-                <div style={{ marginTop: '10px' }}>
-                  <button onClick={updateReview}>Tallenna</button>
-                  <button onClick={deleteReview}>Poista</button>
-                </div>
-                
-                </div>
-                  
-                  
+                    className="reviewtext"
+                  /><br/>
+                  <button id="revieweditbtn" onClick={updateReview}>Tallenna</button>
+                  <button id="reviewedelbtn" onClick={deleteReview}>Poista</button>
+                </div>                
+                </div>                       
               </div>
                      )}
                 </div>
-
-
-
               ) : (
-                <p>Kirjaudu sisään arvostellaksesi reseptin.</p>
+                <p></p>
               )}
-                <div>
+              
+                <div className="reviews">
+                  <p id="reviewtitle">Arvostelut:</p>
                 {recipeReviews.map(review => (
-                  <div key={review.reviewid} >
-                    <p>Käyttäjänimi: {review.username}</p>
-                    <p>Arvostelu: {review.rating}/5</p>
-                    <p>Kommentti: {review.review}</p>
-                    {/* You can render more details of the review here */}
+                  <div className="review-box" key={review.reviewid} >
+                    <div className="review-name">
+                    <label>{review.username}<br/></label>
+                    
+                    {[1, 2, 3, 4, 5].map((star, index) => (
+                    <span
+                      id="stars"
+                      key={index}
+                      style={{ color: star <= review.rating ? '#ff9100' : 'gray' }}
+                    >
+                      &#9733;
+                    </span>
+                  ))}
+                    </div>
+                    <div className="review-comment">
+                    <p>{review.review}</p>
+                    </div>
                   </div>
                 ))}      
               </div>
