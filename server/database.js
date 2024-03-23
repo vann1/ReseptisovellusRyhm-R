@@ -155,7 +155,7 @@ const addRecipeToDatabase = async (req, res) => {
           .query(ingredientQuery);
       }
       await transaction.commit();
-      return true;
+      return recipeID;
     } catch (error) {
       await transaction.rollback();
       console.error('Error adding recipe to the database:', error);
@@ -532,15 +532,17 @@ const deleteRecipeImageFromDatabase = async (req, res) => {
     }
   } 
 }
-
+ 
 
 const getReviewFromDatabase = async (req, res) => {
   const recipeid = req.params.recipeid;
+  const userid = req.params.userid;
   let connection;
   try {
     connection = await sql.connect(config);
     const request = connection.request();
     
+    if(recipeid){
     const query = `SELECT r.*, u.name, u.username
     FROM [dbo].[reviews] AS r
     JOIN [dbo].[users] AS u ON r.userid = u.userid
@@ -554,6 +556,22 @@ const getReviewFromDatabase = async (req, res) => {
     } else{
       return undefined;
     }
+  }
+  if(userid){
+    const query = `SELECT r.*, u.recipename, u.description, u.category, u.images
+    FROM [dbo].[reviews] AS r
+    JOIN [dbo].[recipes] AS u ON r.recipeid = u.recipeid
+    WHERE r.userid = @userid AND r.favorite = 1`;
+    const result = await request
+      .input("userid", sql.Int, userid)
+      .query(query);
+    if (result.recordset.length > 0) {
+      const reviews = result.recordset;
+      return reviews;
+    } else{
+      return undefined;
+    }
+  }
     
   } catch (error) {
     console.error("Error getting reviews from the database:", error);

@@ -1,12 +1,11 @@
 const {badRequest, created, internalServerError, notFound, ok} = require('../utils/responseUtils')
 const {addRecipeToDatabase, getRecipeFromDatabase, editRecipeToDatabase, deleteRecipeFromDatabase, deleteRecipeImageFromDatabase} = require('../database')
 
-const addRecipe = (req, res) => {
+const addRecipe = async (req, res) => {
     try {
-        if(!addRecipeToDatabase(req, res)) {
-            badRequest(res, "Failed to add recipe to database.")
-        }
-        return created(res, "Recipe added to database successfully.")
+        const recipeID = await addRecipeToDatabase(req, res);
+        console.log(recipeID);
+        return ok(res, "Recipe added to database successfully.", {recipeID})
     }catch(error) {
         console.error("Error adding recipe to database: " + error)
         return internalServerError(res, "Internal server error, while creating recipe");

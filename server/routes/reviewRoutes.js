@@ -6,13 +6,17 @@ const config = require('../config/config');
 const router = express.Router();
 const {searchReviews, addReview, editReview, deleteReview} =require("../controllers/review")
 
-const {requireAuth} = require('../middlewares/authMiddleware')
-
-
 
 
 
 router.get('/search/:recipeid', async (req, res) => {
+    if(!isJson) {
+    return badRequest(res, "Content was not Json");
+    }
+    return searchReviews(req, res);
+  });
+
+  router.get('/favorites/:userid', async (req, res) => {
     if(!isJson) {
     return badRequest(res, "Content was not Json");
     }

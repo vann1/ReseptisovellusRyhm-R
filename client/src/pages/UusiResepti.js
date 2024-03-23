@@ -166,14 +166,18 @@ const isValidIngredients = () => {
                   RecipeReg,
                 }),
               });
-        
+              const data = await response.json();
+              const recipeid = data.data.recipeID;
               if (response.ok) {
                 console.log('Recipe added successfully');
+                console.log(recipeid);
+                navigate(`/Recipe/${recipeid}`)
               } else {
                 console.error('Failed to add recipe:', response.statusText);
                 //if not valid jwt token redirect to login
                 navigate('/LoginPage')
               }
+              
             } catch (error) {
               console.error('Error:', error.message);
             }
