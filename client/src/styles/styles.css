@@ -382,7 +382,7 @@
   background-color: #ffe58e;
   border-radius: 10px;
   padding: 1%;
-  width: 80%;
+  width: 90%;
   margin: auto;
 }
 
@@ -532,7 +532,7 @@
 .searchbutton:hover {
   box-shadow: 2px 2px 5px #888888;
 }
-@media screen and (max-width: 1064px) {
+@media screen and (max-width: 1200px) {
   input {
     width: 80%;
   }
@@ -544,7 +544,7 @@
     width: 50%;
   }
   .search {
-    margin-top: 70px;
+    margin-top: 100px;
     flex-direction: column;
     
 
@@ -555,10 +555,10 @@
 
   }
   .searchform {
-
+    height: 260px;
   }
   .searchbutton {
-    margin-top: 50px;
+    margin-top: 77px;
   }
   
   .reciperow {
@@ -583,11 +583,7 @@
     
     width: 50%;
   }
-  .search {
-    margin-top: 70px;
-    flex-direction: column;
 
-  }
   .search-option {
     display: flex;
     justify-content: space-between;
@@ -595,10 +591,7 @@
   }
   .searchform {
     width: 450px;
-    height: 200px;
-  }
-  .searchbutton {
-    margin-top: 50px;
+
   }
 
 
@@ -670,22 +663,15 @@
   input {
     width: 50%;
   }
-  .search {
-    margin-top: 70px;
-    flex-direction: column;
 
-  }
   .search-option {
     display: flex;
     justify-content: space-between;
 
   }
   .searchform {
-    width: 300px;
-    height: 200px;
-  }
-  .searchbutton {
-    margin-top: 50px;
+    width: 350px;
+
   }
   .reciperow {
     width:350px;
@@ -745,14 +731,16 @@
 
 
   }
-  .searchbutton {
-    margin-top: 50px;
-  }
 
   .reciperesults td {
     display: flex;
     width:250px;
     flex-wrap: wrap;
+
+  }
+
+  .searchform {
+    width: 250px;
 
   }
 

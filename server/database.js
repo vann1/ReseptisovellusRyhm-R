@@ -180,7 +180,7 @@ const getRecipeFromDatabase = async (req, res) => {
   //userid for getting recipe for certain user
   const userid = req.params.userId;
   // Destructure parameters from the request body
-  const { recipeName, recipeCategory, recipeTag, recipeUsername, recipeOwnerName, recipeid } = req.body;
+  const { recipeName, recipeCategory, recipeTag, recipeUsername, recipeOwnerName, recipeid, ingredientName } = req.body;
 
   try {
     await connectToDatabase();
@@ -189,7 +189,13 @@ const getRecipeFromDatabase = async (req, res) => {
     const request = pool.request();
 
     // Build the query based on the provided parameters
-    let query = 'SELECT recipes.*, users.username, users.name FROM recipes INNER JOIN users ON recipes.userid = users.userid WHERE 1=1'; // Start with a true condition
+    let query = 'SELECT recipes.*, users.username, users.name FROM recipes INNER JOIN users ON recipes.userid = users.userid'; // Start with a true condition
+
+    if(ingredientName) {
+      query += ' INNER JOIN ingredients ON recipes.recipeid = ingredients.recipeid';
+    }
+
+    query += ' WHERE 1=1';
 
     if (recipeName) {
       query += ' AND recipes.recipename LIKE @recipeName';
@@ -231,7 +237,10 @@ const getRecipeFromDatabase = async (req, res) => {
       query += ' AND recipeid LIKE @recipeid';
       request.input('recipeid', sql.NVarChar, `%${recipeidparams}%`);
     }
-    
+    if (ingredientName) {
+      query += ' AND ingredients.ingredientname LIKE @ingredient';
+      request.input('ingredient', sql.NVarChar, `%${ingredientName}%`);
+    }
     // Execute the query
     const result = await request.query(query);
 

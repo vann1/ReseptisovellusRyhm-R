@@ -10,6 +10,7 @@ const SearchPage = () => {
   const [recipeTag, setrecipeTag] = useState('');
   const [recipeUsername, setrecipeUsername] = useState('');
   const [recipeownerName, setrecipeownerName] = useState('');
+  const [ingredientName, setIngredientName] = useState(''); 
   const [searchResults, setSearchResults] = useState([]);
   const [recipeid, setrecipeID] = useState('');
   const {user} = useAuthContext();
@@ -28,6 +29,7 @@ const SearchPage = () => {
           recipeTag,
           recipeUsername,
           recipeownerName,
+          ingredientName
         }),
       });
   
@@ -99,6 +101,11 @@ const SearchPage = () => {
               <label>Nimimerkki:</label>
               <br></br>
               <input type="text" value={recipeUsername} onChange={(e) => setrecipeUsername(e.target.value)} />
+            </div>
+            <div className='search-option'>
+              <label>Ainesosa:</label>
+              <br></br>
+              <input type="text" value={ingredientName} onChange={(e) => setIngredientName(e.target.value)} />
             </div>
           </div>
           {/* <div>
