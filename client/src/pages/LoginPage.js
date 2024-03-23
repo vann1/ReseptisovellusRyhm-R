@@ -41,8 +41,7 @@ const LoginPage = () => {
     }
   };
   return (
-    <div>
-      <h1>Kirjaudu</h1>
+    <div className='Login-container'>
       <LoginForm virheViesti={virheViesti}  isLoading={isLoading} onLogin={handleLogin}></LoginForm>
     </div>
   );

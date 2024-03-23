@@ -174,10 +174,12 @@
 .pError {
     color :red;
     font-size: 80%;
-    margin-top:-30px;
-    margin-bottom: -8px;
+    margin-top:-25px;
+    margin-bottom: -13px;
 
 }
+
+
 .regInput {
     padding: 5px;
     margin-bottom: 30px;
@@ -186,7 +188,7 @@
     display: inline-block;
     width: 20px;
     height: 20px;
-    left: 10px;
+    left: 40px;
     background-color: gray;
     border-radius: 50%;
     text-align: center;
@@ -194,6 +196,8 @@
     color: white;
     position: relative;
     cursor: pointer;
+    margin-left: -20px;
+
   }
   
   .infoText::after {
@@ -533,14 +537,13 @@
   box-shadow: 2px 2px 5px #888888;
 }
 @media screen and (max-width: 1200px) {
-  input {
+  .search-input {
     width: 80%;
   }
 }
 
 @media screen and (max-width: 844px) {
-  input {
-    
+  .search-input {
     width: 50%;
   }
   .search {
@@ -579,8 +582,7 @@
 }
 
 @media (max-width: 660px) {
-  input {
-    
+  .search-input {
     width: 50%;
   }
 
@@ -660,7 +662,7 @@
 
 
 @media (max-width: 500px) {
-  input {
+  .search-input {
     width: 50%;
   }
 
@@ -926,4 +928,126 @@
   background-color: #ffe58e;
   margin: 20px;
 }
+/*SHOW RECIPE ENDS*/
 
+
+
+
+
+
+
+
+/*RegisterPage Style*/
+
+.Register-container {
+  width: 100%;
+  max-width: 1200px; /* Maksimileveys */
+  margin: 0 auto; /* Keskitä container */
+  padding: 0 15px; /* Lisää sisätilaa tarpeidesi mukaan */
+  box-sizing: border-box; /* Sisällytä reunukset ja täytöt leveyteen */
+  word-wrap: break-word;
+  text-align: center;
+  height: 94vh;
+  display: flex; 
+  justify-content: center; 
+  align-items: center; 
+  background-color: #fcf3d886;
+}
+
+.Register-form {
+  width: 380px;
+  background-color:  #ffe58e;
+  box-shadow: 2px 2px 5px 5px#888888;
+  height: 515px;
+
+}
+
+.Register-h1 {
+  color: #624e08;
+  display: flex;
+  justify-content: center;
+  margin-bottom: -10px;
+  margin-top: 0px;
+}
+
+.Register-button {
+  background-color: #ff9900; 
+  color:#fff; 
+  padding: 10px 60px; 
+  border: none;
+  border-radius: 20px;
+  cursor: pointer; 
+  font-weight: bold;
+}
+
+.Register-button:hover {
+  background-color: green;
+}
+.Register-p {
+  margin-bottom: 30px;
+}
+.register-input-field {
+  font-family: Arial, sans-serif;
+  font-size: 16px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  outline: none;
+  transition: border-color 0.3s;
+}
+
+.register-input-field:focus {
+  border-color: #ff9900;
+  box-shadow: 2px 2px 5px #ff9900;
+}
+
+.register-inputs {
+  margin-bottom: -20px;
+}
+.Register-success-message {
+  text-decoration: none;
+  color: green;
+}
+
+.Register-success-message:hover {
+  text-shadow: 2px 2px 10px #888888; /* Muutetaan tekstivarjoa hiiren ollessa linkin päällä */
+}
+
+
+/*RegisterPage Style ENDS*/
+
+
+
+
+
+/*LoginPage Style STARTS*/
+
+.Login-container {
+  width: 100%;
+  max-width: 1200px; /* Maksimileveys */
+  margin: 0 auto; /* Keskitä container */
+  padding: 0 15px; /* Lisää sisätilaa tarpeidesi mukaan */
+  box-sizing: border-box; /* Sisällytä reunukset ja täytöt leveyteen */
+  word-wrap: break-word;
+  text-align: center;
+  height: 94vh;
+  display: flex; 
+  justify-content: center; 
+  align-items: center; 
+  background-color: #fcf3d886;
+}
+
+.Login-form {
+  width: 380px;
+  background-color:  #ffe58e;
+  box-shadow: 2px 2px 5px 5px#888888;
+  height: 400px;
+
+}
+
+.login-inputs {
+  margin-bottom: -20px;
+}
+
+
+/*LoginPage Style ENDS*/

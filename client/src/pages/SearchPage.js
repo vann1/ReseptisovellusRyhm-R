@@ -85,27 +85,27 @@ const SearchPage = () => {
             <div className='search-option'>
               <label>Resepti nimi:</label>
               <br></br>
-              <input type="text" value={recipeName} onChange={(e) => setrecipeName(e.target.value)} />
+              <input className="search-input" type="text" value={recipeName} onChange={(e) => setrecipeName(e.target.value)} />
             </div>
             <div className='search-option'>
               <label>Kategoria:</label>
               <br></br>
-              <input type="text" value={recipeCategory} onChange={(e) => setrecipeCategory(e.target.value)} />
+              <input className="search-input" type="text" value={recipeCategory} onChange={(e) => setrecipeCategory(e.target.value)} />
             </div>
             <div className='search-option'>
               <label>Tagi:</label>
               <br></br>
-              <input type="text" value={recipeTag} onChange={(e) => setrecipeTag(e.target.value)} />
+              <input className="search-input" type="text" value={recipeTag} onChange={(e) => setrecipeTag(e.target.value)} />
             </div>
             <div className='search-option'>
               <label>Nimimerkki:</label>
               <br></br>
-              <input type="text" value={recipeUsername} onChange={(e) => setrecipeUsername(e.target.value)} />
+              <input className="search-input" type="text" value={recipeUsername} onChange={(e) => setrecipeUsername(e.target.value)} />
             </div>
             <div className='search-option'>
               <label>Ainesosa:</label>
               <br></br>
-              <input type="text" value={ingredientName} onChange={(e) => setIngredientName(e.target.value)} />
+              <input className="search-input" type="text" value={ingredientName} onChange={(e) => setIngredientName(e.target.value)} />
             </div>
           </div>
           {/* <div>
@@ -130,7 +130,7 @@ const SearchPage = () => {
                     <div className='search-top'>
                       <div className='search-top-column'>
                       <Link className='recipename' to={`/Recipe/${recipe.recipeid}`}>
-                        <p className='border4name'></p><h2 >Reseptin nimi: {recipe.recipename}</h2>
+                        <p className='border4name'></p><h2 >Resepti nimi: {recipe.recipename}</h2>
                       </Link>{" "}
                       <h3 className='recipecategory'>Kategoria: {recipe.category}</h3>
                       </div>

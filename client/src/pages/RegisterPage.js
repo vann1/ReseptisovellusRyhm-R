@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import RegisterForm from '../components/RegisterForm';
-import {useNavigate} from "react-router-dom"
-
+import {useNavigate, Link} from "react-router-dom"
+import '../styles/styles.css'
 const RegisterPage = () => {
   const navigate = useNavigate();
   const [signinsuccess, setSigninsuccess] = useState(false);
@@ -30,11 +30,10 @@ const RegisterPage = () => {
   return (
     <div>
       {signinsuccess ? 
-      <div>
-      <h1>Rekisteröityminen onnistui! Voit nyt kirjautua.</h1> 
+      <div className='Register-container'>
+      <h1>Rekisteröityminen onnistui! Voit nyt kirjautua<Link to="/LoginPage"  className='Register-success-message'> tästä linkistä.</Link></h1>
       </div>:
-      <div>
-      <h1>Rekisteröidy</h1>
+      <div className='Register-container'>
       <RegisterForm onRegister={handleRegister} />
       </div>}
     </div>

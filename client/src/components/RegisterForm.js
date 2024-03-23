@@ -119,13 +119,20 @@ const RegisterForm = ({ onRegister }) => {
   }
   
   return (
-    <div>
+    <div className='Register-form'>
+      <div className='Register-h1'>
+          <h1>Rekisteröidy</h1>
+      </div>
+      <div className='Register-p'>
+        <p>Tervetuloa Ressuun! Voit luoda Ressu-käyttäjän alhaalla olevalla lomakkeella.</p>
+      </div>
+      <div className='register-inputs'>
       <input
         type="text"
         placeholder="Nimi"
         value={name}
         onChange={(e) => setName(e.target.value)}
-        className="regInput"
+        className="regInput register-input-field"
       />
       {errorMessages.name && (
         <p className="pError">{errorMessages.name}</p>
@@ -136,7 +143,7 @@ const RegisterForm = ({ onRegister }) => {
         placeholder="Salasana"
         value={password}
         onChange={(e) => setPassword(e.target.value)}
-        className="regInput"
+        className="regInput register-input-field"
       />
       {errorMessages.password && (
         <p className="pError">{errorMessages.password}</p>
@@ -147,7 +154,7 @@ const RegisterForm = ({ onRegister }) => {
         placeholder="Sähköposti"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
-        className="regInput"
+        className="regInput register-input-field"
       />
       {errorMessages.email && <span className="infoText">?</span>}
     {errorMessages.email && <p className="pError">{errorMessages.email}</p>}
@@ -157,11 +164,14 @@ const RegisterForm = ({ onRegister }) => {
         placeholder="Nimimerkki"
         value={username}
         onChange={(e) => setUsername(e.target.value)}
-        className="regInput"
+        className="regInput register-input-field"
       />
       {errorMessages.username && <p className="pError">{errorMessages.username}</p>}
+      </div>
       <br></br>
-      <button onClick={handleRegister} disabled={disabled}>Luo käyttäjä</button>
+      <div className='Register-button-div'>
+      <button  className='Register-button' onClick={handleRegister} disabled={disabled}>Luo käyttäjä</button>'
+      </div>
       <br></br>
       <br></br>
       <br></br>
