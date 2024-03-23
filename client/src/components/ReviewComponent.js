@@ -169,11 +169,12 @@ const RatingComponent = (props) => {
                     placeholder="Leave a comment..."
                     value={comment}
                     onChange={handleCommentChange}
+                    className="regInput register-input-field"
                   />
                 </div>
                 {/* Submit button */}
                 <div style={{ marginTop: '10px' }}>
-                  <button onClick={handleSubmit}>Send Rating</button>
+                  <button className='Register-button' onClick={handleSubmit}>Send Rating</button>
                 </div>
                 </div>
 

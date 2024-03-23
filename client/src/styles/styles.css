@@ -906,28 +906,42 @@
 .compartment-container {
   display: flex;
   flex: 1;
-  gap: 30px;
+  gap: 10px;
 }
 
 .compartment1 {
   flex: 1;
-  padding: 20px;
+  padding: 15px;
   background-color: #ffe58e;
-  margin: 20px;
+  margin: 15px; 
+  border-radius: 10px;
 }
 .compartment2 {
   flex: 1;
-  padding: 20px;
+  padding: 15px;
   background-color: #ffe58e;
-  margin: 20px;
+  margin: 15px;
+  border-radius: 10px;
 }
 
 .compartment3 {
   padding: 20px;
-  border: 1px solid #ccc;
   background-color: #ffe58e;
-  margin: 20px;
+  margin: 15px;
+  border-radius: 10px;
 }
+
+.recipenameshow {
+  border-left: solid 5px;
+  display: flex;
+  color: #624e08;
+  text-decoration: none;
+  padding: 10px;
+}
+.recipeimageshow {
+
+}
+
 /*SHOW RECIPE ENDS*/
 
 

@@ -52,9 +52,9 @@ const ShowRecipe = () => {
                 <div className='compartment1'>
                   {recipe.images && (
                     <div>
-                      <h1>{recipe.recipename}</h1>
+                      <h1 className="recipenameshow ">{recipe.recipename}</h1>
                       {/* Convert Buffer object to base64 encoded string */}
-                      <img src={`data:image/jpeg;base64,${arrayBufferToBase64(recipe.images.data)}`} alt="Recipe Image" style={{ maxWidth: '300px' }} />
+                      <img className='recipeimage' src={`data:image/jpeg;base64,${arrayBufferToBase64(recipe.images.data)}`} alt="Recipe Image" style={{ maxWidth: '300px' }} />
                     </div>
                   )}
                 </div>
