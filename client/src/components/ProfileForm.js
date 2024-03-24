@@ -87,24 +87,39 @@ const ProfileForm = () => {
       <div>
         {showNoRecipes ? <div> <h1>Sinulla ei ole vielä reseptejä</h1>
           </div> :
-          <div className="container-profile">
+          <div>
           {showInfo ? <div>
-            <h1 className="h1-profile">{userDetails.username}</h1>
-            <div>
+            <h1 className="h1-profile">Oma profiili</h1>
+            <div className="container-profile">
+            <div className="userinfo">
+            <p><strong>Käyttäjänimi: </strong> {userDetails.username}</p>
+            <p><strong>Nimi: </strong>{userDetails.name}</p>
+            <p><strong>Sähköposti: </strong>{userDetails.email}</p>
+            <p><strong>ID: </strong>{userDetails.userid}</p>
+            </div>
+            <h1 className="h1-profile">Omat reseptit</h1>
+            <div className="profilerecipes">
+              
               <table>
                 <thead className="thead-profile">
-                  <tr>
-                    <th>Omat Reseptit</th>
+                  <tr className="profilerecipethead">
+                    <th>Nimi</th>
+                    <th>Kategoria</th>
+                    <th>Poista</th>
                   </tr>
                 </thead>
                 <tbody>
                 {userRecipes.map((recipe, index) => (
-                <tr key={index}>
-                  <td className="td-profile">
+                <tr key={index} className="profilerecipetbody">
+                  <td>
                     <Link className="link-profile-recipe" to={`/userrecipe/${recipe.recipeid}`}>
                     <p className='border4name'></p><p>{recipe.recipename}</p>
                     </Link>{" "}
-                    <p className="p-profile-category">{recipe.category}</p>
+                  </td>
+                  <td>
+                    <p>{recipe.category}</p>
+                  </td>
+                  <td>
                     <button className="recipe-delete-button" onClick={() => deleteRecipe(recipe.recipeid)}>Poista</button>
                   </td>        
                 </tr>
@@ -112,6 +127,7 @@ const ProfileForm = () => {
                 </tbody>
               </table>
             </div>
+        </div>
           </div>: <h1>Ladataan...</h1>}
         </div>}
         </div>

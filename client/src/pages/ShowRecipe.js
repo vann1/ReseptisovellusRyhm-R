@@ -50,11 +50,15 @@ const ShowRecipe = () => {
             <div key={recipe.recipeid}>
               <div className='compartment-container'>
                 <div className='compartment1'>
-                  {recipe.images && (
+                  {recipe.images ? (
                     <div>
                       <h1 className="recipenameshow ">{recipe.recipename}</h1>
                       {/* Convert Buffer object to base64 encoded string */}
                       <img className='recipeimage' src={`data:image/jpeg;base64,${arrayBufferToBase64(recipe.images.data)}`} alt="Recipe Image" style={{ maxWidth: '300px' }} />
+                    </div>
+                  ):(
+                    <div>
+                      <h1 className="recipenameshow ">{recipe.recipename}</h1>
                     </div>
                   )}
                 </div>
