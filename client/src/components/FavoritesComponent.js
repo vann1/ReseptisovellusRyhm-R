@@ -5,20 +5,20 @@ import { Link } from 'react-router-dom';
 
 const FavoritesComponent = () => {
     const {user} = useAuthContext();
-    const [userid, setuserid] = useState('');
+    
     const [userfavorites, setuserfavorites] = useState([]);
     const [showInfo, setShowInfo] = useState(false)
 
 
     const SearchReviews = async () => {
-        setuserid(user.userid);
+      const userid = user.userid;
         try {
           const response = await fetch(`http://localhost:3001/api/review/favorites/${userid}`, {
             method: 'GET',
             headers: {
               'Content-Type': 'application/json',
             }
-          });
+          }); 
         const data = await response.json();
           if (response.ok) {
             setShowInfo(true);
@@ -59,16 +59,16 @@ const FavoritesComponent = () => {
         {showInfo ? <div>
 
         {userfavorites.length > 0 && (
-        <div className='reciperesults'>
+        <div>
           <table >
             <thead  className='reciperesult-thead'>
               <tr>
-                <th>Sinun suosikkisi</th>
+                <th style={{fontSize : '34px'}}>Sinun suosikkisi</th>
               </tr>
             </thead>
             <tbody>
               {userfavorites.map((recipe, index) => (
-                <tr key={index} className='reciperow'>
+                <tr key={index} className='favoritereciperow'>
                     <td>
                       <div className='search-flex'>
                     <div className='search-top'>
@@ -79,7 +79,7 @@ const FavoritesComponent = () => {
                       <p className='recipecategory'><strong>Kategoria: </strong><br/>{recipe.category}</p>
                       <p><strong>Kuvaus: </strong><br/>{recipe.description}</p>
                       </div>
-                      <div className='search-image'>
+                      <div className='favoritesearch-image'>
                       {recipe.images ?
                           <img   className='recipeimage'  src={`data:image/jpeg;base64,${arrayBufferToBase64(recipe.images.data)}`} alt="Recipe Image"/> :
                           <img   className='alterimage' src="/pics/noimage.png" alt="No Image"/>}

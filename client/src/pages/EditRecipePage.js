@@ -187,7 +187,6 @@ const EditRecipePage = () => {
   //Heittää consoleen mitä tallentuu, tietokanta yhteys myöhemmin
   //Varmistaa että kentät eivät ole tyhjiä
   const editBtnClick = async () => {
-    console.log(selectedFile);
     if (RecipeName) {
       if (RecipeCategory){
           if(RecipeGuide){

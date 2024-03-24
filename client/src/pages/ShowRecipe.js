@@ -50,7 +50,7 @@ const ShowRecipe = () => {
             <div key={recipe.recipeid}>
               <div className='compartment-container'>
                 <div className='compartment1'>
-                  {recipe.images && (
+                  {recipe.images ? (
                     <div>
                       <h1 className="recipenameshow ">{recipe.recipename}</h1>
                       {/* Convert Buffer object to base64 encoded string */}
@@ -61,6 +61,10 @@ const ShowRecipe = () => {
                         <input type="text"></input>
                         <button>Lähetä</button>
                       </div>
+                    </div>
+                  ):(
+                    <div>
+                      <h1 className="recipenameshow ">{recipe.recipename}</h1>
                     </div>
                   )}
                 </div>

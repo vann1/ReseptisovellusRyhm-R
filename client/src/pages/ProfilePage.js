@@ -8,9 +8,13 @@ const ProfilePage = () => {
 
 
   return (
-    <div>
+    <div className='profile-background'>
+      <div className='profile-component'>
       <ProfileForm></ProfileForm>
+      </div>
+      <div className='favorites'>
       <FavoritesComponent/>
+      </div>
     </div>
   );
 };
