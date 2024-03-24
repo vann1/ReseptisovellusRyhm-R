@@ -7,9 +7,10 @@ import { useAuthContext } from "../hooks/useAuthContext";
 
 const ShowRecipe = () => {
   const [searchResults, setSearchResults] = useState([]);
+  const [reciverEmail, setReciverEmail] = useState('');
   const { recipeId } = useParams();
   const {user} = useAuthContext();
-
+  const [localhostAddress, setLocalhostAddress] = useState('http://localhost:3000/Recipe/' + recipeId);
   const handleSearch = async () => {
     try {
       const response = await fetch('http://localhost:3001/api/recipe/search', {
@@ -41,6 +42,32 @@ const ShowRecipe = () => {
     handleSearch();
   }, [recipeId]);
 
+
+  const sendRecipeToEmail = async () => {
+    console.log(localhostAddress, user.email, reciverEmail)
+    try {
+      const response = await fetch('http://localhost:3001/api/email/send', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          recipePageAddress: localhostAddress,
+          senderEmail: user.email,
+          reciverEmail: reciverEmail
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      console.log("Resepti lähetetty sähköpostiin")
+    } catch (error) {
+      console.error('Error sending recipe to email:', error.message);
+    }
+
+  }
+
  
   return (
     <div className='app'>
@@ -55,11 +82,11 @@ const ShowRecipe = () => {
                       <h1 className="recipenameshow ">{recipe.recipename}</h1>
                       {/* Convert Buffer object to base64 encoded string */}
                       <img className='recipeimage' src={`data:image/jpeg;base64,${arrayBufferToBase64(recipe.images.data)}`} alt="Recipe Image" style={{ maxWidth: '300px' }} />
-                      <div>
+                      <div className='email-form'>
                         <h3>Jaa resepti</h3>
                         <label>Sähköposti: </label>
-                        <input type="text"></input>
-                        <button>Lähetä</button>
+                        <input className='email-input-field' type="text" onChange={(e) => setReciverEmail(e.target.value)}></input>
+                        <button className="email-send-button" onClick={() => sendRecipeToEmail()}>Lähetä</button>
                       </div>
                     </div>
                   ):(
