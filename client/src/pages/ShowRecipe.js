@@ -55,6 +55,12 @@ const ShowRecipe = () => {
                       <h1 className="recipenameshow ">{recipe.recipename}</h1>
                       {/* Convert Buffer object to base64 encoded string */}
                       <img className='recipeimage' src={`data:image/jpeg;base64,${arrayBufferToBase64(recipe.images.data)}`} alt="Recipe Image" style={{ maxWidth: '300px' }} />
+                      <div>
+                        <h3>Jaa resepti</h3>
+                        <label>Sähköposti: </label>
+                        <input type="text"></input>
+                        <button>Lähetä</button>
+                      </div>
                     </div>
                   )}
                 </div>
