@@ -942,6 +942,40 @@
 .recipeimageshow {
 
 }
+.email-input-field {
+  font-family: Arial, sans-serif;
+  font-size: 16px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  outline: none;
+  transition: border-color 0.3s;
+}
+.email-input-field:focus {
+  border-color: #ff9900;
+  box-shadow: 2px 2px 5px #ff9900;
+}
+
+
+.email-send-button {
+  background-color: #ff9900; 
+  color:#fff; 
+  padding: 10px 30px; 
+  border: none;
+  border-radius: 20px;
+  cursor: pointer; 
+  font-weight: bold;
+  margin-left: 20px;
+}
+
+.email-send-button:hover {
+  background-color: green;
+}
+.email-form {
+  padding: 10px;
+  background-color: #fcebb3;
+  border-radius: 10px;
+}
 
 /*SHOW RECIPE ENDS*/
 /*RECIPE REVIEW STARTS*/

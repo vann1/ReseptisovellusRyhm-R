@@ -9,7 +9,7 @@ const userRoutes = require("./routes/userRoutes");
 const recipeRoutes = require("./routes/recipeRoutes");
 const ingredientsRoutes = require("./routes/ingredientsRoutes");
 const reviewRoutes = require("./routes/reviewRoutes")
-
+const emailRoutes = require("./routes/emailRoutes")
 app.use(cors()); // Enable CORS for all routes
 app.use(bodyParser.json());
 
@@ -30,6 +30,9 @@ app.use("/api/recipe", recipeRoutes);
 app.use("/api/ingredients", ingredientsRoutes);
 
 app.use("/api/review", reviewRoutes);
+
+app.use("/api/email", emailRoutes);
+
 const port = process.env.PORT || 3001;
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
