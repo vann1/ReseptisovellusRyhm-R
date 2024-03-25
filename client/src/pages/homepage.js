@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 const HomePage = () => {
     const [input, setInput] = useState('');
     const searchRecipes = async () => {
+        console.log(input);
         try {
             console.log("lol")
             const response = await fetch("http://localhost:3001/api/recipe/searchAll", {

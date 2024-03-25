@@ -772,8 +772,8 @@ const searchRecipesFromDatabase = async (req, res) => {
   try {
     await connectToDatabase();
 
-    let query = `
-    SELECT DISTINCT
+    const query = `
+    SELECT distinct
     r.recipeid, 
     r.userid, 
     r.recipename, 
@@ -791,18 +791,17 @@ LEFT JOIN
 INNER JOIN 
     [dbo].[users] u ON r.userid = u.userid
   WHERE 
-    r.recipename LIKE '@input' OR
-    r.category LIKE '@input' OR
-    r.tags LIKE '@input' OR
-    r.description LIKE '@input' OR
-    i.ingredientname LIKE '@input' OR
-    u.username LIKE '@input' OR
-    u.name LIKE '@input';`;
+    r.recipename LIKE @input OR
+    r.category LIKE @input OR
+    r.tags LIKE @input OR
+    r.description LIKE @input OR
+    i.ingredientname LIKE @input OR
+    u.username LIKE @input OR
+    u.name LIKE @input;`;
 
     const result = await pool.request()
-      .input('input', sql.NVarChar, `%${input}%`)
+      .input('input', sql.NVarChar, input)
       .query(query);
-
     return result.recordset;
   } catch (error) {
     console.error(error);
