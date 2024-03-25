@@ -67,7 +67,6 @@ const deleteRecipeImage = async (req,res) => {
 const searchRecipes = async (req,res) => {
     try {
         const result = await searchRecipesFromDatabase(req, res);
-        console.log(result)
         if(!result) {
             return notFound(res, "not ok")
         }

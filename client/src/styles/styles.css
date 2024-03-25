@@ -621,7 +621,7 @@
 .search-top {
   display: flex;
   flex-direction: row;
-
+  
 }
 
 
@@ -997,6 +997,7 @@
     padding:10px;
    justify-content: center;
     align-items: center;
+    width: 100%;
 }
 
 .favoritereciperow {
@@ -1009,15 +1010,19 @@
   
 }
 
+.favoritestable{
+  width: 100%;
+}
+
 .favoritesearch-image {
   margin-right: 1%;
-
+  
 }
 
 
 .profile-component{
     padding:10px;
-  
+    
 }
 
 .profilerecipes{

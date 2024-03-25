@@ -774,6 +774,8 @@ const searchRecipesFromDatabase = async (req, res) => {
 
     const query = `
     SELECT distinct
+    r.description,
+    r.images,
     r.recipeid, 
     r.userid, 
     r.recipename, 
