@@ -96,10 +96,10 @@ const ShowRecipe = () => {
                   )}
                 </div>
                 <div className='compartment2'>
-                  <p><strong>Category:</strong> {recipe.category}</p>
-                  <p><strong>Description:</strong> {recipe.description}</p>
-                  <p><strong>Tags:</strong> {recipe.tags}</p>
-                  <p><strong>Instructions:</strong> {recipe.instructions}</p>
+                  <p><strong>Kategoria:</strong> {recipe.category}</p>
+                  <p><strong>Kuvaus:</strong> {recipe.description}</p>
+                  <p><strong>Tagit:</strong> {recipe.tags}</p>
+                  <p><strong>Ohje:</strong> {recipe.instructions}</p>
                 </div>  
               </div>
               <div className='compartment3'>
