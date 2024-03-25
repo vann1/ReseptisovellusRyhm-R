@@ -1,30 +1,13 @@
+import React, { useState } from "react";
+import "../styles/styles.css";
 
-import { useState } from "react";
-import '../styles/styles.css';
+const LostPasswordForm = ({ errorMessage, successMessage, clearMessages, isLoading, sendReturnCode }) => {
+  const [email, setEmail] = useState("");
 
-const LostPasswordForm = ({ errorMessage, isLoading }) => {
-  const [email, setEmail] = useState('');
-  
-  const sendReturnCode = async () => {
-    try {
-      const response = await fetch('http://localhost:3001/api/email/recover', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email }),
-      });
-
-      if (!response.ok) {
-        const data = await response.json();
-        throw new Error(data.error);
-      }
-      
-    } catch (error) {
-      console.error('Error sending password recovery email:', error);
-      // Set the error message in the parent component
-    }
-  }
+  const handleSendReturnCode = () => {
+    clearMessages();
+    sendReturnCode(email);
+  };
 
   return (
     <div>
@@ -36,10 +19,14 @@ const LostPasswordForm = ({ errorMessage, isLoading }) => {
         className="regInput"
       />
       <br />
-      <p className="loginError">{errorMessage}</p>
-      <button onClick={sendReturnCode} disabled={isLoading}>Palauta salasana</button>
+      <p>{errorMessage}</p>
+      <p>{successMessage}</p>
+      <button onClick={handleSendReturnCode} disabled={isLoading}>
+        Palauta salasana
+      </button>
     </div>
   );
 };
 
 export default LostPasswordForm;
+

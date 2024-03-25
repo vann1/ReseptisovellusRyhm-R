@@ -726,9 +726,48 @@ const isEmailRegistered = async (email) => {
     }
   }
 };
+/**
+ * Adds a new password for the specified user to the database.
+ * @param {string} email - The email of the user.
+ * @param {string} password - The new password to be added.
+ * @returns {boolean} Returns true if the password is successfully added to the database, otherwise false.
+ */
+const addPasswordToDatabase = async (email, password) => {
+  try {
+      // Create a connection to the database
+      await connectToDatabase();
+
+      // Initialize a new request object to send SQL queries
+      const request = pool.request();
+
+      // Encrypt the password for the database
+      const hashedPassword = await bcrypt.hash(password, 10);
+
+      // Define the SQL query to update the user's password in the database
+      const query = `
+          UPDATE [dbo].[users]
+          SET password = @password
+          WHERE email = @email
+      `;
+
+      // Execute the database query
+      await request
+          .input("password", sql.NVarChar, hashedPassword)
+          .input("email", sql.NVarChar, email)
+          .query(query);
+
+      return true; // Password added successfully
+  } catch (error) {
+      console.error("Error adding password to the database:", error);
+      return false; // Error occurred while adding password
+  } finally {
+      // Close the database connection
+      await closeDatabaseConnection();
+  }
+}
 
 
 
 module.exports = {deleteReviewInDatabase, editReviewInDatabase, addReviewToDatabase, getReviewFromDatabase, deleteRecipeImageFromDatabase, deleteRecipeFromDatabase, deleteIngredientFromDatabase ,addIngredientToDatabase,
    addUserToDatabase, getUserFromDatabase, addRecipeToDatabase, getRecipeFromDatabase, getAllUsersFromDatabase, deleteUserFromDatabase,
-    editRecipeToDatabase, getIngredientsFromDatabase, isEmailRegistered};
+    editRecipeToDatabase, getIngredientsFromDatabase, isEmailRegistered, addPasswordToDatabase};
