@@ -1,39 +1,43 @@
+
 import { useState } from "react";
 import '../styles/styles.css';
 
-const LostPasswordForm = ({ onLogin, virheViesti, isLoading }) => {
-  const [password, setPassword] = useState('');
+const LostPasswordForm = ({ errorMessage, isLoading }) => {
   const [email, setEmail] = useState('');
-  const [showForm, setShowForm] = useState(true);
-  const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   
-  const sendReturnCode = () => {
-    // Here you would typically send a reset code to the user's email
-    // For demonstration purposes, let's just show the success message
-    setShowForm(false);
-    setShowSuccessMessage(true);
+  const sendReturnCode = async () => {
+    try {
+      const response = await fetch('http://localhost:3001/api/email/recover', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email }),
+      });
+
+      if (!response.ok) {
+        const data = await response.json();
+        throw new Error(data.error);
+      }
+      
+    } catch (error) {
+      console.error('Error sending password recovery email:', error);
+      // Set the error message in the parent component
+    }
   }
 
   return (
     <div>
-      {showForm && (
-        <div>
-          <input
-            type="text"
-            placeholder="Sähköposti"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="regInput"
-          />
-          <br />
-          <p className="loginError">{virheViesti}</p>
-          <button onClick={sendReturnCode} disabled={isLoading}>Palauta salasana</button>
-          <br />
-        </div>
-      )}
-      {showSuccessMessage && (
-        <p>Palautuskoodi lähetetty</p>
-      )}
+      <input
+        type="text"
+        placeholder="Sähköposti"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        className="regInput"
+      />
+      <br />
+      <p className="loginError">{errorMessage}</p>
+      <button onClick={sendReturnCode} disabled={isLoading}>Palauta salasana</button>
     </div>
   );
 };

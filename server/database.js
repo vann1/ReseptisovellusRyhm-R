@@ -695,9 +695,40 @@ const deleteReviewInDatabase = async (req, res) => {
     }
   } 
 }; 
+/**
+ * Checks if the provided email is registered in the database.
+ * @param {string} email - The email to check.
+ * @returns {boolean} Returns true if the email is registered, otherwise returns false.
+ */
+const isEmailRegistered = async (email) => {
+  let connection;
+  try {
+    connection = await sql.connect(config);
+    const request = connection.request();
+
+    const query = `
+      SELECT COUNT(*) AS count
+      FROM [dbo].[users]
+      WHERE email = @email
+    `;
+    const result = await request
+      .input("email", sql.NVarChar, email)
+      .query(query);
+
+    const count = result.recordset[0].count;
+    return count > 0;
+  } catch (error) {
+    console.error("Error checking if email is registered in the database:", error);
+    throw error;
+  } finally {
+    if (connection) {
+      connection.close();
+    }
+  }
+};
 
 
 
 module.exports = {deleteReviewInDatabase, editReviewInDatabase, addReviewToDatabase, getReviewFromDatabase, deleteRecipeImageFromDatabase, deleteRecipeFromDatabase, deleteIngredientFromDatabase ,addIngredientToDatabase,
    addUserToDatabase, getUserFromDatabase, addRecipeToDatabase, getRecipeFromDatabase, getAllUsersFromDatabase, deleteUserFromDatabase,
-    editRecipeToDatabase, getIngredientsFromDatabase};
+    editRecipeToDatabase, getIngredientsFromDatabase, isEmailRegistered};

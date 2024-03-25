@@ -3,6 +3,7 @@ const router = express.Router();
 const {requireAuth} = require('../middlewares/authMiddleware');
 const {isJson} = require('../utils/requestUtils')
 const {sendEmail} = require('../controllers/email');
+const {sendPasswordRecoveryEmail } = require('../controllers/email');
 
 // router.use(requireAuth);
 
@@ -12,6 +13,25 @@ router.post('/send', async (req, res) => {
       return badRequest(res, "Content was not Json");
     }
     return sendEmail(req,res);
+  });
+
+  router.post('/recover', async (req, res) => {
+    try {
+      const { email } = req.body;
+      // Add any validation for email here if needed
+      
+      // Call the function to send password recovery email
+      const success = await sendPasswordRecoveryEmail(email);
+  
+      if (success) {
+        res.status(200).json({ message: 'Password recovery email sent successfully' });
+      } else {
+        res.status(404).json({ error: 'Email not registered' });
+      }
+    } catch (error) {
+      console.error('Error sending password recovery email:', error);
+      res.status(500).json({ error: 'Internal server error' });
+    }
   });
 
 module.exports = router;
