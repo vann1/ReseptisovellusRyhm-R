@@ -48,7 +48,6 @@ const ShowRecipe = () => {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${user.token}`
         },
       });
       const data = await response.json();

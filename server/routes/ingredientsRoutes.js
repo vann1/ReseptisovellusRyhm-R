@@ -7,7 +7,7 @@ const router = express.Router();
 const {getIngredients, addIngredient, deleteIngredient} = require("../controllers/ingredients")
 const {requireAuth} = require('../middlewares/authMiddleware')
 
-router.use(requireAuth);
+
 router.get('/:recipeId', async (req, res) => {
   if(!isJson) {
     //If it wasn't, the responseUtils.badRequest function is returned, which takes res and an error message as parameters.
@@ -15,6 +15,8 @@ router.get('/:recipeId', async (req, res) => {
   }
   return getIngredients(req, res);
 });
+
+router.use(requireAuth);
 router.post('/add', async (req, res) => {
   if(!isJson) {
     //If it wasn't, the responseUtils.badRequest function is returned, which takes res and an error message as parameters.
