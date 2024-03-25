@@ -235,6 +235,53 @@
   }
 
   /*UUSI RESEPTI SIVU JUTTUJA*/
+  .ingredient-delete-button{
+      background-color: #ff9900; 
+      color:#fff; 
+      padding: 1px 7px; 
+      border: none;
+      border-radius: 20px;
+      cursor: pointer; 
+      font-weight: bold;
+      margin-left: auto;
+  }
+  .ingredient-delete-button:hover{
+    background-color: red; 
+    box-shadow: 2px 2px 5px #888888;
+  }
+  
+  .ingredient-save-button {
+      background-color: #ff9900; 
+      color:#fff; 
+      padding: 10px 7px; 
+      border: none;
+      border-radius: 20px;
+      cursor: pointer; 
+      font-weight: bold;
+      margin-left: auto;
+      margin-bottom: -4px;
+  }
+  .ingredient-save-button:hover {
+    box-shadow: 2px 2px 5px #888888;
+    background-color: green;
+}
+  
+  .ingredient-add-button {
+    background-color: #ff9900; 
+    color:#fff; 
+    padding: 1px 7px; 
+    border: none;
+    border-radius: 20px;
+    cursor: pointer; 
+    font-weight: bold;
+    margin-left: auto;
+  }
+  .ingredient-add-button:hover {
+    background-color:green;
+    box-shadow: 2px 2px 5px #888888;
+}
+  
+ 
   .component-background {
     background-color: #fcf3d8;
     width: 90%;
@@ -256,21 +303,24 @@
   padding:10px;
   border-radius: 10px;
 }
+ 
+
+
 
  #newrecipesavebtn {
-  background-color: #ffc400;
+  background-color: #ff9900;
   border: none;
-  border-radius: 5px;
+  color:#fff; 
+  border-radius: 20px;
   cursor: pointer;
-  font-size: 16px;
   font-weight: bold;
-  height: 50px;
-  width: 100px;
+  padding: 10px 10px;
+  margin-left: 10px;
 }
 
 #newrecipesavebtn:hover{
-  background-color: #fccc30;
-  text-decoration: underline;
+  background-color: green;
+  text-decoration: none;
 }
 
 .category-grid {
@@ -311,9 +361,39 @@
   resize:none;
 }
 
+.recipe-input {
+  font-family: Arial, sans-serif;
+  border: 1px solid #ccc;
+  width: 90%;
+  border-radius: 5px;
+  outline: none;
+  transition: border-color 0.3s;
+}
+
+.recipe-input:focus {
+  border-color: #ff9900;
+  box-shadow: 2px 2px 5px #ff9900;
+}
+.recipebutton {
+  background-color: #ff9900; 
+  color:#fff; 
+  padding: 5px 7px; 
+  border: none;
+  border-radius: 20px;
+  cursor: pointer; 
+  font-weight: bold;
+  margin: 1px;
+}
 
 
-
+.recipebutton:hover {
+  background-color: green;
+  box-shadow: 2px 2px 5px #888888;
+}
+.recipebutton-delete:hover {
+  background-color: red;
+  box-shadow: 2px 2px 5px #888888;
+}
 .recipeGuideContainer {
   padding-top: 10%;
 }
@@ -1108,9 +1188,17 @@
   width: 100%;
   height: 100px;
   resize:none;
+  font-family: Arial, sans-serif;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  outline: none;
+  transition: border-color 0.3s;
 }
 
-
+.reviewtext:focus {
+  border-color: #ff9900;
+  box-shadow: 2px 2px 5px #ff9900;
+}
 #revieweditbtn {
   background-color: #ff9900;
   color:white;
@@ -1331,3 +1419,4 @@
 }
 
 /*AdminPage Style ENDS*/
+

@@ -203,7 +203,7 @@ const isValidIngredients = () => {
        <div className="newrecipe">
       <div className="recipehalf">
       <label>Reseptin nimi: <br></br></label>
-      <input type="text" value={RecipeName} onChange={RecipeNameChange} style={{width: '100%'}}/>
+      <input className='recipe-input' type="text" value={RecipeName} onChange={RecipeNameChange} style={{width: '100%'}}/>
       <br></br>
       <label>Reseptin kategoria:</label>
 <div className="category-grid">
@@ -245,6 +245,7 @@ const isValidIngredients = () => {
       <tr key={index}>
         <td>
           <input
+            className='recipe-input'
             type="number"
             min="0"
             value={ingredient.IngAmount}
@@ -255,6 +256,7 @@ const isValidIngredients = () => {
         <td>
           <select
             value={ingredient.IngMeasure}
+            className='recipe-input'
             onChange={(e) => handleInputChange(index, 'IngMeasure', e.target.value)}
           >
             {options.map((option, index) => (
@@ -266,6 +268,7 @@ const isValidIngredients = () => {
         </td>
         <td>
           <input
+            className='recipe-input'
             type="text"
             value={ingredient.IngName}
             onChange={(e) => handleInputChange(index, 'IngName', e.target.value)}
@@ -275,19 +278,19 @@ const isValidIngredients = () => {
     ))}
   </tbody>
 </table>
-  <button type="button" onClick={addIngredient}>Lisää Ainesosa</button>
-  <button type="button" onClick={deleteLastIngredient}>Poista ainesosa</button>
+  <button className='recipebutton' type="button" onClick={addIngredient}>Lisää Ainesosa</button>
+  <button className='recipebutton recipebutton-delete'  type="button" onClick={deleteLastIngredient}>Poista ainesosa</button>
 </div>
 
 </div>
         
       <div>
        <label>Reseptin kuvaus:<br></br></label>
-       <textarea type="text" value={RecipeDesc} onChange={RecipeDescChange} style={{height: '80px'}}></textarea>
+       <textarea className='recipe-input' type="text" value={RecipeDesc} onChange={RecipeDescChange} style={{height: '80px'}}></textarea>
        </div>
        <div>
        <label>tags:</label>
-       <textarea type="text" value={Tags} onChange={TagsChange}style={{height: '60px'}}></textarea>
+       <textarea className='recipe-input' type="text" value={Tags} onChange={TagsChange}style={{height: '60px'}}></textarea>
        </div>
 
       </div>
@@ -307,7 +310,7 @@ const isValidIngredients = () => {
   </div>
   <div className="recipeGuideContainer">
     <label>Reseptin ohje:</label>
-    <textarea type="text" value={RecipeGuide} onChange={RecipeGuideChange} style={{height: '300px'}}></textarea>
+    <textarea className='recipe-input' type="text" value={RecipeGuide} onChange={RecipeGuideChange} style={{height: '300px'}}></textarea>
   </div>
 </div>
 </div>

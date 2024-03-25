@@ -401,7 +401,7 @@ const handleDeleteImageButtonClick = (e) => {
     
       <div className="recipehalf">
       <label>Reseptin nimi:<br></br></label>
-      <input type="text" value={RecipeName} onChange={RecipeNameChange} />
+      <input type="text" className='recipe-input' value={RecipeName} onChange={RecipeNameChange} />
       <br></br>
       <label>Reseptin kategoria:</label>
       <div className="category-grid">
@@ -443,7 +443,7 @@ const handleDeleteImageButtonClick = (e) => {
       {ingredientsPlaceholder.map((ingredient, index) => (
         <tr key={index}>
           <td>
-            <input type="text" value={ingAmountArray[index] || ''} onChange={(event) => IngAmountChangeArray(event, index)} />
+            <input className='recipe-input' type="text" value={ingAmountArray[index] || ''} onChange={(event) => IngAmountChangeArray(event, index)} />
           </td>
           <td>
           {/* <select value={ingMeasureArray[index] || ''} onChange={(event) => IngMeasureChangeArray(event, index)}>
@@ -454,7 +454,7 @@ const handleDeleteImageButtonClick = (e) => {
                 </option>
               ))}
             </select> */}
-            <select value={ingMeasureArray[index] || ''} onChange={(event) => IngMeasureChangeArray(event, index)}>
+            <select className='recipe-input' value={ingMeasureArray[index] || ''} onChange={(event) => IngMeasureChangeArray(event, index)}>
               {options.map((option, index) => (
                 <option key={index} value={option}>
                   {option} 
@@ -463,24 +463,24 @@ const handleDeleteImageButtonClick = (e) => {
             </select>
           </td>
           <td>
-            <input type="text" value={ingNameArray[index] || ''} onChange={(event) => IngNameChangeArray(event, index)} />
+            <input className='recipe-input' type="text" value={ingNameArray[index] || ''} onChange={(event) => IngNameChangeArray(event, index)} />
           </td>
           <td>
-            <button onClick={() => {deleteIngredient(ingredientsPlaceholder[index].ingredientid)}}>Poista</button>
+            <button className='ingredient-delete-button' onClick={() => {deleteIngredient(ingredientsPlaceholder[index].ingredientid)}}>Poista</button>
           </td>
          </tr>
       ))}
       <tr>
         <td>
-         <button type="button" onClick={editIngredients}>Tallenna muutokset</button> {missingFieldsMessage && <div style={{ color: 'red' }}>{missingFieldsMessage}</div>}
+         <button type="button" className='ingredient-save-button' onClick={editIngredients}>Tallenna muutokset</button> {missingFieldsMessage && <div style={{ color: 'red' }}>{missingFieldsMessage}</div>}
         </td>
       </tr>
       <tr>
         <td>
-          <input type="text" value={IngAmount} onChange={IngAmountChange} />
+          <input type="text" className='recipe-input' value={IngAmount} onChange={IngAmountChange} />
         </td>
         <td>
-          <select  value={IngMeasure} onChange={IngMeasureChange}>
+          <select className='recipe-input' value={IngMeasure} onChange={IngMeasureChange}>
               {options.map((option, index) => (
                 <option key={index} value={option}>
                   {option}
@@ -489,10 +489,10 @@ const handleDeleteImageButtonClick = (e) => {
             </select>
         </td>
         <td>
-          <input type="text" value={IngName} onChange={IngNameChange} />
+          <input type="text" className='recipe-input' value={IngName} onChange={IngNameChange} />
         </td>
         <td>
-          <button type="submit" onClick={(e) => addIngredient(e)}>
+          <button className='ingredient-add-button' type="submit" onClick={(e) => addIngredient(e)}>
           Lisää
           </button>
         </td>
@@ -504,11 +504,11 @@ const handleDeleteImageButtonClick = (e) => {
 </div>
 
        <label>Reseptin kuvaus:</label>
-       <textarea type="text" value={RecipeDesc} onChange={RecipeDescChange} style={{height: '80px'}}></textarea>
+       <textarea className='recipe-input' type="text" value={RecipeDesc} onChange={RecipeDescChange} style={{height: '80px'}}></textarea>
        
        <div>
        <label>tags:</label>
-       <textarea type="text" value={Tags} onChange={TagsChange} style={{height: '80px'}}></textarea>
+       <textarea className='recipe-input' type="text" value={Tags} onChange={TagsChange} style={{height: '80px'}}></textarea>
        </div>
 
 
@@ -520,7 +520,7 @@ const handleDeleteImageButtonClick = (e) => {
  
      <div>
       <label>Reseptin kuva: <br></br></label>
-        <input type="file" accept=".jpg, .jpeg, .png" onChange={handleFileChange}/><button onClick={(e) => handleDeleteImageButtonClick(e)}>Poista kuva</button>
+        <input  type="file" accept=".jpg, .jpeg, .png" onChange={handleFileChange}/><button onClick={(e) => handleDeleteImageButtonClick(e)}>Poista kuva</button>
       <br></br>
       {imagePreview ?         
         
@@ -531,7 +531,7 @@ const handleDeleteImageButtonClick = (e) => {
       <div className="recipeGuideContainer">
         <label>Reseptin ohje:</label>
       
-        <textarea type="text" value={RecipeGuide} onChange={RecipeGuideChange} style={{height: '300px'}}></textarea>
+        <textarea className='recipe-input' type="text" value={RecipeGuide} onChange={RecipeGuideChange} style={{height: '300px'}}></textarea>
       </div>
       
      

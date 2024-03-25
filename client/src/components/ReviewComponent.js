@@ -212,7 +212,7 @@ const RatingComponent = (props) => {
                   /> Lisää suosikkeihin.
                 </div>
                 <div style={{ marginTop: '10px' }}>
-                  <textarea
+                  <textarea 
                     placeholder="Leave a comment..."
                     value={comment}
                     onChange={handleCommentChange}
