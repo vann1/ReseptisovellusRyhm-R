@@ -1,5 +1,5 @@
 const {badRequest, created, internalServerError, notFound, ok} = require('../utils/responseUtils')
-const {addRecipeToDatabase, getRecipeFromDatabase, editRecipeToDatabase, deleteRecipeFromDatabase, deleteRecipeImageFromDatabase} = require('../database')
+const {searchRecipesFromDatabase, addRecipeToDatabase, getRecipeFromDatabase, editRecipeToDatabase, deleteRecipeFromDatabase, deleteRecipeImageFromDatabase} = require('../database')
 
 const addRecipe = async (req, res) => {
     try {
@@ -64,4 +64,18 @@ const deleteRecipeImage = async (req,res) => {
 }
 
 
-module.exports = {deleteRecipeImage, deleteRecipe,addRecipe, SearchRecipe, editRecipe}
+const searchRecipes = async (req,res) => {
+    try {
+        const result = await searchRecipesFromDatabase(req, res);
+        console.log(result)
+        if(!result) {
+            return notFound(res, "not ok")
+        }
+        return ok(res, "Its ok", {data: result});
+    } catch (error) {
+        return internalServerError(res, "Internal server error")
+    }
+}
+
+
+module.exports = {searchRecipes,deleteRecipeImage, deleteRecipe,addRecipe, SearchRecipe, editRecipe}

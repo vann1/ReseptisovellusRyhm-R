@@ -766,8 +766,54 @@ const addPasswordToDatabase = async (email, password) => {
   }
 }
 
+const searchRecipesFromDatabase = async (req, res) => {
+  const { input } = req.body; // Oletetaan, että input sisältää käyttäjän antaman syötteen
+
+  try {
+    await connectToDatabase();
+
+    let query = `
+    SELECT DISTINCT
+    r.recipeid, 
+    r.userid, 
+    r.recipename, 
+    r.category, 
+    r.tags,
+    u.username, 
+    u.email, 
+    u.name
+FROM 
+    [dbo].[recipes] r
+LEFT JOIN 
+    [dbo].[reviews] rv ON r.recipeid = rv.recipeid
+LEFT JOIN 
+    [dbo].[ingredients] i ON r.recipeid = i.recipeid
+INNER JOIN 
+    [dbo].[users] u ON r.userid = u.userid
+  WHERE 
+    r.recipename LIKE '@input' OR
+    r.category LIKE '@input' OR
+    r.tags LIKE '@input' OR
+    r.description LIKE '@input' OR
+    i.ingredientname LIKE '@input' OR
+    u.username LIKE '@input' OR
+    u.name LIKE '@input';`;
+
+    const result = await pool.request()
+      .input('input', sql.NVarChar, `%${input}%`)
+      .query(query);
+
+    return result.recordset;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  } finally {
+    await closeDatabaseConnection();
+  }
+};
 
 
-module.exports = {deleteReviewInDatabase, editReviewInDatabase, addReviewToDatabase, getReviewFromDatabase, deleteRecipeImageFromDatabase, deleteRecipeFromDatabase, deleteIngredientFromDatabase ,addIngredientToDatabase,
+
+module.exports = {searchRecipesFromDatabase,deleteReviewInDatabase, editReviewInDatabase, addReviewToDatabase, getReviewFromDatabase, deleteRecipeImageFromDatabase, deleteRecipeFromDatabase, deleteIngredientFromDatabase ,addIngredientToDatabase,
    addUserToDatabase, getUserFromDatabase, addRecipeToDatabase, getRecipeFromDatabase, getAllUsersFromDatabase, deleteUserFromDatabase,
     editRecipeToDatabase, getIngredientsFromDatabase, isEmailRegistered, addPasswordToDatabase};
