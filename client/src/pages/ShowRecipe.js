@@ -6,8 +6,10 @@ import { useAuthContext } from "../hooks/useAuthContext";
 
 
 const ShowRecipe = () => {
+  const [emailSent, setEmailSent] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [reciverEmail, setReciverEmail] = useState('');
+  const [disabled, setDisabled] = useState(false);
   const { recipeId } = useParams();
   const {user} = useAuthContext();
   const [localhostAddress, setLocalhostAddress] = useState('http://localhost:3000/Recipe/' + recipeId);
@@ -44,7 +46,11 @@ const ShowRecipe = () => {
 
 
   const sendRecipeToEmail = async () => {
-    console.log(localhostAddress, user.email, reciverEmail)
+    setEmailSent('');
+    setDisabled(true);
+    setTimeout(() => {
+      setDisabled(false);
+    }, 1000)
     try {
       const response = await fetch('http://localhost:3001/api/email/send', {
         method: 'POST',
@@ -59,7 +65,11 @@ const ShowRecipe = () => {
       });
 
       if (!response.ok) {
+        setEmailSent('Sähköpostia ei ole olemassa ❌ Tarkista sähköposti.')
         throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      if(response.ok) {
+        setEmailSent('Resepti lähetetty ✔️')
       }
       console.log("Resepti lähetetty sähköpostiin")
     } catch (error) {
@@ -82,12 +92,13 @@ const ShowRecipe = () => {
                       <h1 className="recipenameshow ">{recipe.recipename}</h1>
                       {/* Convert Buffer object to base64 encoded string */}
                       <img className='recipeimage' src={`data:image/jpeg;base64,${arrayBufferToBase64(recipe.images.data)}`} alt="Recipe Image" style={{ maxWidth: '300px' }} />
-                      <div className='email-form'>
+                      {user && (<div className='email-form'>
                         <h3>Jaa resepti</h3>
                         <label>Sähköposti: </label>
                         <input className='email-input-field' type="text" onChange={(e) => setReciverEmail(e.target.value)}></input>
-                        <button className="email-send-button" onClick={() => sendRecipeToEmail()}>Lähetä</button>
-                      </div>
+                        <button className="email-send-button" disabled={disabled} onClick={() => sendRecipeToEmail()}>Lähetä</button>
+                        {emailSent && (<p>{emailSent}</p>)}
+                      </div>)}
                     </div>
                   ):(
                     <div>
