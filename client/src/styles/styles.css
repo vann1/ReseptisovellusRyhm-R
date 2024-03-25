@@ -398,7 +398,7 @@
 
 .search-option{
   margin-left: 10px;
-  margin: 20px;
+
   margin-top: 0px;
 }
 
@@ -536,23 +536,37 @@
 .searchbutton:hover {
   box-shadow: 2px 2px 5px #888888;
 }
-@media screen and (max-width: 1200px) {
-  .search-input {
-    width: 80%;
-  }
+
+.search-input {
+  font-family: Arial, sans-serif;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  width: 90%;
+  border-radius: 5px;
+  outline: none;
+  transition: border-color 0.3s;
 }
 
+.search-input:focus {
+  border-color: #ff9900;
+  box-shadow: 2px 2px 5px #ff9900;
+}
+
+
+
 @media screen and (max-width: 844px) {
+
   .search-input {
     width: 50%;
   }
   .search {
     margin-top: 100px;
     flex-direction: column;
-    
+
 
   }
   .search-option {
+    margin:10px;
     display: flex;
     justify-content: space-between;
 
@@ -561,7 +575,7 @@
     height: 260px;
   }
   .searchbutton {
-    margin-top: 77px;
+    margin-top: 85px;
   }
   
   .reciperow {
@@ -589,6 +603,7 @@
   .search-option {
     display: flex;
     justify-content: space-between;
+
 
   }
   .searchform {
