@@ -4,7 +4,7 @@ const HomePage = () => {
     const searchRecipes = async () => {
         try {
             console.log("lol")
-            const response = await fetch("http://localhost:3001/api/recipe", {
+            const response = await fetch("http://localhost:3001/api/recipe/searchAll", {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",
