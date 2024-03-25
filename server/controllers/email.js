@@ -1,6 +1,8 @@
 const {internalServerError, notFound, ok} = require('../utils/responseUtils')
 const {} = require('../database')
 const nodemailer = require("nodemailer");
+require("dotenv").config();
+
 
 const sendEmail = async (req,res) => {
     const {recipePageAddress, senderEmail, reciverEmail} = req.body;
@@ -19,7 +21,7 @@ const sendEmail = async (req,res) => {
         secure: true,
         auth: {
             user: 'ressureseptisovellus@gmail.com',
-            pass: 'bngs yjth mlko gkwe'
+            pass: process.env.EMAIL_PASSWORD
         }
     });
 
