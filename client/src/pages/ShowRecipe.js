@@ -11,6 +11,8 @@ const ShowRecipe = () => {
   const { recipeId } = useParams();
   const {user} = useAuthContext();
   const [localhostAddress, setLocalhostAddress] = useState('http://localhost:3000/Recipe/' + recipeId);
+  const [ingredients, setIngredients] = useState([]);
+
   const handleSearch = async () => {
     try {
       const response = await fetch('http://localhost:3001/api/recipe/search', {
@@ -38,7 +40,29 @@ const ShowRecipe = () => {
 
   };
 
+  const getIngredients = async () => {
+    try {
+      const response = await fetch(`http://localhost:3001/api/ingredients/${recipeId}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${user.token}`
+        },
+      });
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.error);
+      }
+      setIngredients(data.data.ingredients);
+
+ 
+    } catch (error) {
+      console.error('Error during search:', error.message);
+    }
+  }
+ 
   useEffect(() => {
+    getIngredients();
     handleSearch();
   }, [recipeId]);
 
@@ -75,25 +99,44 @@ const ShowRecipe = () => {
         <div>
           {searchResults.map((recipe) => (
             <div key={recipe.recipeid}>
+              <h1 className="recipenameshow">{recipe.recipename}</h1>
               <div className='compartment-container'>
                 <div className='compartment1'>
                   {recipe.images ? (
                     <div>
-                      <h1 className="recipenameshow ">{recipe.recipename}</h1>
+                      
                       {/* Convert Buffer object to base64 encoded string */}
                       <img className='recipeimage' src={`data:image/jpeg;base64,${arrayBufferToBase64(recipe.images.data)}`} alt="Recipe Image" style={{ maxWidth: '300px' }} />
-                      <div className='email-form'>
-                        <h3>Jaa resepti</h3>
-                        <label>Sähköposti: </label>
-                        <input className='email-input-field' type="text" onChange={(e) => setReciverEmail(e.target.value)}></input>
-                        <button className="email-send-button" onClick={() => sendRecipeToEmail()}>Lähetä</button>
-                      </div>
+                      
                     </div>
                   ):(
                     <div>
-                      <h1 className="recipenameshow ">{recipe.recipename}</h1>
+                      
                     </div>
                   )}
+                  <div className='recipeshowingredients'>
+                    <h3>Ainesosat:</h3>
+                    <table>
+                      <thead>
+                        <tr>
+                          <th className='showrecipetable20'>Määrä</th>
+                          <th className='showrecipetable20'> Mitta</th>
+                          <th className='showrecipetable40'>Ainesosa</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {ingredients.map((ingredient, index) => (
+                      <tr key={index}>
+                        <td className='showrecipetable20'>{ingredient.quantity}</td>
+                        <td className='showrecipetable20'>{ingredient.measure}</td>
+                        <td className='showrecipetable40'>{ingredient.ingredientname}</td>
+                      </tr>
+                    ))}
+                      </tbody>
+                    </table>
+                    
+
+                  </div>
                 </div>
                 <div className='compartment2'>
                   <p><strong>Category:</strong> {recipe.category}</p>
@@ -103,12 +146,18 @@ const ShowRecipe = () => {
                 </div>  
               </div>
               <div className='compartment3'>
+                
               {user ? (
                 <RatingComponent userid={user.userid} recipeid={recipe.recipeid} />
               ) : (
                 <RatingComponent recipeid={recipe.recipeid}/>
               )}
-                                  
+              <div className='email-form'>
+                        <h3>Jaa resepti</h3>
+                        <label>Sähköposti: </label>
+                        <input className='email-input-field' type="text" onChange={(e) => setReciverEmail(e.target.value)}></input>
+                        <button className="email-send-button" onClick={() => sendRecipeToEmail()}>Lähetä</button>
+                      </div>             
               </div>           
             </div>
           ))}
