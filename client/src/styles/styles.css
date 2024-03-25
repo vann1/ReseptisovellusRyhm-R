@@ -1,3 +1,4 @@
+/*HomePage style */
 .container-home {
   width: 100%; /* Voit määrittää leveyden tarpeidesi mukaan */
   max-width: 1200px; /* Maksimileveys */
@@ -8,7 +9,42 @@
   word-wrap: break-word;
 }
 
+.homepage-top {
+  display: flex;
+  flex-direction: column;
+}
 
+.homepage-search {
+  display: flex;
+  flex-direction: row;
+}
+.home-search-input {
+  font-family: Arial, sans-serif;
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  padding: 10px;
+  outline: none;
+  transition: border-color 0.3s;
+}
+
+.home-search-input:focus {
+  box-shadow: 2px 2px 5px #ff9900;
+}
+
+.home-search-button {
+  background-color: #ff9900; 
+  color:#fff; 
+  padding: 10px 15px; 
+  border: none;
+  border-radius: 20px;
+  cursor: pointer; 
+  font-weight: bold;
+  margin-left: -54px
+}
+
+.home-search-button:hover {
+  box-shadow: 2px 2px 5px #ff9900;
+}
 /*Navigation*/
 .navigation {
     background-color: #ffca17;
