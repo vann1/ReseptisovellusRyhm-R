@@ -83,7 +83,6 @@ const RatingComponent = (props) => {
         const removedReview = recipeReviews.splice(userReviewIndex, 1)[0];
         
         setUserReview(removedReview);
-        console.log('Removed review:', removedReview);
         setRecipeReviews([...recipeReviews]);
         setUserEditFavorite(removedReview.favorite);
         setUserEditRating(removedReview.rating);
@@ -128,7 +127,7 @@ const RatingComponent = (props) => {
         
     };
 
-
+    
     const deleteReview = async () => {
       const reviewid = userReview.reviewid;
       try {

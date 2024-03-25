@@ -1098,11 +1098,10 @@
 }
 
 .recipenameshow {
-  border-left: solid 5px;
-  display: flex;
   color: #624e08;
   text-decoration: none;
   padding: 10px;
+  text-align: center;
 }
 .recipeimageshow {
 
@@ -1119,6 +1118,20 @@
 .email-input-field:focus {
   border-color: #ff9900;
   box-shadow: 2px 2px 5px #ff9900;
+}
+
+.recipeshowingredients table {
+  width: 100%;
+  text-align: left;
+}
+
+.showrecipetable20 {
+  width: 15%;
+  box-sizing: border-box;
+}
+.showrecipetable40 {
+  width: 60%;
+  box-sizing: border-box;
 }
 
 
