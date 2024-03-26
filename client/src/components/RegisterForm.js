@@ -170,7 +170,7 @@ const RegisterForm = ({ onRegister }) => {
       </div>
       <br></br>
       <div className='Register-button-div'>
-      <button  className='Register-button' onClick={handleRegister} disabled={disabled}>Luo käyttäjä</button>'
+      <button  className='Register-button' onClick={handleRegister} disabled={disabled}>Luo käyttäjä</button>
       </div>
       <br></br>
       <br></br>

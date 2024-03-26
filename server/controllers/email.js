@@ -70,7 +70,7 @@ async function sendPasswordRecoveryEmail(email) {
             secure: true,
             auth: {
                 user: 'ressureseptisovellus@gmail.com',
-                pass: 'bngs yjth mlko gkwe'
+                pass: process.env.EMAIL_PASSWORD
             }
         });
 

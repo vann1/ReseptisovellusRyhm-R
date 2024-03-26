@@ -79,6 +79,7 @@ const ShowRecipe = () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${user.token}`
         },
         body: JSON.stringify({
           recipePageAddress: localhostAddress,

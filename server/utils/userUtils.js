@@ -103,7 +103,6 @@ const comparePassword = async (req, res, user) => {
 };
 
 const createJWT = (id, maxAge) => {
-  console.log(maxAge)
   return jwt.sign({ id }, process.env.ACCESS_TOKEN_SECRET, {
     expiresIn: maxAge,
   });
@@ -126,4 +125,4 @@ const createJWT = (id, maxAge) => {
 //     next();
 //   })
 // }
-module.exports = { validateUser, createJWT, comparePassword };
+module.exports = {validatePassword, validateUser, createJWT, comparePassword };
