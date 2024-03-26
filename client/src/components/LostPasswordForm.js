@@ -24,7 +24,7 @@ const LostPasswordForm = ({ errorMessage, successMessage, clearMessages, isLoadi
         placeholder="Sähköposti"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
-        className="regInput"
+        className="regInput register-input-field"
       />
       </div>
       <button  className="Register-button" onClick={handleSendReturnCode} disabled={isLoading}>
