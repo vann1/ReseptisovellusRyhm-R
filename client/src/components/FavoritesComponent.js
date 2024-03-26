@@ -66,7 +66,7 @@ const FavoritesComponent = () => {
         {userfavorites.length > 0 && (
         <div>
          
-      <table>
+      <table className="favoritestable">
                   <thead  className='reciperesult-thead'>
                     <tr>
                       <th style={{fontSize : '34px'}}>Sinun suosikkisi</th>
@@ -75,8 +75,8 @@ const FavoritesComponent = () => {
                   <tbody className="favoritereciperow">
                     {userfavorites.map((recipe, index) => (
                       <tr key={index}>
-                          <td>
-                            <div>
+                          <td style={{width : '100%'}}>
+                            <div className='search-flex'>
                           <div className='search-top'>
                             <div className='search-top-column'>
                             <Link className='recipename' to={`/Recipe/${recipe.recipeid}`}>

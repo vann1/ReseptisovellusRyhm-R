@@ -15,7 +15,7 @@ const getIngredients = async (req, res) => {
         return internalServerError(res, "Internal server error while searching for recipes");
     }
 };
-
+ 
 const addIngredient = async (req, res) => {
     try {
         const result = await addIngredientToDatabase(req, res);

@@ -1,7 +1,7 @@
 const express = require("express");
 const { isJson } = require("../utils/requestUtils");
 const router = express.Router();
-const { createUser, loginUser, showUser, showAllUsers, deleteUser , getUserRecipe} = require("../controllers/user");
+const {changePassword, createUser, loginUser, showUser, showAllUsers, deleteUser , getUserRecipe} = require("../controllers/user");
 const { badRequest, notFound, ok , internalServerError} = require("../utils/responseUtils");
 const {requireAuth} = require('../middlewares/authMiddleware');
 
@@ -49,7 +49,7 @@ router.post("/login", async (req, res) => {
   return internalServerError(res, "Internal server error: " + err)
 }
 });
-
+//after this all routes requires authenticated user
 router.use(requireAuth);
 
 router.post("/profile", async (req, res) => {
@@ -108,4 +108,19 @@ router.get('/profile/:userId', (req,res) => {
   }
 
 })
+
+router.post("/password/change", async (req, res) => {
+  try {
+  //First, it checks if the received request was in JSON format or not.
+  if (!isJson(req)) {
+    //If it wasn't, the responseUtils.badRequest function is returned, which takes res and an error message as parameters.
+    return badRequest(res, "Content was not Json");
+  }
+  //checks if the given password is matching
+  return changePassword(req, res);
+
+} catch (err){
+  return internalServerError(res, "Internal server error: " + err)
+}
+});
 module.exports = router;

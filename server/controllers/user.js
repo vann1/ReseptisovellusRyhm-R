@@ -6,8 +6,8 @@ const {
   ok,
   unauthorized
 } = require("../utils/responseUtils");
-const { addUserToDatabase, getUserFromDatabase ,getAllUsersFromDatabase, deleteUserFromDatabase, getRecipeFromDatabase} = require("../database");
-const { createJWT, comparePassword } = require("../utils/userUtils");
+const {updatePasswordToDatabase, addUserToDatabase, getUserFromDatabase ,getAllUsersFromDatabase, deleteUserFromDatabase, getRecipeFromDatabase} = require("../database");
+const { createJWT, comparePassword ,validatePassword } = require("../utils/userUtils");
 
 /**
  * Creates a new user in the database.
@@ -127,4 +127,36 @@ const getUserRecipe = async (req, res) => {
   }
 }
 
-module.exports = { createUser, loginUser, showUser, showAllUsers , deleteUser, getUserRecipe};
+
+const changePassword = async (req,res) => {
+  try {
+    const user = await getUserFromDatabase(req, res);
+    //First, it checks if the requested user exists in the database.
+    console.log(user)
+    if (!user) {
+      //If the user is not found, it returns the notFound function from responseUtils, which takes res and an error message as parameters.
+      return false;
+    }
+    //checks if database password matches with user's given password
+    if (await comparePassword(req, res, user)) {
+        const {newPassword} = req.body;
+        //validates password
+        if(!validatePassword(newPassword)){
+          return badRequest(res, 'Password is not strong enough. Atleast min 8 chars, uppercase letter and number is required.')
+        }
+        //update validate password to database
+        const result = await updatePasswordToDatabase(req);
+        if(!result) {
+          throw new Error('Password change failed')
+        }
+        //password updated successfully
+        return ok(res, "Password changed successfully", {result})
+    } else {
+      return unauthorized(res, "Password is not correct");
+    }
+  } catch (error) {
+    console.error("Error updateing user password:", error);
+    return internalServerError(res,"Internal server error, while updateing user password");
+  }
+}
+module.exports = {changePassword, createUser, loginUser, showUser, showAllUsers , deleteUser, getUserRecipe};

@@ -999,13 +999,12 @@
 .favorites{
     display: flex;
     flex-wrap: wrap;
-    padding:10px;
    justify-content: center;
     align-items: center;
     width: 100%;
 }
 
-.favoritereciperow {
+.favoritereciperow tr {
   background-color: #ffe58e;
   display: flex;
   margin-bottom: 1%;
@@ -1020,8 +1019,8 @@
 }
 
 .favoritesearch-image {
-  margin-right: 1%;
-  
+  margin-right: 2%;
+  margin-left: auto;
 }
 
 
@@ -1491,6 +1490,49 @@
 
 /*AdminPage Style ENDS*/
 
+/*Change password page STARTS*/
+
+
+.changepassword-button {
+  background-color: #ff9900; 
+  color:#fff; 
+  padding: 10px 20px; 
+  border: none;
+  border-radius: 20px;
+  cursor: pointer; 
+  font-weight: bold;
+}
+
+
+.changepassword-button:hover {
+  background-color: green;
+}
+
+.Changepassword-form {
+  width: 380px;
+  background-color:  #ffe58e;
+  box-shadow: 2px 2px 5px 5px#888888;
+  height: auto;
+
+}
+.changepassword-messages {
+  font-weight: bold;
+}
+.border4PasswordChange {
+    color: #624e08;
+    border-left: solid 7px;
+    padding-left: 10px;
+
+}
+.changepassword-link {
+  text-decoration: none;
+}
+.changepassword-link:hover {
+  text-decoration: none;
+  font-weight: bold;
+  text-shadow: 2px 2px 5px #888888;
+}
+/*Change password page ENDS*/
 /*LostPassword style starts*/
 
 .LostPassword-form {
