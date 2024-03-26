@@ -594,7 +594,10 @@
 }
 .recipedesctiption {
   word-break: break-all;
+
 }
+
+
 
 .recipedesctiptiontitle {
   margin-bottom: -10px;
@@ -610,6 +613,7 @@
   margin-top: 15px;
   margin-bottom: 10px;
   border-radius: 10px;
+
 }
 
 .search-flex {

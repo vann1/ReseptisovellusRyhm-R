@@ -10,7 +10,6 @@ const HomePage = () => {
     const searchRecipes = async () => {
         console.log(input);
         try {
-            console.log("lol")
             const response = await fetch("http://localhost:3001/api/recipe/searchAll", {
               method: "POST",
               headers: {
@@ -25,7 +24,7 @@ const HomePage = () => {
             
             if (response.ok) {
                 setuserfavorites(data.data.data);
-                console.log(userfavorites);
+                console.log(data.data);
             } 
           } catch (error) {
             console.error("Error:", error);
