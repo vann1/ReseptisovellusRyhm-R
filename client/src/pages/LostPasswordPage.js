@@ -38,8 +38,7 @@ const LostPassword = () => {
   };
 
   return (
-    <div>
-      <h1>Palauta salasana</h1>
+    <div className='Login-container'>
       <LostPasswordForm
         errorMessage={errorMessage}
         successMessage={successMessage}

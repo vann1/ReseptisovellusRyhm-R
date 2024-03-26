@@ -11,7 +11,7 @@ const LoginForm = ({onLogin, virheViesti, isLoading}) => {
 }
   return (
     <div  className='Login-form'>
-      <div div className='Register-h1'>
+      <div className='Register-h1'>
         <h1>Kirjaudu</h1>
       </div>
       <div className='Register-p'>
