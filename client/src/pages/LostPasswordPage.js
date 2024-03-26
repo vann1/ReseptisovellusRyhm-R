@@ -20,10 +20,9 @@ const LostPassword = () => {
       setIsLoading(false);
 
       if (!response.ok) {
-        setErrorMessage(data.error);
+        setErrorMessage("Sähköpostia ei ole rekisteröity");
       } else {
         setSuccessMessage("Salasana palautettu onnistuneesti");
-        // Optionally set a success message here
       }
     } catch (error) {
       console.error("Error sending password recovery email:", error);

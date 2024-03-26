@@ -1119,6 +1119,7 @@
   display: flex;
   flex: 1;
   gap: 10px;
+  flex-direction: row;
 }
 
 .compartment1 {
@@ -1143,15 +1144,20 @@
   border-radius: 10px;
 }
 
+.compartment4 {
+  padding: 20px;
+  background-color: #ffe58e;
+  margin: 15px;
+  border-radius: 10px;
+}
+
 .recipenameshow {
   color: #624e08;
   text-decoration: none;
   padding: 10px;
   text-align: center;
 }
-.recipeimageshow {
 
-}
 .email-input-field {
   font-family: Arial, sans-serif;
   font-size: 16px;
@@ -1199,6 +1205,12 @@
   padding: 10px;
   background-color: #fcebb3;
   border-radius: 10px;
+}
+
+@media (max-width: 768px) {
+  .compartment-container {
+    flex-direction: column; 
+  }
 }
 
 /*SHOW RECIPE ENDS*/
@@ -1479,3 +1491,13 @@
 
 /*AdminPage Style ENDS*/
 
+/*LostPassword style starts*/
+
+.LostPassword-form {
+  width: 380px;
+  background-color:  #ffe58e;
+  box-shadow: 2px 2px 5px 5px#888888;
+  height: 300px;
+}
+
+/*LostPassword style ends*/

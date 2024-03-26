@@ -61,7 +61,7 @@ async function sendPasswordRecoveryEmail(email) {
             from: 'ressureseptisovellus@gmail.com',
             to: email,
             subject: 'Password Recovery',
-            text: `Uusi salasanasi on: ${newPassword}`, // Include the new password in the email
+            text: `Väliaikainen salasanasi on ${newPassword}. Vaihda salasana uuteen profiili sivulla.`, // Include the new password in the email
         };
 
         const transporter = nodemailer.createTransport({

@@ -10,9 +10,14 @@ const LostPasswordForm = ({ errorMessage, successMessage, clearMessages, isLoadi
   };
 
   return (
-    <div className='Login-form'>
+    <div className='LostPassword-form'>
     <div>
-      <div className='Register-h1'><h1>Palauta salasana</h1></div>
+      <div className='Register-h1'>
+        <h1>Palauta salasana</h1>
+        </div>
+      <div className='Register-p'>
+        <p>Syötä tunnuksellesi rekisteröity sähköpostiosoite, johon lähetämme uuden salasanan</p>
+      </div>
     <div className='login-inputs'>
       <input
         type="text"
@@ -21,12 +26,12 @@ const LostPasswordForm = ({ errorMessage, successMessage, clearMessages, isLoadi
         onChange={(e) => setEmail(e.target.value)}
         className="regInput"
       />
-      <p>{errorMessage}</p>
-      <p>{successMessage}</p>
       </div>
       <button  className="Register-button" onClick={handleSendReturnCode} disabled={isLoading}>
         Palauta salasana
       </button>
+      <p>{errorMessage}</p>
+      <p>{successMessage}</p>
       </div>
     </div>
   );

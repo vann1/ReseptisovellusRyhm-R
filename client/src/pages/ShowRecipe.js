@@ -112,18 +112,9 @@ const ShowRecipe = () => {
               <div className='compartment-container'>
                 <div className='compartment1'>
                   {recipe.images ? (
-                    <div>
+                    <div>                   
+                      <img className='recipeimage' src={`data:image/jpeg;base64,${arrayBufferToBase64(recipe.images.data)}`} alt="Recipe Image"/>
                       
-                      {/* Convert Buffer object to base64 encoded string */}
-                      <img className='recipeimage' src={`data:image/jpeg;base64,${arrayBufferToBase64(recipe.images.data)}`} alt="Recipe Image" style={{ maxWidth: '300px' }} />
-                      
-                      {user && (<div className='email-form'>
-                        <h3>Jaa resepti</h3>
-                        <label>Sähköposti: </label>
-                        <input className='email-input-field' type="text" onChange={(e) => setReciverEmail(e.target.value)}></input>
-                        <button className="email-send-button" disabled={disabled} onClick={() => sendRecipeToEmail()}>Lähetä</button>
-                        {emailSent && (<p>{emailSent}</p>)}
-                      </div>)}
                     </div>
                   ):(
                     <div>
@@ -160,6 +151,15 @@ const ShowRecipe = () => {
                   <p><strong>Tagit:</strong> {recipe.tags}</p>
                   <p><strong>Ohje:</strong> {recipe.instructions}</p>
                 </div>  
+              </div>
+              <div className='compartment4'>
+              {user && (<div className='email-form'>
+                        <h3>Jaa resepti</h3>
+                        <label>Sähköposti: </label>
+                        <input className='email-input-field' type="text" onChange={(e) => setReciverEmail(e.target.value)}></input>
+                        <button className="email-send-button" disabled={disabled} onClick={() => sendRecipeToEmail()}>Lähetä</button>
+                        {emailSent && (<p>{emailSent}</p>)}
+                      </div>)}
               </div>
               <div className='compartment3'>
                 
