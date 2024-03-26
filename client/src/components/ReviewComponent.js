@@ -94,10 +94,13 @@ const RatingComponent = (props) => {
     };
   
     useEffect(() => {
-      const hasUserReview = recipeReviews.some(review => review.userid === props.userid);
+      if(Array.isArray(recipeReviews)){
+        const hasUserReview = recipeReviews.some(review => review.userid === props.userid);
       if (hasUserReview) {
         removeUserReview();
       }
+      }
+      
     }, [recipeReviews, props.userid]);
 
     const updateReview = async () => {
@@ -261,10 +264,10 @@ const RatingComponent = (props) => {
               ) : (
                 <p></p>
               )}
-              
-                <div className="reviews">
+              {Array.isArray(recipeReviews) ? (  
+              <div className="reviews">
                   <p id="reviewtitle">Arvostelut:</p>
-                {recipeReviews.map(review => (
+                {recipeReviews.map((review) => (
                   <div className="review-box" key={review.reviewid} >
                     <div className="review-name">
                     <label>{review.username}<br/></label>
@@ -284,7 +287,13 @@ const RatingComponent = (props) => {
                     </div>
                   </div>
                 ))}      
-              </div>
+              </div>):(
+                 <div className="reviews">
+                 <p id="reviewtitle">Arvostelut:</p>
+               
+             </div>
+              )}
+               
 
       </div>
 

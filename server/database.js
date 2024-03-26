@@ -269,7 +269,7 @@ const getAllUsersFromDatabase = async (req, res) => {
     const query = `SELECT * FROM users`;
 
     const result = await request.query(query);
-
+ 
     if (result.recordset.length > 0) {
       const users = result.recordset;
       return users;
@@ -284,7 +284,7 @@ const getAllUsersFromDatabase = async (req, res) => {
     await closeDatabaseConnection();
     } 
 };
-
+     
 const deleteUserFromDatabase = async (userid)  => {
   try {
     await connectToDatabase();
@@ -555,7 +555,7 @@ const getReviewFromDatabase = async (req, res) => {
       const reviews = result.recordset;
       return reviews;
     } else{
-      return undefined;
+      return 'Ei arvosteluja';
     }
   }
   if(userid){
@@ -814,7 +814,7 @@ INNER JOIN
   }
 };
 
-
+ 
 
 module.exports = {searchRecipesFromDatabase,deleteReviewInDatabase, editReviewInDatabase, addReviewToDatabase, getReviewFromDatabase, deleteRecipeImageFromDatabase, deleteRecipeFromDatabase, deleteIngredientFromDatabase ,addIngredientToDatabase,
    addUserToDatabase, getUserFromDatabase, addRecipeToDatabase, getRecipeFromDatabase, getAllUsersFromDatabase, deleteUserFromDatabase,

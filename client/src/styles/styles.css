@@ -999,13 +999,12 @@
 .favorites{
     display: flex;
     flex-wrap: wrap;
-    padding:10px;
    justify-content: center;
     align-items: center;
     width: 100%;
 }
 
-.favoritereciperow {
+.favoritereciperow tr {
   background-color: #ffe58e;
   display: flex;
   margin-bottom: 1%;
@@ -1020,8 +1019,8 @@
 }
 
 .favoritesearch-image {
-  margin-right: 1%;
-  
+  margin-right: 2%;
+  margin-left: auto;
 }
 
 
