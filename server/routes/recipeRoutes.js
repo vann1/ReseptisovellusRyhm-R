@@ -8,7 +8,6 @@ const {searchRecipes,addRecipe, SearchRecipe, editRecipe,deleteRecipe, deleteRec
 const {requireAuth} = require('../middlewares/authMiddleware')
 
 router.post('/search', async (req, res) => {
-  console.log(req.body)
   if(!isJson) {
     //If it wasn't, the responseUtils.badRequest function is returned, which takes res and an error message as parameters.
     return badRequest(res, "Content was not Json");
@@ -25,7 +24,7 @@ router.post('/searchAll', async (req, res) => {
 })
 
 router.use(requireAuth);
-
+//after this all routes requires authenticated user
 router.get('/:id', async (req, res) => {
   if(!isJson) {
     //If it wasn't, the responseUtils.badRequest function is returned, which takes res and an error message as parameters.

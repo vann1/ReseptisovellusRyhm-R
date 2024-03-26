@@ -81,7 +81,8 @@ const addUserToDatabase = async (req, res) => {
  */
 const getUserFromDatabase = async (req, res) => {
   //takes email from req.body
-  const { email } = req.body;
+  const { email, userId } = req.body;
+
   try {
     //creates connection to database
     await connectToDatabase();
@@ -89,12 +90,23 @@ const getUserFromDatabase = async (req, res) => {
 
     //initializes a new request object that is used to send SQL queries to the connected database using the sql module or library.
     const request = pool.request();
+    let query;
+    let input;
 
     //query for database
-    const query = `SELECT * FROM users WHERE email = @email`;
+    if(email) {
+      query = `SELECT * FROM users WHERE email = @email`;
+      input ='email';
+    } else if (userId) {
+      query = `SELECT * FROM users WHERE userid = @userId`;
+      input ='userId';
+    } else {
+      return undefined;
+    }
+  
     //make database request for email
     const result = await request
-      .input("email", sql.NVarChar, email)
+      .input(input, sql.NVarChar, email || userId)
       .query(query);
     //checks if the user existed in the database
     if (result.recordset.length > 0) {
@@ -111,8 +123,6 @@ const getUserFromDatabase = async (req, res) => {
     await closeDatabaseConnection();
     } 
 };
-
-console.log("...")
 
 const addRecipeToDatabase = async (req, res) => {
   const { UserID, RecipeName, RecipeCategory, RecipeGuide, RecipeDesc, Tags, Ingredients, selectedFile, RecipeReg } = req.body;
@@ -814,7 +824,42 @@ INNER JOIN
 };
 
 
+//this function is for updateing user's password with newPassword and userId
+const updatePasswordToDatabase = async (req) => {
+  const {newPassword, userId} = req.body;
+  try {
+      // Create a connection to the database
+      await connectToDatabase();
 
-module.exports = {searchRecipesFromDatabase,deleteReviewInDatabase, editReviewInDatabase, addReviewToDatabase, getReviewFromDatabase, deleteRecipeImageFromDatabase, deleteRecipeFromDatabase, deleteIngredientFromDatabase ,addIngredientToDatabase,
+      // Initialize a new request object to send SQL queries
+      const request = pool.request();
+
+      // Encrypt the password for the database
+      const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+      // Define the SQL query to update the user's password in the database
+      const query = `
+          UPDATE [dbo].[users]
+          SET password = @newPassword
+          WHERE userid = @userId
+      `;
+
+      // Execute the database query
+      await request
+          .input("newPassword", sql.NVarChar, hashedPassword)
+          .input("userId", sql.Int, userId)
+          .query(query);
+      return true; // Password added successfully
+  } catch (error) {
+      console.error("Error adding password to the database:", error);
+      return false; // Error occurred while adding password
+  } finally {
+      // Close the database connection
+      await closeDatabaseConnection();
+  }
+}
+
+
+module.exports = {updatePasswordToDatabase, searchRecipesFromDatabase,deleteReviewInDatabase, editReviewInDatabase, addReviewToDatabase, getReviewFromDatabase, deleteRecipeImageFromDatabase, deleteRecipeFromDatabase, deleteIngredientFromDatabase ,addIngredientToDatabase,
    addUserToDatabase, getUserFromDatabase, addRecipeToDatabase, getRecipeFromDatabase, getAllUsersFromDatabase, deleteUserFromDatabase,
     editRecipeToDatabase, getIngredientsFromDatabase, isEmailRegistered, addPasswordToDatabase};

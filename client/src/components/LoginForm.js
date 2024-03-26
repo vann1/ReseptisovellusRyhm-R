@@ -11,7 +11,7 @@ const LoginForm = ({onLogin, virheViesti, isLoading}) => {
 }
   return (
     <div  className='Login-form'>
-      <div div className='Register-h1'>
+      <div className='Register-h1'>
         <h1>Kirjaudu</h1>
       </div>
       <div className='Register-p'>
@@ -36,7 +36,7 @@ const LoginForm = ({onLogin, virheViesti, isLoading}) => {
       </div>
       <br></br>
       <p className="loginError">{virheViesti}</p>
-      <button className="Register-button" onClick={handleLogin} disabled={isLoading}>Kirjaudu</button>'
+      <button className="Register-button" onClick={handleLogin} disabled={isLoading}>Kirjaudu</button>
       <br></br>
       <div>
       <Link to={`/Password`}><p>Unohtuiko salasana?</p></Link>

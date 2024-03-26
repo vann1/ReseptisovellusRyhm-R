@@ -83,6 +83,9 @@ const ProfileForm = () => {
           console.error('Error deleting recipe:', error.message);
         }
   }
+
+
+
     return (
       <div>
         {showNoRecipes ? <div> <h1>Sinulla ei ole vielä reseptejä</h1>
@@ -96,6 +99,7 @@ const ProfileForm = () => {
             <p><strong>Nimi: </strong>{userDetails.name}</p>
             <p><strong>Sähköposti: </strong>{userDetails.email}</p>
             <p><strong>ID: </strong>{userDetails.userid}</p>
+            <Link className="changepassword-link" to={`/changepassword/${userDetails.userid}`}><p className='border4PasswordChange'>Vaihda salasana</p></Link>
             </div>
             <h1 className="h1-profile">Omat reseptit</h1>
             <div className="profilerecipes">
