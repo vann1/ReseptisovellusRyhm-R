@@ -23,6 +23,7 @@ const RuokaKategoria = () => {
    const options = ['ml', 'tl', 'rkl', 'dl', 'l', 'kkp' ,'g', 'kg', 'kpl'];
   const [RecipeReg, setRecipeReg] = useState(0);
   const [image, setImage] = useState(null);
+  const [pElement, setPElement] = useState('');
 
   
   /*Mitat:
@@ -171,10 +172,10 @@ const isValidIngredients = () => {
               } else {
                 console.error('Failed to add recipe:', response.statusText);
                 //if not valid jwt token redirect to login
-                navigate('/LoginPage')
               }
               
             } catch (error) {
+              setPElement('Kuva on liian iso tai väärä tiedosto tyyppiä.')
               console.error('Error:', error.message);
             }
 
@@ -303,10 +304,11 @@ const isValidIngredients = () => {
     <input type="file" accept=".jpg, .jpeg, .png" onChange={handleFileChange} />
     <br></br>
     {image ? (
-      <img src={image} alt="Uploaded" style={{ maxWidth: '100%', maxHeight: '100%' }} />
+      <img src={image} alt="Uploaded" style={{width: '300px'}}/>
     ) : (
       <p>Kuva tulee tähän</p>
     )}
+    <p style={{color:'red'}}>{pElement}</p>
   </div>
   <div className="recipeGuideContainer">
     <label>Reseptin ohje:</label>
