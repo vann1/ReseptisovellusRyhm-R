@@ -13,6 +13,7 @@ import ShowRecipe from './pages/ShowRecipe';
 import { AdminPage } from './pages/AdminPage';
 import { EditRecipePage } from './pages/EditRecipePage';
 import LostPassword from './pages/LostPasswordPage';
+import {PasswordChangePage} from './pages/PasswordChangePage'
 function App() {
   const {user} = useAuthContext()
   //Navigatio komponentti on vaan testausta varten, voi poistaa
@@ -32,6 +33,7 @@ function App() {
         <Route path='/Password' element={<LostPassword></LostPassword>}></Route>
         </>)}      
         {user && (<>
+        <Route path='/changepassword/:userId' element={<PasswordChangePage></PasswordChangePage>}></Route>
         <Route path='/NewRecipe' element={<RuokaKategoria></RuokaKategoria>}></Route>
         <Route path="/userrecipe/:id" element={<EditRecipePage></EditRecipePage>} />
         <Route path='/ProfilePage' element={<ProfilePage></ProfilePage>}></Route>

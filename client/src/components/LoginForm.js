@@ -36,7 +36,7 @@ const LoginForm = ({onLogin, virheViesti, isLoading}) => {
       </div>
       <br></br>
       <p className="loginError">{virheViesti}</p>
-      <button className="Register-button" onClick={handleLogin} disabled={isLoading}>Kirjaudu</button>'
+      <button className="Register-button" onClick={handleLogin} disabled={isLoading}>Kirjaudu</button>
       <br></br>
       <div>
       <Link to={`/Password`}><p>Unohtuiko salasana?</p></Link>
