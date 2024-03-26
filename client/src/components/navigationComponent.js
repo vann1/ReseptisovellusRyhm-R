@@ -29,6 +29,9 @@ const Navigation = (props) => {
         <li className="navigation-item">
         <NavLink exact to="/" className="navigation-link" activeClassName="active" id="home"></NavLink>
         </li>
+        <li>
+          
+        </li>
         {user && (<li className="navigation-item">
         <NavLink to="/ProfilePage" className="navigation-link" activeClassName="active">Oma profiili</NavLink>
         </li>)}
@@ -46,9 +49,9 @@ const Navigation = (props) => {
         <li className="navigation-item">
         <NavLink to="/NewRecipe" className="navigation-link" activeClassName="active">Uusi resepti</NavLink>
           </li>
-          {user.role === 1  && (<div className='navigation-item'><NavLink to="/AdminPage" className="navigation-link" activeClassName="active">Ylläpito</NavLink></div>)}
-          <button className='logout' onClick={handleClick}>Kirjaudu ulos</button></>)}
+          <div className='navigation-item-1'>{user.role === 1  && (<NavLink to="/AdminPage" className="navigation-link" activeClassName="active">Ylläpito</NavLink>)}<button className='logout' onClick={handleClick}>Kirjaudu ulos</button></div></>)}
       </ul>
+      <div className='logo'></div>
     </nav>
   )
 };
