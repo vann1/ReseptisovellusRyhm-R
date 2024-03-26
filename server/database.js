@@ -289,7 +289,8 @@ const deleteUserFromDatabase = async (userid)  => {
   try {
     await connectToDatabase();
     const request = pool.request();
-    const query = `DELETE FROM users WHERE userid = @userid`;
+    const query = `DELETE FROM [dbo].[reviews] WHERE userid = @userid;
+                    DELETE FROM users WHERE userid = @userid`;
 
     const result = await request
       .input("userid", sql.NVarChar, userid)

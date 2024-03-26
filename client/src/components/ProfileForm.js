@@ -85,10 +85,9 @@ const ProfileForm = () => {
   }
     return (
       <div>
-        {showNoRecipes ? <div> <h1>Sinulla ei ole vielä reseptejä</h1>
-          </div> :
-          <div>
-          {showInfo ? <div>
+
+        
+          
             <h1 className="h1-profile">Oma profiili</h1>
             <div className="container-profile">
             <div className="userinfo">
@@ -97,6 +96,11 @@ const ProfileForm = () => {
             <p><strong>Sähköposti: </strong>{userDetails.email}</p>
             <p><strong>ID: </strong>{userDetails.userid}</p>
             </div>
+{showNoRecipes ? <div> <h1>Sinulla ei ole vielä reseptejä</h1>
+          </div> :
+          <div>
+            
+            {showInfo ? <div>
             <h1 className="h1-profile">Omat reseptit</h1>
             <div className="profilerecipes">
               
@@ -127,9 +131,15 @@ const ProfileForm = () => {
                 </tbody>
               </table>
             </div>
+
+
+
+            </div>: <h1>Ladataan...</h1>}
+
+              </div>}
         </div>
-          </div>: <h1>Ladataan...</h1>}
-        </div>}
+          
+      
         </div>
       );
 }

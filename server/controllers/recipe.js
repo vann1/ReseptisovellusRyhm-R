@@ -4,7 +4,6 @@ const {searchRecipesFromDatabase, addRecipeToDatabase, getRecipeFromDatabase, ed
 const addRecipe = async (req, res) => {
     try {
         const recipeID = await addRecipeToDatabase(req, res);
-        console.log(recipeID);
         return ok(res, "Recipe added to database successfully.", {recipeID})
     }catch(error) {
         console.error("Error adding recipe to database: " + error)

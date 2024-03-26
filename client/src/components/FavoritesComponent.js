@@ -8,6 +8,7 @@ const FavoritesComponent = () => {
     
     const [userfavorites, setuserfavorites] = useState([]);
     const [showInfo, setShowInfo] = useState(false)
+    const [showFavorites, setShowFavorites] = useState(true);
 
 
     const SearchReviews = async () => {
@@ -20,10 +21,13 @@ const FavoritesComponent = () => {
             }
           }); 
         const data = await response.json();
+        setShowInfo(true);
           if (response.ok) {
-            setShowInfo(true);
+            setShowFavorites(true);
+            
             setuserfavorites(data.data.reviews);
           } else {
+            setShowFavorites(false);
             throw new Error(`HTTP error! Status: ${response.status}`);
           }
           
@@ -56,59 +60,71 @@ const FavoritesComponent = () => {
 
     return (
       <div>
+         {showFavorites ? ( <div> 
         {showInfo ? <div>
 
         {userfavorites.length > 0 && (
         <div>
-          <table>
-            <thead  className='reciperesult-thead'>
-              <tr>
-                <th style={{fontSize : '34px'}}>Sinun suosikkisi</th>
-              </tr>
-            </thead>
-            <tbody className="favoritereciperow">
-              {userfavorites.map((recipe, index) => (
-                <tr key={index}>
-                    <td>
-                      <div>
-                    <div className='search-top'>
-                      <div className='search-top-column'>
-                      <Link className='recipename' to={`/Recipe/${recipe.recipeid}`}>
-                        <p className='border4name'></p><h2 >Resepti nimi: {recipe.recipename}</h2>
-                      </Link>{" "}
-                      <p className='recipecategory'><strong>Kategoria: </strong><br/>{recipe.category}</p>
-                      <p><strong>Kuvaus: </strong><br/>{recipe.description}</p>
-                      </div>
-                      <div className='favoritesearch-image'>
-                      {recipe.images ?
-                          <img   className='recipeimage'  src={`data:image/jpeg;base64,${arrayBufferToBase64(recipe.images.data)}`} alt="Recipe Image"/> :
-                          <img   className='alterimage' src="/pics/noimage.png" alt="No Image"/>}
-                      </div>
-                      </div>
-                      <div className='search-bottom' style={{marginTop : '1%'}}>
-                      <h4 className='recipedesctiptiontitle'>Arvostelusi: </h4>
-                      <div style={{marginTop :'1%'}}>
-                      {[1, 2, 3, 4, 5].map((star, index) => (
-                    <span
-                      id="stars"
-                      key={index}
-                      style={{ color: star <= recipe.rating ? '#ff9100' : 'gray' }}
-                    >
-                      &#9733;
-                    </span>
-                  ))}</div>
-                      <p className='recipedesctiption'>{recipe.review}</p>
-                      </div>
-                      </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+         
+      <table>
+                  <thead  className='reciperesult-thead'>
+                    <tr>
+                      <th style={{fontSize : '34px'}}>Sinun suosikkisi</th>
+                    </tr>
+                  </thead>
+                  <tbody className="favoritereciperow">
+                    {userfavorites.map((recipe, index) => (
+                      <tr key={index}>
+                          <td>
+                            <div>
+                          <div className='search-top'>
+                            <div className='search-top-column'>
+                            <Link className='recipename' to={`/Recipe/${recipe.recipeid}`}>
+                              <p className='border4name'></p><h2 >Resepti nimi: {recipe.recipename}</h2>
+                            </Link>{" "}
+                            <p className='recipecategory'><strong>Kategoria: </strong><br/>{recipe.category}</p>
+                            <p><strong>Kuvaus: </strong><br/>{recipe.description}</p>
+                            </div>
+                            <div className='favoritesearch-image'>
+                            {recipe.images ?
+                                <img   className='recipeimage'  src={`data:image/jpeg;base64,${arrayBufferToBase64(recipe.images.data)}`} alt="Recipe Image"/> :
+                                <img   className='alterimage' src="/pics/noimage.png" alt="No Image"/>}
+                            </div>
+                            </div>
+                            <div className='search-bottom' style={{marginTop : '1%'}}>
+                            <h4 className='recipedesctiptiontitle'>Arvostelusi: </h4>
+                            <div style={{marginTop :'1%'}}>
+                            {[1, 2, 3, 4, 5].map((star, index) => (
+                          <span
+                            id="stars"
+                            key={index}
+                            style={{ color: star <= recipe.rating ? '#ff9100' : 'gray' }}
+                          >
+                            &#9733;
+                          </span>
+                        ))}</div>
+                            <p className='recipedesctiption'>{recipe.review}</p>
+                            </div>
+                            </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+          
+
+          
         </div>
       )}
 
 </div>: <h1>Ladataan...</h1>}
+</div>
+):(
+            <div>
+<h1>Sinulla ei ole vielä suosikki reseptejä.</h1>
+</div>
+          )}
+
         </div>
       );
 }
