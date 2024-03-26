@@ -27,6 +27,7 @@ const EditRecipePage = () => {
   const [ingMeasureArray ,setIngMeasureArray] = useState([]);
   const [missingFieldsMessage, setMissingFieldsMessage] = useState('');
   const [RecipeReg, setRecipeReg] = useState();
+  const [tooLargeImage, setTooLargeImage] = useState('');
   //Vaihtoehdot kategorialle ja ainesosan mitalle
   const Kategoria = ['Alkupala', 'Juoma', 'Välipala', 'Pääruoka', 'Jälkiruoka', 'Leivonnaiset', 'Muu'];
   const options = ['ml', 'tl', 'rkl', 'dl', 'l', 'kkp' ,'g', 'kg', 'kpl'];
@@ -218,13 +219,15 @@ const EditRecipePage = () => {
               });
         
               if (response.ok) {
+                setTooLargeImage('');
                 console.log('Recipe edited successfully');
                 window.alert('Resepti muokattu.')
                 navigate('/ProfilePage')
               } else {
-                console.error('Failed to add recipe:', response.statusText);
+                if(response.stats === 413)
+                console.error('Failed to edit recipe:', response.statusText);
+                setTooLargeImage('Kuva on liian iso tai väärä tiedosto tyyppiä.');
                 //if not valid jwt token redirect to login
-                navigate('/LoginPage')
               }
             } catch (error) {
               console.error('Error:', error.message);
@@ -418,9 +421,7 @@ const handleDeleteImageButtonClick = (e) => {
         </div>
       ))}
 </div>
-
 <label >
-        
         Vain rekisteröityneille käyttäjille?<br></br><input
           type="checkbox"
           checked={RecipeReg}
@@ -499,10 +500,7 @@ const handleDeleteImageButtonClick = (e) => {
       </tr>
       </tbody>
       </table>  
-       
-    
 </div>
-
        <label>Reseptin kuvaus:</label>
        <textarea className='recipe-input' type="text" value={RecipeDesc} onChange={RecipeDescChange} style={{height: '80px'}}></textarea>
        
@@ -510,14 +508,9 @@ const handleDeleteImageButtonClick = (e) => {
        <label>tags:</label>
        <textarea className='recipe-input' type="text" value={Tags} onChange={TagsChange} style={{height: '80px'}}></textarea>
        </div>
-
-
-
 </div>
 <div className="recipehalf">
   <div className="recipehalf2">
-
- 
      <div>
       <label>Reseptin kuva: <br></br></label>
         <input  type="file" accept=".jpg, .jpeg, .png" onChange={handleFileChange}/><button onClick={(e) => handleDeleteImageButtonClick(e)}>Poista kuva</button>
@@ -526,26 +519,19 @@ const handleDeleteImageButtonClick = (e) => {
         
           <img src={imagePreview} alt="Recipe Image" style={{ maxWidth: '300px' }} />
         : <img src={`data:image/jpeg;base64,${selectedFile}`} alt="Recipe Image" style={{ maxWidth: '300px' }} />}
-      
+      <p style={{color:'red'}}>{tooLargeImage}</p>
       </div>
       <div className="recipeGuideContainer">
         <label>Reseptin ohje:</label>
       
         <textarea className='recipe-input' type="text" value={RecipeGuide} onChange={RecipeGuideChange} style={{height: '300px'}}></textarea>
       </div>
-      
-     
-
-      
-     
+    
        </div>
 </div>
       <button id="newrecipesavebtn" type="button" onClick={editBtnClick}>
         Tallenna muokkaus
       </button>
-    
-
-
 </div>
 </form>
 </div>
