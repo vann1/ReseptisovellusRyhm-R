@@ -10,7 +10,7 @@ const FavoritesComponent = () => {
     const [showInfo, setShowInfo] = useState(false)
     const [showFavorites, setShowFavorites] = useState(true);
 
-
+  //Etsii käyttäjän tekemät arvostelut jotka hän on merkannut suosikeiksensa.
     const SearchReviews = async () => {
       const userid = user.userid;
         try {
@@ -38,7 +38,7 @@ const FavoritesComponent = () => {
             
        
       };
-
+      //Kuvan funktio
       const arrayBufferToBase64 = (buffer) => {
         let binary = '';
         const bytes = new Uint8Array(buffer);
@@ -57,7 +57,7 @@ const FavoritesComponent = () => {
 
 
   
-
+    //Näyttää suosikki arvostelut, jos niitä on.
     return (
       <div>
          {showFavorites ? ( <div> 

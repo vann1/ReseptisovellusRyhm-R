@@ -45,7 +45,7 @@ const EditRecipePage = () => {
   Muut:
   kpl = kappale
   */
-
+  //Kuva tiedoston muuttuminen
   const handleFileChange = async (event) => {
     const file = event.target.files[0];
     if (file) {
@@ -58,7 +58,7 @@ const EditRecipePage = () => {
       }
     }
   };
-  
+  //Kuvaan liittyvä.
   const readFileAsBase64 = (file) => {
     return new Promise((resolve, reject) => {
       try {
@@ -75,7 +75,7 @@ const EditRecipePage = () => {
       }
     });
   };
-
+//Kuvaan liittyvä.
   const arrayBufferToBase64 = (buffer) => {
     let binary = '';
     const bytes = new Uint8Array(buffer);
@@ -161,7 +161,7 @@ const EditRecipePage = () => {
       alert('Ainesosan määrä puuttuu');
     }
   };
-
+  //Ainesosan muokkaaminen
   const editIngredients = () => {
       const combinedArray = ingredientsPlaceholder.map((ingredient, index) => ({
       ingredientid: ingredient.ingredientid,
@@ -185,7 +185,7 @@ const EditRecipePage = () => {
   };
 
 
-  //Heittää consoleen mitä tallentuu, tietokanta yhteys myöhemmin
+  //Tallentaa reseptin muokkaukset tietokantaan.
   //Varmistaa että kentät eivät ole tyhjiä
   const editBtnClick = async () => {
     if (RecipeName) {
@@ -193,7 +193,6 @@ const EditRecipePage = () => {
           if(RecipeGuide){
             const UserID = `${user.userid}`
             try {
-              //checks if user is logged in to the site
               if(!user) {
                 throw Error('Sinun täytyy kirjautuu sisään jotta voit luoda uusia reseptejä.')
              }
@@ -227,7 +226,6 @@ const EditRecipePage = () => {
                 if(response.stats === 413)
                 console.error('Failed to edit recipe:', response.statusText);
                 setTooLargeImage('Kuva on liian iso tai väärä tiedosto tyyppiä.');
-                //if not valid jwt token redirect to login
               }
             } catch (error) {
               console.error('Error:', error.message);
@@ -244,6 +242,7 @@ const EditRecipePage = () => {
     }
   };
 
+  //Hakee reseptin tietokannasta id:een perusteella.
   useEffect(() => {
     const getRecipe = async () => {
       try {
@@ -278,7 +277,7 @@ const EditRecipePage = () => {
     getIngredients();
   }, [/*id, user*/]);
 
-
+//lähettää uuden ainesosat.
 const sendIngredients = async () => {
             try {
               const response = await fetch(`http://localhost:3001/api/ingredients/add`, {
@@ -311,7 +310,7 @@ useEffect(() => {
 },[Ingredients])
 
 
-
+//Hakee reseptin ainesosat.
           const getIngredients = async () => {
             try {
               const response = await fetch(`http://localhost:3001/api/ingredients/${id}`, {
@@ -342,7 +341,7 @@ useEffect(() => {
               console.error('Error during search:', error.message);
             }
           }
-
+//Reseptin ainesosan poistaminen
           const deleteIngredient = async (ingredientId) => {
             try {
                 const response = await fetch(`http://localhost:3001/api/ingredients/${ingredientId}`, {
@@ -381,7 +380,7 @@ useEffect(() => {
               console.error('Error deleting image:', error.message);
             }
       }
-
+//Kuvan poistaminen
 const handleDeleteImageButtonClick = (e) => {
   if(selectedFile !== null) {
   deleteImage();
