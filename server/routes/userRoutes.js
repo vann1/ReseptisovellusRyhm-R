@@ -13,6 +13,7 @@ const {requireAuth} = require('../middlewares/authMiddleware');
  * @param {import('express').Response} res - The response object.
  * @returns {Promise<void>} A Promise that resolves when the user creation process is complete.
  */
+//Creates user
 router.post("/create", async (req, res) => {
   //First, it checks if the received request was in JSON format or not.
   if (!isJson(req)) {
@@ -30,6 +31,7 @@ const maxAge = 60 * 60 * 1000;
  * @param {import('express').Response} res - The response object.
  * @returns {Promise<void>} A Promise that resolves when the user login process is complete.
  */
+//Used in user log in
 router.post("/login", async (req, res) => {
   const {email} = req.body;
   try {
@@ -52,6 +54,7 @@ router.post("/login", async (req, res) => {
 //after this all routes requires authenticated user
 router.use(requireAuth);
 
+//Users info
 router.post("/profile", async (req, res) => {
   try {
   //First, it checks if the received request was in JSON format or not.
@@ -65,6 +68,7 @@ router.post("/profile", async (req, res) => {
 }
 });
 
+//Admin info
 router.get("/admin", async (req, res) => {
   try {
   //First, it checks if the received request was in JSON format or not.
@@ -78,6 +82,7 @@ router.get("/admin", async (req, res) => {
 }
 });
 
+//Deletes user using userid
 router.delete('/:userId', (req,res) => {
   const userid = req.params.userId;
   try {
@@ -94,6 +99,7 @@ router.delete('/:userId', (req,res) => {
 
 })
 
+//Gets user info using userid
 router.get('/profile/:userId', (req,res) => {
   try {
     //First, it checks if the received request was in JSON format or not.
@@ -109,6 +115,7 @@ router.get('/profile/:userId', (req,res) => {
 
 })
 
+//Used in password change
 router.post("/password/change", async (req, res) => {
   try {
   //First, it checks if the received request was in JSON format or not.

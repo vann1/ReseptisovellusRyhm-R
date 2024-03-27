@@ -16,7 +16,7 @@ const { createJWT, comparePassword ,validatePassword } = require("../utils/userU
  * @param {Object} res - HTTP response object.
  * @returns {Promise<void>} - Promise indicating the state of execution.
  */
-
+//Creates user
 const createUser = async (req, res) => {
   try {
     //First checks if the user can be added to the database.
@@ -47,6 +47,7 @@ const createUser = async (req, res) => {
  * @param {Object} res - HTTP response object.
  * @returns {Promise<void>} - Promise indicating the state of execution.
  */  
+//Used when user logs in
 const loginUser = async (req, res, maxAge) => {
   try {
     const user = await getUserFromDatabase(req, res);
@@ -72,6 +73,7 @@ const loginUser = async (req, res, maxAge) => {
   }
 };
 
+//Shows user
 const showUser = async (req, res) => {
   try {
     const user = await getUserFromDatabase(req, res);
@@ -90,6 +92,7 @@ const showUser = async (req, res) => {
   }
 };
 
+//Shows all users
 const showAllUsers = async (req,res) => {
   try {
     const users = await getAllUsersFromDatabase(res);
@@ -103,6 +106,7 @@ const showAllUsers = async (req,res) => {
   }
 }
 
+//Deletes user
 const deleteUser = async (res, userid) => {
   try {
     const result = await deleteUserFromDatabase(userid);
@@ -115,6 +119,7 @@ const deleteUser = async (res, userid) => {
   }
 }
 
+//Gets users recipes
 const getUserRecipe = async (req, res) => {
   try {
     const result = await getRecipeFromDatabase(req,res);
@@ -127,7 +132,7 @@ const getUserRecipe = async (req, res) => {
   }
 }
 
-
+//Used in password change
 const changePassword = async (req,res) => {
   try {
     const user = await getUserFromDatabase(req, res);

@@ -5,7 +5,7 @@ const { addPasswordToDatabase } = require('../database');
 const nodemailer = require("nodemailer");
 require("dotenv").config();
 
-
+//Sends recipe as email
 const sendEmail = async (req,res) => {
     const {recipePageAddress, senderEmail, reciverEmail} = req.body;
     
@@ -42,6 +42,7 @@ const sendEmail = async (req,res) => {
     }
 }
 
+//Used to recover password
 async function sendPasswordRecoveryEmail(email) {
     try {
         const isRegistered = await isEmailRegistered(email); // Checks if inserted email can be found in our database
@@ -83,6 +84,7 @@ async function sendPasswordRecoveryEmail(email) {
     }
 }
 
+//Used to generate random password
 function generateRandomPassword() { // function to generate random password
     const randomString = Math.random().toString(36).slice(-8);
     return randomString;

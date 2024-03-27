@@ -1,7 +1,7 @@
 const {internalServerError, notFound, ok} = require('../utils/responseUtils')
 const {getIngredientsFromDatabase, addIngredientToDatabase, deleteIngredientFromDatabase} = require('../database')
 
-
+//Searches ingredients
 const getIngredients = async (req, res) => {
     try {
         const ingredients = await getIngredientsFromDatabase(req, res);
@@ -16,6 +16,7 @@ const getIngredients = async (req, res) => {
     }
 };
  
+//Adds ingredient
 const addIngredient = async (req, res) => {
     try {
         const result = await addIngredientToDatabase(req, res);
@@ -31,7 +32,7 @@ const addIngredient = async (req, res) => {
     }
 };
 
-
+//Deletes ingredient
 const deleteIngredient = async (req, res) => {
     try {
         const result = await deleteIngredientFromDatabase(req, res);

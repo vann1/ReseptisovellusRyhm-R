@@ -7,7 +7,7 @@ const router = express.Router();
 const {searchRecipes,addRecipe, SearchRecipe, editRecipe,deleteRecipe, deleteRecipeImage} = require("../controllers/recipe")
 const {requireAuth} = require('../middlewares/authMiddleware')
 
-//Etsii reseptejä tietokannasta.
+//Searches recipes from database
 router.post('/search', async (req, res) => {
   if(!isJson) {
     //If it wasn't, the responseUtils.badRequest function is returned, which takes res and an error message as parameters.
@@ -16,7 +16,7 @@ router.post('/search', async (req, res) => {
   return SearchRecipe(req, res);
 });
 
-//Etsii kaikki reseptit tietokannasta
+//Searches all recipes from database
 router.post('/searchAll', async (req, res) => {
   if(!isJson) {
     //If it wasn't, the responseUtils.badRequest function is returned, which takes res and an error message as parameters.
@@ -27,7 +27,7 @@ router.post('/searchAll', async (req, res) => {
 
 router.use(requireAuth);
 //after this all routes requires authenticated user
-//Hakee reseptin tietokannasta id:een perusteella
+//Searches recipe from database using id
 router.get('/:id', async (req, res) => {
   if(!isJson) {
     //If it wasn't, the responseUtils.badRequest function is returned, which takes res and an error message as parameters.
@@ -36,7 +36,7 @@ router.get('/:id', async (req, res) => {
   return SearchRecipe(req, res);
 });
 
-//Lisää reseptin tietokantaan
+//Adds recipe to database
 router.post('/add', async (req, res) => {
     if(!isJson) {
       //If it wasn't, the responseUtils.badRequest function is returned, which takes res and an error message as parameters.
@@ -44,7 +44,7 @@ router.post('/add', async (req, res) => {
     }
     return addRecipe(req, res);
   });
-//Muokkaa reseptiä tietokannassa
+//Edits recipe in database
   router.put('/edit', async (req, res) => {
     if(!isJson) {
       //If it wasn't, the responseUtils.badRequest function is returned, which takes res and an error message as parameters.
@@ -52,7 +52,7 @@ router.post('/add', async (req, res) => {
     }
     return editRecipe(req, res);
   });
-//Poistaa reseptin tietokannasta
+//Deletes recipe from database using id
   router.delete('/:recipeId', async (req, res) => {
     if(!isJson) {
       //If it wasn't, the responseUtils.badRequest function is returned, which takes res and an error message as parameters.
@@ -60,7 +60,7 @@ router.post('/add', async (req, res) => {
     }
     return deleteRecipe(req, res);
   });
-  //Poistaa reseptin kuvan tietokannasta
+  //Deletes image from recipe in database using recipeid
   router.delete('/image/:recipeId', async (req, res) => {
     if(!isJson) {
       //If it wasn't, the responseUtils.badRequest function is returned, which takes res and an error message as parameters.

@@ -7,7 +7,7 @@ const {sendPasswordRecoveryEmail } = require('../controllers/email');
 
 // router.use(requireAuth);
 
-
+//Used in recovering password
   router.post('/recover', async (req, res) => {
     try {
       const { email } = req.body;  
@@ -27,7 +27,7 @@ const {sendPasswordRecoveryEmail } = require('../controllers/email');
 
   router.use(requireAuth); 
   //after this all routes requires authenticated user
-
+//Used in sharing a recipe through email
   router.post('/send', async (req, res) => {
     if(!isJson) {
       //If it wasn't, the responseUtils.badRequest function is returned, which takes res and an error message as parameters.
