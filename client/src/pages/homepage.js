@@ -51,11 +51,14 @@ const HomePage = () => {
     return(
         <div className="container-home">
             <div className="homepage-top">
+              <div className="homepage-top2">
                 <h1>Resepti haku</h1>
                 <div className="homepage-search">
                     <input type="text" className="home-search-input" placeholder="Etsi..." onChange={(e) => setInput(e.target.value)}></input><button onClick={() => searchRecipes()} className="home-search-button">Hae</button>
                 </div>
                 {isSearched ? !user && <h3 style={{color:'red', fontWeight: 'bold'}}>Kirjaudu nähdäksesi reseptejä enemmän!</h3>: <h3>{notFound}</h3>}
+              </div>
+              <div className='logohome'></div>
             </div>
             {userfavorites.length > 0 && (
         <div>
@@ -93,9 +96,8 @@ const HomePage = () => {
               ))}
             </tbody>
           </table>
-        </div>
+        </div>     
       )}
-
         </div>
     )
   };
