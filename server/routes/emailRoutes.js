@@ -10,10 +10,8 @@ const {sendPasswordRecoveryEmail } = require('../controllers/email');
 
   router.post('/recover', async (req, res) => {
     try {
-      const { email } = req.body;
-      // Add any validation for email here if needed
-      
-      // Call the function to send password recovery email
+      const { email } = req.body;  
+      // Calls the function to send password recovery email
       const success = await sendPasswordRecoveryEmail(email);
   
       if (success) {

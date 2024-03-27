@@ -6,7 +6,7 @@ const LostPassword = () => {
   const [successMessage, setSuccessMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  const sendReturnCode = async (email) => {
+  const sendReturnCode = async (email) => { //sends the new password to requested email address
     try {
       setIsLoading(true);
       const response = await fetch("http://localhost:3001/api/email/recover", {
@@ -31,7 +31,7 @@ const LostPassword = () => {
     }
   };
 
-  const clearMessages = () => {
+  const clearMessages = () => { //Clears the success/error messages in case user inserts new email
     setErrorMessage("");
     setSuccessMessage("");
   };

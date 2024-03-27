@@ -44,24 +44,24 @@ const sendEmail = async (req,res) => {
 
 async function sendPasswordRecoveryEmail(email) {
     try {
-        const isRegistered = await isEmailRegistered(email);
+        const isRegistered = await isEmailRegistered(email); // Checks if inserted email can be found in our database
         if (!isRegistered) {
             console.log('Email is not registered');
-            return false; // Indicate that email is not registered
+            return false; 
         }
 
-        // Generate a new random password
+        // Generates new random password to user
         const newPassword = generateRandomPassword();
 
-        // Add the new password to the database
+        // Adds the new password to database
         await addPasswordToDatabase(email, newPassword);
 
-        // Send the password recovery email with the new password
+        // Sends the new password to email user has inserted (in case it exists in our database)
         const mailOptions = {
             from: 'ressureseptisovellus@gmail.com',
             to: email,
             subject: 'Password Recovery',
-            text: `Väliaikainen salasanasi on ${newPassword}. Vaihda salasana uuteen profiili sivulla.`, // Include the new password in the email
+            text: `Väliaikainen salasanasi on ${newPassword}. Vaihda salasana uuteen profiili sivulla.`, 
         };
 
         const transporter = nodemailer.createTransport({
@@ -76,15 +76,14 @@ async function sendPasswordRecoveryEmail(email) {
 
         await transporter.sendMail(mailOptions);
         console.log('Password recovery email sent successfully');
-        return true; // Indicate success
+        return true; 
     } catch (error) {
         console.error('Error sending password recovery email:', error);
-        throw error; // Throw the error to be handled by the caller
+        throw error; 
     }
 }
 
-function generateRandomPassword() {
-    // Generate a random string of characters for the password
+function generateRandomPassword() { // function to generate random password
     const randomString = Math.random().toString(36).slice(-8);
     return randomString;
 }

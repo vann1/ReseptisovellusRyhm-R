@@ -1149,32 +1149,33 @@
 /*PROFILEPAGE*/
 
 /*SHOW RECIPE STARTS*/
-.app {
+.showrecipe-container {
   background-color: #fcf3d886;
   display: flex;
   flex-wrap: wrap;
-  margin: 0 auto; /* Keskitä container */
+  margin: 0 auto; 
   max-width: 1200px;
   padding: 10px;
   justify-content: center;
   flex-direction: column;
 }
 
-.compartment-container {
+.recipeinfo-container {
   display: flex;
   flex: 1;
   gap: 10px;
   flex-direction: row;
 }
 
-.compartment1 {
+.recipeinfobox1 {
   flex: 1;
   padding: 15px;
   background-color: #ffe58e;
   margin: 15px; 
   border-radius: 10px;
 }
-.compartment2 {
+
+.recipeinfobox2 {
   flex: 1;
   padding: 15px;
   background-color: #ffe58e;
@@ -1182,19 +1183,20 @@
   border-radius: 10px;
 }
 
-.compartment3 {
+.sharerecipebox {
   padding: 20px;
   background-color: #ffe58e;
   margin: 15px;
   border-radius: 10px;
 }
 
-.compartment4 {
+.ratingbox {
   padding: 20px;
   background-color: #ffe58e;
   margin: 15px;
   border-radius: 10px;
 }
+
 
 .recipenameshow {
   color: #624e08;

@@ -4,7 +4,7 @@ import "../styles/styles.css";
 const LostPasswordForm = ({ errorMessage, successMessage, clearMessages, isLoading, sendReturnCode }) => {
   const [email, setEmail] = useState("");
 
-  const handleSendReturnCode = () => {
+  const handleSendReturnCode = () => { //triggers the functions in LostPasswordPage.js
     clearMessages();
     sendReturnCode(email);
   };
