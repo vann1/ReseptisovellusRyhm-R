@@ -147,6 +147,7 @@ const ShowRecipe = () => {
                   </div>
                 </div>
                 <div className='compartment2'>
+                  <p><strong>Tekijä:</strong> {recipe.username}</p>
                   <p><strong>Kategoria:</strong> {recipe.category}</p>
                   <p><strong>Kuvaus:</strong> {recipe.description}</p>
                   <p><strong>Tagit:</strong> {recipe.tags}</p>
