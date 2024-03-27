@@ -4,7 +4,6 @@ import { useNavigate } from 'react-router-dom';
 import '../styles/styles.css'
 
 const RuokaKategoria = () => {
-  //ContextApi for current user
   const {user} = useAuthContext();
   const navigate = useNavigate();
   //Muuttujat
@@ -25,22 +24,7 @@ const RuokaKategoria = () => {
   const [image, setImage] = useState(null);
   const [pElement, setPElement] = useState('');
 
-  
-  /*Mitat:
-  Tilavuus:
-  ml = millilitra 1ml
-  tl = teelusikka 5ml
-  rkl = ruokalusikka 15ml
-  dl= desilitra 100ml 
-  kkp = kahvikuppi 150ml / 1,5 dl
-  l = litra = 1000 ml / 10 dl
-  Paino:
-  g = gramma 1g
-  kg = kilogramma 1000g
-  Muut:
-  kpl = kappale
-  */
-
+  //Kuvan lisäys funktio
   const handleFileChange = async (event) => {
     const file = event.target.files[0];
     if (file) {
@@ -58,10 +42,12 @@ const RuokaKategoria = () => {
     }
   };
 
+  //Rekisteröityneille käyttäjille valinta, 0 kaikille, 1 vain rekisteröityneille
   const handleCheckboxChange = () => {
     setRecipeReg(RecipeReg === 0 ? 1 : 0);
     
   };
+  //Lukee kuvan
   const readFileAsBase64 = (file) => {
     return new Promise((resolve, reject) => {
       try {
@@ -123,18 +109,17 @@ const isValidIngredients = () => {
       setIngMeasure('ml');
       setIngName('');
   };
- 
+  
+  //poistaa viimeisimmän ingredientin.
   const deleteLastIngredient = () => {
     const newIngredients = [...Ingredients];
-    // Remove the last item from the array
     newIngredients.pop();
-    // Update state with the modified array
     setIngredients(newIngredients);
   };
 
 
 
-  //Heittää consoleen mitä tallentuu, tietokanta yhteys myöhemmin
+  //Lähettää uuden reseptin tietokantaan ja ohjaa showrecipe sivulle reseptistä.
   //Varmistaa että kentät eivät ole tyhjiä
   const TallennaBtnClick = async () => {
     if (RecipeName) {
@@ -144,8 +129,6 @@ const isValidIngredients = () => {
           if(RecipeGuide){
             const UserID = `${user.userid}`
             try {
-
-              //checks if user is logged in to the site
               if(!user) {
                 throw Error('Sinun täytyy kirjautuu sisään jotta voit luoda uusia reseptejä.')
              }
@@ -174,7 +157,6 @@ const isValidIngredients = () => {
                 navigate(`/Recipe/${recipeid}`)
               } else {
                 console.error('Failed to add recipe:', response.statusText);
-                //if not valid jwt token redirect to login
               }
               
             } catch (error) {

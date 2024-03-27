@@ -45,7 +45,7 @@ const RatingComponent = (props) => {
 
 
 
-
+      //Etsii arvostelut tietokannasta
     const SearchReviews = async () => {
       try {
         const response = await fetch(`http://localhost:3001/api/review/search/${recipeid}`, {
@@ -76,7 +76,7 @@ const RatingComponent = (props) => {
     useEffect(() => {
       SearchReviews();
     },[])
-
+    //Jos kirjautunut käyttäjä on tehnyt arvostelun reseptiin, sitä ei näytettä arvosteluissa, vaan uusi arvostelu muuttuu muokkaa arvostelu jossa oma arvostelu näkyy.
     const removeUserReview = () => {
       const userReviewIndex = recipeReviews.findIndex(review => review.userid === props.userid);
       if (userReviewIndex !== -1) {
@@ -103,6 +103,7 @@ const RatingComponent = (props) => {
       
     }, [recipeReviews, props.userid]);
 
+    //Arvostelun muokkaaminen
     const updateReview = async () => {
       try {
           const response = await fetch('http://localhost:3001/api/review/edit', {
@@ -130,7 +131,7 @@ const RatingComponent = (props) => {
         
     };
 
-    
+    //Arvostelun poistaminen
     const deleteReview = async () => {
       const reviewid = userReview.reviewid;
       try {
@@ -153,7 +154,7 @@ const RatingComponent = (props) => {
 
     };
 
-
+    //Arvostelun lisääminen
     const handleSubmit = async () => {
       if(userRating && comment) {
       try {
@@ -187,7 +188,7 @@ const RatingComponent = (props) => {
 
 
 
-    
+    //Alhaalla palautetaan arvostele resepti, jos kirjautuneella käyttäjällä ei ole reseptille arvostelua ja näytetään muokkaa resepti jo on.
     return(
             <div>
       
