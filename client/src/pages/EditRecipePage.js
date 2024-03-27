@@ -517,8 +517,8 @@ const handleDeleteImageButtonClick = (e) => {
       <br></br>
       {imagePreview ?         
         
-          <img src={imagePreview} alt="Recipe Image" style={{ maxWidth: '300px' }} />
-        : <img src={`data:image/jpeg;base64,${selectedFile}`} alt="Recipe Image" style={{ maxWidth: '300px' }} />}
+          <img src={imagePreview} alt="Recipe Image" style={{ maxWidth: '300px',  maxHeight: '270px' }} />
+        : <img src={`data:image/jpeg;base64,${selectedFile}`} alt="Recipe Image" style={{ maxWidth: '300px',  maxHeight: '270px' }} />}
       <p style={{color:'red'}}>{tooLargeImage}</p>
       </div>
       <div className="recipeGuideContainer">

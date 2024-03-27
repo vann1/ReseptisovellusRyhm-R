@@ -5,6 +5,7 @@ import '../styles/styles.css'
 const RegisterPage = () => {
   const navigate = useNavigate();
   const [signinsuccess, setSigninsuccess] = useState(false);
+  const [emailExist, setEmailExist] = useState('');
   const handleRegister = async (name, password, email, username) => {
       try {
         const response = await fetch('http://localhost:3001/api/user/create', {
@@ -19,10 +20,12 @@ const RegisterPage = () => {
           throw new Error(data.error);
         }
         if (response.ok) {
+          setEmailExist("");
           console.log('User created successfully', response.status);
           setSigninsuccess(true);
         } 
       } catch (error) {
+        setEmailExist("Annettu sähköposti on jo käytössä.")
         console.error('Error:', error);
       }
   };
@@ -34,7 +37,7 @@ const RegisterPage = () => {
       <h1>Rekisteröityminen onnistui! Voit nyt kirjautua<Link to="/LoginPage"  className='Register-success-message'> tästä linkistä.</Link></h1>
       </div>:
       <div className='Register-container'>
-      <RegisterForm onRegister={handleRegister} />
+      <RegisterForm onRegister={handleRegister} emailExist={emailExist}/>
       </div>}
     </div>
   );

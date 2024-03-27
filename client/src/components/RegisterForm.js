@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import '../styles/styles.css'
-const RegisterForm = ({ onRegister }) => {
+const RegisterForm = ({ onRegister, emailExist }) => {
   const [name, setName] = useState('');
   const [password, setPassword] = useState('');
   const [username, setUsername] = useState('');
@@ -171,6 +171,7 @@ const RegisterForm = ({ onRegister }) => {
       <br></br>
       <div className='Register-button-div'>
       <button  className='Register-button' onClick={handleRegister} disabled={disabled}>Luo käyttäjä</button>
+      <p className='emailExist' style={{color:'red'}}>{emailExist}</p>
       </div>
       <br></br>
       <br></br>

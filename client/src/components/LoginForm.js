@@ -38,8 +38,9 @@ const LoginForm = ({onLogin, virheViesti, isLoading}) => {
       <p className="loginError">{virheViesti}</p>
       <button className="Register-button" onClick={handleLogin} disabled={isLoading}>Kirjaudu</button>
       <br></br>
-      <div>
-      <Link to={`/Password`}><p>Unohtuiko salasana?</p></Link>
+      <div className="loginform-links">
+      <Link to={`/RegisterPage`}><p>Luo käyttäjä</p></Link>
+      <Link to={`/Password`}><p className="loginform-link" >Unohtuiko salasana?</p></Link>
       </div>
     </div>
   );

@@ -1346,6 +1346,9 @@
 
 
 /*RegisterPage Style*/
+.emailExist {
+  margin-top: 5px;
+}
 
 .Register-container {
   width: 100%;
@@ -1457,8 +1460,12 @@
 .login-inputs {
   margin-bottom: -20px;
 }
-
-
+.loginform-link {
+  margin-top: -10px;
+}
+.loginform-links {
+  margin-top: -5px;
+}
 /*LoginPage Style ENDS*/
 
 

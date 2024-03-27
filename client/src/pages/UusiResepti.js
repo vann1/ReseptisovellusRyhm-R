@@ -304,7 +304,7 @@ const isValidIngredients = () => {
     <input type="file" accept=".jpg, .jpeg, .png" onChange={handleFileChange} />
     <br></br>
     {image ? (
-      <img src={image} alt="Uploaded" style={{width: '300px'}}/>
+      <img src={image} alt="Uploaded" style={{width: '300px', maxHeight: '270px'}}/>
     ) : (
       <p>Kuva tulee tähän</p>
     )}
