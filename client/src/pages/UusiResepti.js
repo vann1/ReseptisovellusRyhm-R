@@ -100,6 +100,9 @@ const RuokaKategoria = () => {
   }
 
   const handleInputChange = (index, field, value) => {
+    if(field === "IngAmount"){
+      value = value.replace(/[^0-9]/g, '');
+    }
     const updatedIngredients = [...Ingredients];
     updatedIngredients[index] = {
       ...updatedIngredients[index],
@@ -249,6 +252,7 @@ const isValidIngredients = () => {
             className='recipe-input'
             type="number"
             min="0"
+            inputMode="numeric"
             value={ingredient.IngAmount}
             onChange={(e) => handleInputChange(index, 'IngAmount', e.target.value)}
             pattern="[0-9]*"
