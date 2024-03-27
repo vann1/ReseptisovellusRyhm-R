@@ -3,10 +3,6 @@ import {ProfileForm} from '../components/ProfileForm';
 import { FavoritesComponent } from '../components/FavoritesComponent';
 
 const ProfilePage = () => {
-
-  
-
-
   return (
     <div className='profile-background'>
       <div className='profile-component'>

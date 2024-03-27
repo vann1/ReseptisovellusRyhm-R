@@ -77,7 +77,6 @@ const loginUser = async (req, res, maxAge) => {
 const showUser = async (req, res) => {
   try {
     const user = await getUserFromDatabase(req, res);
-
     //First, it checks if the requested user exists in the database.
     if (!user) {
       //If the user is not found, it returns the notFound function from responseUtils, which takes res and an error message as parameters.
@@ -92,13 +91,14 @@ const showUser = async (req, res) => {
   }
 };
 
-//Shows all users
+//Gets all users from database
 const showAllUsers = async (req,res) => {
   try {
     const users = await getAllUsersFromDatabase(res);
     if (!users) {
       return notFound(res, "Error finding users from database")
     }
+    //returns ok and all users found from the database
     return ok(res, "User found from the database", {users})
   } 
   catch (error) {
@@ -106,9 +106,10 @@ const showAllUsers = async (req,res) => {
   }
 }
 
-//Deletes user
+//Deletes user from database
 const deleteUser = async (res, userid) => {
   try {
+    //removes user from database
     const result = await deleteUserFromDatabase(userid);
     if(!result) {
       return notFound(res, "Error finding user from database")
@@ -126,6 +127,7 @@ const getUserRecipe = async (req, res) => {
     if(!result) {
       return notFound(res, "Error finding recipe from database")
     }
+    //if recipe found return status ok and message
     return ok(res, "User recipes found from database", {result})
   } catch(error) {
     return internalServerError(res,"Internal server error, while trying to get user's recipes from database");

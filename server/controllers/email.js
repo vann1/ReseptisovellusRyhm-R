@@ -5,18 +5,19 @@ const { addPasswordToDatabase } = require('../database');
 const nodemailer = require("nodemailer");
 require("dotenv").config();
 
-//Sends recipe as email
+//Function for sharing recipe via email
 const sendEmail = async (req,res) => {
     const {recipePageAddress, senderEmail, reciverEmail} = req.body;
     
     try {
+        //sets options for nodemailer
     const mailOptions = {
         from: senderEmail,
         to: reciverEmail,
         subject: 'Ressu Reseptisovellus',
         text: `Käyttäjä ${senderEmail} jakoi reseptin sinulle. Katsele reseptiä tästä osoitteesta ${recipePageAddress}`
     };
-
+    //nodemailer config
     const transporter = nodemailer.createTransport({
         host: 'smtp.gmail.com',
         port: 465,

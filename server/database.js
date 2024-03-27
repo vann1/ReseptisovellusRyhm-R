@@ -386,6 +386,7 @@ for (let i = 0; i < updatedIngredients.length; i++) {
   } 
   }
   
+//Gets ingredients from database
 //gets all ingredients from database
 const getIngredientsFromDatabase = async (req,res) => {
   const recipeid = req.params.recipeId;
