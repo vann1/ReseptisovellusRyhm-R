@@ -1,6 +1,7 @@
 const {badRequest, created, internalServerError, notFound, ok} = require('../utils/responseUtils')
 const {searchRecipesFromDatabase, addRecipeToDatabase, getRecipeFromDatabase, editRecipeToDatabase, deleteRecipeFromDatabase, deleteRecipeImageFromDatabase} = require('../database')
 
+//Lisää reseptin tietokantaan
 const addRecipe = async (req, res) => {
     try {
         const recipeID = await addRecipeToDatabase(req, res);
@@ -11,6 +12,7 @@ const addRecipe = async (req, res) => {
     }
 }
 
+//Etsii reseptejä tietokannasta
 const SearchRecipe = async (req, res) => {
     try {
         const recipes = await getRecipeFromDatabase(req, res);
@@ -25,6 +27,7 @@ const SearchRecipe = async (req, res) => {
         return internalServerError(res, "Internal server error while searching for recipes");
     }
 };
+//Muokkaa reseptie tietokannassa
 const editRecipe = async (req,res) => {
     try {
         const recipes = await editRecipeToDatabase(req, res);
@@ -37,7 +40,7 @@ const editRecipe = async (req,res) => {
         return internalServerError(res, "Internal server error while editing recipes");
     }
 }
-
+//Poistaa reseptin tietokannasta
 const deleteRecipe = async (req,res) => {
     try {
         const result = await deleteRecipeFromDatabase(req, res);
@@ -49,7 +52,7 @@ const deleteRecipe = async (req,res) => {
         return internalServerError(res, "Internal server error while deleting recipe")
     }
 }
-
+//Poistaa reseptin kuvan tietokannassa
 const deleteRecipeImage = async (req,res) => {
     try {
         const result = await deleteRecipeImageFromDatabase(req, res);
@@ -62,7 +65,7 @@ const deleteRecipeImage = async (req,res) => {
     }
 }
 
-
+//Hakee reseptejä
 const searchRecipes = async (req,res) => {
     try {
         const result = await searchRecipesFromDatabase(req, res);

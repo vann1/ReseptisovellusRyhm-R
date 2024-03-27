@@ -2,7 +2,7 @@ const {badRequest, created, internalServerError, notFound, ok} = require('../uti
 const {getReviewFromDatabase, addReviewToDatabase, editReviewInDatabase, deleteReviewInDatabase} = require('../database')
 
 
-
+//Etsii arvosteluja
 const searchReviews = async (req, res) => {
     try {
         const reviews = await getReviewFromDatabase(req, res);
@@ -18,7 +18,7 @@ const searchReviews = async (req, res) => {
     }
 };
 
-
+//Lisää arvosteluja
 const addReview = async (req, res) => {
     try {
         if(!addReviewToDatabase(req, res)) {
@@ -30,7 +30,7 @@ const addReview = async (req, res) => {
         return internalServerError(res, "Internal server error, while adding review");
     }
 }
-
+//Muokkaa arvosteluja
 const editReview = async (req, res) => {
     try {
         if(!editReviewInDatabase(req, res)) {
@@ -42,7 +42,7 @@ const editReview = async (req, res) => {
         return internalServerError(res, "Internal server error, while adding review");
     }
 }
-
+//poistaa arvosteluja
 const deleteReview = async (req, res) => {
     try {
         if(!deleteReviewInDatabase(req, res)) {

@@ -5,7 +5,7 @@ const config = require("./config/config");
 const bcrypt = require("bcrypt"); // for password encrypting
 
 let pool;
-
+//Yhdistää  tietokantaan,
 const connectToDatabase = async () => {
   try {
     pool = await sql.connect(config);
@@ -13,7 +13,7 @@ const connectToDatabase = async () => {
     console.error("Error connecting to the database:", error);
   }
 };
-
+//Sulkee yhteyden tietokantaan.
 const closeDatabaseConnection = async () => {
   try {
     await pool.close();
@@ -29,6 +29,7 @@ const closeDatabaseConnection = async () => {
  * @param {object} res - The response object.
  * @returns {boolean} Returns true if the user is successfully added to the database, otherwise false.
  */
+//Lisää käyttäjän tietokantaan
 const addUserToDatabase = async (req, res) => {
   //First it gets user details from req.body
   const { username, email, password, name } = req.body;
@@ -79,6 +80,7 @@ const addUserToDatabase = async (req, res) => {
  * @param {object} res - The response object.
  * @returns {object|undefined} Returns the user object if found, otherwise returns undefined.
  */
+//Hakee käyttäjän tietokannasta
 const getUserFromDatabase = async (req, res) => {
   //takes email from req.body
   const { email, userId } = req.body;
@@ -124,6 +126,7 @@ const getUserFromDatabase = async (req, res) => {
     } 
 };
 
+//Lisää reseptin tietokantaan
 const addRecipeToDatabase = async (req, res) => {
   const { UserID, RecipeName, RecipeCategory, RecipeGuide, RecipeDesc, Tags, Ingredients, selectedFile, RecipeReg } = req.body;
   let connection;
@@ -183,7 +186,7 @@ const addRecipeToDatabase = async (req, res) => {
 }; 
   
 /********************************************************* */
-
+//Hakee reseptin tietokannasta
 const getRecipeFromDatabase = async (req, res) => {
   // Assuming your database connection is already established and stored in the 'sql' variable
   const recipeidparams = req.params.id;
@@ -270,6 +273,7 @@ const getRecipeFromDatabase = async (req, res) => {
     } 
 };
 
+//Hakee kaikki käyttäjät tietokannasta
 const getAllUsersFromDatabase = async (req, res) => {
   try {
     await connectToDatabase();
@@ -294,7 +298,8 @@ const getAllUsersFromDatabase = async (req, res) => {
     await closeDatabaseConnection();
     } 
 };
-     
+
+//poistaa käyttäjän ja hänen arvostelut tietokannasta
 const deleteUserFromDatabase = async (userid)  => {
   try {
     await connectToDatabase();
@@ -315,6 +320,7 @@ const deleteUserFromDatabase = async (userid)  => {
     } 
 };
 
+//Muokkaa reseptiä tietokannassa
 const editRecipeToDatabase = async (req,res) => {
 
   const { id, RecipeName, RecipeCategory, RecipeGuide, RecipeDesc, Tags, updatedIngredients, Ingredients, RecipeReg, selectedFile} = req.body;
@@ -380,7 +386,7 @@ for (let i = 0; i < updatedIngredients.length; i++) {
   } 
   }
   
-
+//Hakee ainesosat tietokannasta
 const getIngredientsFromDatabase = async (req,res) => {
   const recipeid = req.params.recipeId;
   try {
@@ -410,7 +416,7 @@ const getIngredientsFromDatabase = async (req,res) => {
 }
 
 
-
+//Lisää ainesosan tietokantaan
 const addIngredientToDatabase = async (req, res) => {
   const {Ingredients, id} = req.body;
   let connection;
@@ -448,7 +454,7 @@ const addIngredientToDatabase = async (req, res) => {
   } 
 }; 
 
-
+//Poistaa ainesosan tietokannasta
 const deleteIngredientFromDatabase = async (req, res) => {
   const { ingredientId } = req.params; 
   let connection;
@@ -481,6 +487,8 @@ const deleteIngredientFromDatabase = async (req, res) => {
     }
   } 
 }
+
+//Poistaa reseptin tietokannasta
 const deleteRecipeFromDatabase = async (req, res) => {
   const { recipeId } = req.params; 
   let connection;
@@ -513,7 +521,7 @@ const deleteRecipeFromDatabase = async (req, res) => {
     }
   } 
 }
-
+//Poistaa reseptin kuvan tietokannasta
 const deleteRecipeImageFromDatabase = async (req, res) => {
   const { recipeId } = req.params; 
   let connection;
@@ -544,7 +552,7 @@ const deleteRecipeImageFromDatabase = async (req, res) => {
   } 
 }
  
- 
+ //Hakee arvostelut tietokannasta
 const getReviewFromDatabase = async (req, res) => {
   const recipeid = req.params.recipeid;
   const userid = req.params.userid;
@@ -593,7 +601,7 @@ const getReviewFromDatabase = async (req, res) => {
   }
 };
  
-
+//Lisää arvostelun tietokantaan
 const addReviewToDatabase = async (req, res) => {
   const {recipeid, userid, rating, comment, favorite} = req.body;
   let connection;
@@ -632,6 +640,7 @@ const addReviewToDatabase = async (req, res) => {
   } 
 }; 
 
+//Päivittää arvostelun tietokannassa
 const editReviewInDatabase = async (req, res) => {
   const {recipeid, userid, rating, comment, favorite, reviewid} = req.body;
   let connection;
@@ -675,7 +684,7 @@ const editReviewInDatabase = async (req, res) => {
     }
   } 
 }; 
-
+//Poistaa arvostelun
 const deleteReviewInDatabase = async (req, res) => {
   const reviewid = req.params.reviewid;
   let connection;
@@ -776,7 +785,7 @@ const addPasswordToDatabase = async (email, password) => {
       await closeDatabaseConnection();
   }
 }
-
+//Etsii reseptejä tietokannasta
 const searchRecipesFromDatabase = async (req, res) => {
   const { input } = req.body; // Oletetaan, että input sisältää käyttäjän antaman syötteen
 

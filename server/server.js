@@ -26,11 +26,11 @@ sql.connect(config, (err) => {
 app.use("/api/user", userRoutes);
 //Configure route for request /api/recipe which uses middleware functions from recipeRoutes file
 app.use("/api/recipe", recipeRoutes);
-
+//Configure route for request /api/ingredients which uses middleware functions from ingredientsRoutes file
 app.use("/api/ingredients", ingredientsRoutes);
-
+//Configure route for request /api/review which uses middleware functions from reviewRoutes file
 app.use("/api/review", reviewRoutes);
-
+//Configure route for request /api/email which uses middleware functions from emailRoutes file
 app.use("/api/email", emailRoutes);
 
 const port = process.env.PORT || 3001;

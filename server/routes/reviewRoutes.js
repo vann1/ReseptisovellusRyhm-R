@@ -8,7 +8,7 @@ const {searchReviews, addReview, editReview, deleteReview} =require("../controll
 
 
 
-
+//Etsii arvostelut recipeid:een perusteella
 router.get('/search/:recipeid', async (req, res) => {
     if(!isJson) {
     return badRequest(res, "Content was not Json");
@@ -16,6 +16,7 @@ router.get('/search/:recipeid', async (req, res) => {
     return searchReviews(req, res);
   });
 
+  //Etsii käyttäjän arvostelut jotka hän on merkinnyt suosikeiksensa
   router.get('/favorites/:userid', async (req, res) => {
     if(!isJson) {
     return badRequest(res, "Content was not Json");
@@ -23,6 +24,7 @@ router.get('/search/:recipeid', async (req, res) => {
     return searchReviews(req, res);
   });
 
+  //lisää arvostelu
 router.post('/add', async (req, res) => {
     
   if(!isJson) {
@@ -32,6 +34,7 @@ router.post('/add', async (req, res) => {
   
 }); 
 
+//Muokkaa arvostelua
 router.post('/edit', async (req, res) => {
     
   if(!isJson) {
@@ -41,6 +44,7 @@ router.post('/edit', async (req, res) => {
   
 });
 
+//Poistaa arvostelun reviewid:een perusteella
 router.delete('/delete/:reviewid', async (req, res) => {
     
   if(!isJson) {
