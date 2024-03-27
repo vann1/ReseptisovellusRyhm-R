@@ -70,30 +70,6 @@ function validateUser(username, email, password, name) {
   }
 }
 
-/**
- * Creates a JSON Web Token (JWT) for authentication.
- * @param {import('express').Request} req - The request object.
- * @param {import('express').Response} res - The response object.
- * @param {Object} user - The user object containing password for comparison.
- * @returns {Promise<string|import('express').Response>} Returns the generated JWT if authentication is successful, otherwise returns an unauthorized response.
- */
-const createJWT1 = async (req, res, user) => {
-  //First the function gets the user password from req.body.
-  const { password } = req.body;
-  //Then it compares the crypted password from database to req.body password.
-  if (await bcrypt.compare(password, user.password)) {
-    //If these passwords matches, it creates jwt token which is returned.
-    const token = jwt.sign(
-      { userId: user.id },
-      process.env.ACCESS_TOKEN_SECRET,
-      { expiresIn: "1h" }
-    );
-    return token;
-  } else {
-    //Else it returns responseUtils.unautorized function with parameters res and error message
-    return unauthorized(res, "Virheellinen salasana");
-  }
-};
 
 const comparePassword = async (req, res, user) => {
   //First the function gets the user password from req.body.
@@ -101,28 +77,11 @@ const comparePassword = async (req, res, user) => {
   //Then it compares the crypted password from database to req.body password.
   return await bcrypt.compare(password, user.password);
 };
-
+//created jwt token
 const createJWT = (id, maxAge) => {
   return jwt.sign({ id }, process.env.ACCESS_TOKEN_SECRET, {
     expiresIn: maxAge,
   });
 };
 
-// const authenticateToken =(req ,res, next) => {
-//   const token = req.header('Authorization');
-
-//   if(!token) {
-//     return responseUtils.unauthorized(res, "Access denied. Token missing.");
-//   }
-
-//   const tokenValue = token.split(' ')[1];
-
-//   jwt.verify(tokenValue, process.env.ACCESS_TOKEN_SECRET , (err, user)=> {
-//     if(err) {
-//       return responseUtils.forbidden(res, "Invalid token");
-//     }
-//     req.user = user;
-//     next();
-//   })
-// }
 module.exports = {validatePassword, validateUser, createJWT, comparePassword };

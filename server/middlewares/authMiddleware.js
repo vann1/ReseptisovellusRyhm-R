@@ -2,14 +2,16 @@ const jwt = require('jsonwebtoken');
 const {getUserFromDatabaseById} = require('../database')
 require('dotenv').config();
 
-
+//Blocks non authenticated users from given routes
 const requireAuth = async (req, res, next) => {
     const {authorization} = req.headers;
+    //checks if users has auth token
     if(!authorization){
         return res.status(401).json({error: 'Authorization token required'})
     }
     const token = authorization.split(' ')[1];
     try {
+        //verifyis token if its valid or not
         jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)
         next();
     }catch(err) {

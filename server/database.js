@@ -386,7 +386,7 @@ for (let i = 0; i < updatedIngredients.length; i++) {
   } 
   }
   
-//Hakee ainesosat tietokannasta
+//Gets ingredients from database
 const getIngredientsFromDatabase = async (req,res) => {
   const recipeid = req.params.recipeId;
   try {
@@ -416,7 +416,7 @@ const getIngredientsFromDatabase = async (req,res) => {
 }
 
 
-//Lisää ainesosan tietokantaan
+//Adds ingredient to database
 const addIngredientToDatabase = async (req, res) => {
   const {Ingredients, id} = req.body;
   let connection;
@@ -454,7 +454,7 @@ const addIngredientToDatabase = async (req, res) => {
   } 
 }; 
 
-//Poistaa ainesosan tietokannasta
+//Deletes ingredient from database
 const deleteIngredientFromDatabase = async (req, res) => {
   const { ingredientId } = req.params; 
   let connection;
@@ -488,7 +488,7 @@ const deleteIngredientFromDatabase = async (req, res) => {
   } 
 }
 
-//Poistaa reseptin tietokannasta
+//Deletes recipe from database
 const deleteRecipeFromDatabase = async (req, res) => {
   const { recipeId } = req.params; 
   let connection;
@@ -521,7 +521,7 @@ const deleteRecipeFromDatabase = async (req, res) => {
     }
   } 
 }
-//Poistaa reseptin kuvan tietokannasta
+//Deletes recipe image from database
 const deleteRecipeImageFromDatabase = async (req, res) => {
   const { recipeId } = req.params; 
   let connection;
@@ -551,8 +551,7 @@ const deleteRecipeImageFromDatabase = async (req, res) => {
     }
   } 
 }
- 
- //Hakee arvostelut tietokannasta
+ //gets reviews from database
 const getReviewFromDatabase = async (req, res) => {
   const recipeid = req.params.recipeid;
   const userid = req.params.userid;
@@ -601,7 +600,7 @@ const getReviewFromDatabase = async (req, res) => {
   }
 };
  
-//Lisää arvostelun tietokantaan
+//Adds review to database
 const addReviewToDatabase = async (req, res) => {
   const {recipeid, userid, rating, comment, favorite} = req.body;
   let connection;
