@@ -15,7 +15,7 @@ const ShowRecipe = () => {
   const [localhostAddress, setLocalhostAddress] = useState('http://localhost:3000/Recipe/' + recipeId);
   const [ingredients, setIngredients] = useState([]);
 
-  const handleSearch = async () => {
+  const handleSearch = async () => { //Searches recipe that is shown on the page, uses recipeId to find it
     try {
       const response = await fetch('http://localhost:3001/api/recipe/search', {
         method: 'POST',
@@ -42,7 +42,7 @@ const ShowRecipe = () => {
 
   };
 
-  const getIngredients = async () => {
+  const getIngredients = async () => { //Searches ingredients for the shown recipe, uses recipeId to find them
     try {
       const response = await fetch(`http://localhost:3001/api/ingredients/${recipeId}`, {
         method: 'GET',
@@ -68,7 +68,7 @@ const ShowRecipe = () => {
   }, [recipeId]);
 
 
-  const sendRecipeToEmail = async () => {
+  const sendRecipeToEmail = async () => { //sends the link to email that user has inserted, link takes to currently watched recipe
     setEmailSent('');
     setDisabled(true);
     setTimeout(() => {
@@ -104,23 +104,20 @@ const ShowRecipe = () => {
 
  
   return (
-    <div className='app'>
+    <div className='showrecipe-container'>
       {searchResults.length > 0 && (
         <div>
           {searchResults.map((recipe) => (
             <div key={recipe.recipeid}>
               <h1 className="recipenameshow">{recipe.recipename}</h1>
-              <div className='compartment-container'>
-                <div className='compartment1'>
+              <div className='recipeinfo-container'>
+                <div className='recipeinfobox1'>
                   {recipe.images ? (
                     <div>                   
                       <img className='recipeimage' src={`data:image/jpeg;base64,${arrayBufferToBase64(recipe.images.data)}`} alt="Recipe Image"/>
-                      
                     </div>
                   ):(
-                    <div>
-                      
-                    </div>
+                    <div></div>
                   )}
                   <div className='recipeshowingredients'>
                     <h3>Ainesosat:</h3>
@@ -134,19 +131,17 @@ const ShowRecipe = () => {
                       </thead>
                       <tbody>
                         {ingredients.map((ingredient, index) => (
-                      <tr key={index}>
-                        <td className='showrecipetable20'>{ingredient.quantity}</td>
-                        <td className='showrecipetable20'>{ingredient.measure}</td>
-                        <td className='showrecipetable40'>{ingredient.ingredientname}</td>
-                      </tr>
-                    ))}
+                          <tr key={index}>
+                            <td className='showrecipetable20'>{ingredient.quantity}</td>
+                            <td className='showrecipetable20'>{ingredient.measure}</td>
+                            <td className='showrecipetable40'>{ingredient.ingredientname}</td>
+                          </tr>
+                        ))}
                       </tbody>
                     </table>
-                    
-
                   </div>
                 </div>
-                <div className='compartment2'>
+                <div className='recipeinfobox2'>
                   <p><strong>Tekijä:</strong> {recipe.username}</p>
                   <p><strong>Kategoria:</strong> {recipe.category}</p>
                   <p><strong>Kuvaus:</strong> {recipe.description}</p>
@@ -154,23 +149,23 @@ const ShowRecipe = () => {
                   <p><strong>Ohje:</strong> {recipe.instructions}</p>
                 </div>  
               </div>
-              <div className='compartment4'>
-              {user && (<div className='email-form'>
-                        <h3>Jaa resepti</h3>
-                        <label>Sähköposti: </label>
-                        <input className='email-input-field' type="text" onChange={(e) => setReciverEmail(e.target.value)}></input>
-                        <button className="email-send-button" disabled={disabled} onClick={() => sendRecipeToEmail()}>Lähetä</button>
-                        {emailSent && (<p>{emailSent}</p>)}
-                      </div>)}
+              <div className='sharerecipebox'>
+                {user && (
+                  <div className='email-form'>
+                    <h3>Jaa resepti</h3>
+                    <label>Sähköposti: </label>
+                    <input className='email-input-field' type="text" onChange={(e) => setReciverEmail(e.target.value)}></input>
+                    <button className="email-send-button" disabled={disabled} onClick={() => sendRecipeToEmail()}>Lähetä</button>
+                    {emailSent && (<p>{emailSent}</p>)}
+                  </div>
+                )}
               </div>
-              <div className='compartment3'>
-                
-              {user ? (
-                <RatingComponent userid={user.userid} recipeid={recipe.recipeid} />
-              ) : (
-                <RatingComponent recipeid={recipe.recipeid}/>
-              )}
-                      
+              <div className='ratingbox'>
+                {user ? (
+                  <RatingComponent userid={user.userid} recipeid={recipe.recipeid} />
+                ) : (
+                  <RatingComponent recipeid={recipe.recipeid}/>
+                )}
               </div>           
             </div>
           ))}
@@ -179,9 +174,10 @@ const ShowRecipe = () => {
     </div>
   );
   
+  
 };
 
-// Function to convert ArrayBuffer to base64
+// Converts the photo from database to visible form
 const arrayBufferToBase64 = (buffer) => {
   let binary = '';
   const bytes = new Uint8Array(buffer);

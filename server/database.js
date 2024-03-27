@@ -834,37 +834,33 @@ INNER JOIN
 };
 
 
-//this function is for updateing user's password with newPassword and userId
+//this function is for updateing users password with newPassword and userId
 const updatePasswordToDatabase = async (req) => {
   const {newPassword, userId} = req.body;
   try {
-      // Create a connection to the database
+
       await connectToDatabase();
 
-      // Initialize a new request object to send SQL queries
       const request = pool.request();
 
-      // Encrypt the password for the database
+      // Encrypts the new password
       const hashedPassword = await bcrypt.hash(newPassword, 10);
 
-      // Define the SQL query to update the user's password in the database
+      // The SQL query to update the password to database
       const query = `
           UPDATE [dbo].[users]
           SET password = @newPassword
           WHERE userid = @userId
       `;
-
-      // Execute the database query
       await request
           .input("newPassword", sql.NVarChar, hashedPassword)
           .input("userId", sql.Int, userId)
           .query(query);
-      return true; // Password added successfully
+      return true; 
   } catch (error) {
       console.error("Error adding password to the database:", error);
-      return false; // Error occurred while adding password
+      return false; 
   } finally {
-      // Close the database connection
       await closeDatabaseConnection();
   }
 }
