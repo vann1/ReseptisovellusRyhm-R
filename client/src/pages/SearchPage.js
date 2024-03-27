@@ -14,6 +14,7 @@ const SearchPage = () => {
   const [searchResults, setSearchResults] = useState([]);
   const [recipeid, setrecipeID] = useState('');
   const {user} = useAuthContext();
+  const Kategoria = ['','Alkupala', 'Juoma', 'Välipala', 'Pääruoka', 'Jälkiruoka', 'Leivonnaiset', 'Muu'];
 
   const handleSearch = async () => {
     try {
@@ -90,7 +91,13 @@ const SearchPage = () => {
             <div className='search-option'>
               <label>Kategoria:</label>
               <br></br>
-              <input className="search-input" type="text" value={recipeCategory} onChange={(e) => setrecipeCategory(e.target.value)} />
+              <select className="search-input" type="text" value={recipeCategory} onChange={(e) => setrecipeCategory(e.target.value)}>
+              {Kategoria.map((option, index) => (
+                <option key={index} value={option}>
+                  {option} 
+                </option> 
+              ))}
+              </select>
             </div>
             <div className='search-option'>
               <label>Tagi:</label>
